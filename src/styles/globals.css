@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "KobeBold";
+  src: url("/fonts/kobe11-bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,121 +1,106 @@
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   Text,
-  IconButton,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   useDisclosure,
   useColorModeValue,
-  Stack,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
+
+import { LiaShoppingBagSolid } from "react-icons/lia";
+import { CiHeart, CiUser } from "react-icons/ci";
+import { TfiSearch } from "react-icons/tfi";
+import { LogoCI } from "../Icons";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Links = ["Dashboard", "Projects", "Team"];
-
-const NavLink = (props: Props) => {
-  const { children } = props;
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-      href={"#"}
-    >
-      {children}
-    </Box>
-  );
-};
+const Links = ["FARMACIA", "TRATAMIENTOS", "ACERCA DE"];
 
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <IconButton
-            size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
-            display={{ md: "none" }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={"center"}>
-            <Box>Logo</Box>
-            <HStack
-              as={"nav"}
-              spacing={4}
-              display={{ base: "none", md: "flex" }}
-            >
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </HStack>
+    <Flex
+      px={4}
+      h="86px"
+      alignItems="center"
+      justifyContent="space-between"
+      pt="20px"
+      pb="20px"
+      position="fixed"
+      width="100%"
+      zIndex={9999999}
+    >
+      {/* Lado izquierdo */}
+      <Flex flex={1} pl="10px">
+        <Box>
+          <HStack>
+            {Links.map((link) => (
+              <Box key={link} mr={4}>
+                <Text
+                  fontSize="14px"
+                  fontWeight={400}
+                  lineHeight="normal"
+                  color="white"
+                  cursor="pointer"
+                >
+                  {link}
+                </Text>
+              </Box>
+            ))}
           </HStack>
-          <Flex alignItems={"center"}>
-            <Button
-              variant={"solid"}
-              colorScheme={"teal"}
-              size={"sm"}
-              mr={4}
-              leftIcon={<AddIcon />}
-            >
-              Action
-            </Button>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-              >
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
-        </Flex>
+        </Box>
+      </Flex>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
-      </Box>
+      {/* Centro */}
+      <Flex alignItems="center" justifyContent="center" flex={2}>
+        <LogoCI />
+      </Flex>
 
-      <Box p={4}>Main Content Here</Box>
-    </>
+      {/* Lado derecho */}
+      <Flex alignItems="center" flex={1} justifyContent="flex-end">
+        <CiHeart
+          style={{
+            width: "30px",
+            height: "30px",
+            marginRight: "12px",
+            cursor: "pointer",
+            color: "white",
+          }}
+        />
+        <CiUser
+          style={{
+            width: "30px",
+            height: "30px",
+            marginRight: "12px",
+            cursor: "pointer",
+            color: "white",
+          }}
+        />
+
+        <TfiSearch
+          style={{
+            width: "25px",
+            height: "25px",
+            marginRight: "12px",
+            cursor: "pointer",
+            color: "white",
+          }}
+        />
+        <LiaShoppingBagSolid
+          style={{
+            width: "30px",
+            height: "30px",
+            marginRight: "12px",
+            cursor: "pointer",
+            color: "white",
+            strokeWidth: "-2",
+          }}
+        />
+      </Flex>
+    </Flex>
   );
 };
 
