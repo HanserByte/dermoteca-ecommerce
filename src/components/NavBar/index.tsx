@@ -42,6 +42,7 @@ const NavBar = () => {
       pb="20px"
       position="fixed"
       width="100%"
+      maxW="1920px"
       zIndex={9999999}
     >
       {/* Lado izquierdo */}

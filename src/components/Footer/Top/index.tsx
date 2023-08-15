@@ -117,8 +117,8 @@ const Top = () => {
               {/* Lado izquierdo */}
               <Flex flex={1}>
                 <Box>
-                  {SampleLinks1.map((item: { title: string; url?: string }) => {
-                    return <TitleRedirect title={item.title} />;
+                  {SampleLinks1.map((item: { title: string; url?: string }, index: number) => {
+                    return <TitleRedirect title={item.title} key={index}/>;
                   })}
                 </Box>
               </Flex>
@@ -131,8 +131,8 @@ const Top = () => {
                 textAlign="right"
               >
                 <UnorderedList>
-                  {SampleLinks2.map((item: { title: string; url?: string }) => {
-                    return <TitleRedirect title={item.title} />;
+                  {SampleLinks2.map((item: { title: string; url?: string }, index: number) => {
+                    return <TitleRedirect title={item.title} key={index}/>;
                   })}
                 </UnorderedList>
               </Flex>
@@ -156,8 +156,8 @@ const Top = () => {
               <Box>
                 <HStack>
                   <LogoShortCI />
-                  {SampleLinks1.map((item: { title: string; url?: string }) => {
-                    return <TitleRedirect title={item.title} />;
+                  {SampleLinks1.map((item: { title: string; url?: string }, index: number) => {
+                    return <TitleRedirect title={item.title} key={index}/>;
                   })}
                 </HStack>
               </Box>
@@ -168,8 +168,8 @@ const Top = () => {
 
             {/* Lado derecho */}
             <Flex alignItems="center" flex={1} justifyContent="flex-end">
-              {SampleLinks2.map((item: { title: string; url?: string }) => {
-                return <TitleRedirect title={item.title} />;
+              {SampleLinks2.map((item: { title: string; url?: string }, index: number) => {
+                return <TitleRedirect title={item.title} key={index}/>;
               })}
             </Flex>
           </Flex>

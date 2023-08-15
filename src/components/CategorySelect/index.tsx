@@ -131,8 +131,8 @@ const CategorySelect = () => {
           isMobile ? "repeat(auto-fit, minmax(200px, 1fr))" : "repeat(4, 1fr)"
         }
       >
-        {DataCategory.map((item: ICategory) => {
-          return <Category title={item.title} url_img={item.url_img} />;
+        {DataCategory.map((item: ICategory, index: number) => {
+          return <Category title={item.title} url_img={item.url_img} key={index}/>;
         })}
       </SimpleGrid>
     </Box>

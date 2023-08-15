@@ -63,13 +63,14 @@ const Hero = () => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
-    <Box position="relative">
+    <Box position="relative" id="hero">
       <Image
         src="/img/HeroHome1.png"
         alt="Hero"
         pt={isMobile ? "81px" : ""}
         height={isMobile ? "900px" : ""}
         objectFit={"cover"}
+        width="100%"
         objectPosition={isMobile ? "90% 50%" : ""}
       />
 
@@ -133,8 +134,8 @@ const Hero = () => {
               </Text>
               <Box flex={100} pl="10px">
                 <HStack>
-                  {SampleLinks2.map((item: ITitleRedirect) => {
-                    return <RenderOptions title={item.title} />;
+                  {SampleLinks2.map((item: ITitleRedirect, index: number) => {
+                    return <RenderOptions title={item.title} key={index} />;
                   })}
                 </HStack>
               </Box>
@@ -159,8 +160,8 @@ const Hero = () => {
                   </Text>
                   <Box flex={100} pl="10px">
                     <HStack>
-                      {SampleLinks2.map((item: ITitleRedirect) => {
-                        return <RenderOptions title={item.title} />;
+                      {SampleLinks2.map((item: ITitleRedirect, index: number) => {
+                        return <RenderOptions title={item.title} key={index} />;
                       })}
                     </HStack>
                   </Box>
