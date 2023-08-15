@@ -1,12 +1,16 @@
 import {
   Box,
+  Button,
   Card,
-  CardBody,
+  Grid,
   HStack,
   Image,
   SimpleGrid,
+  Spacer,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
+import { LogoArrowRightCI } from "../Icons";
 
 interface ICategory {
   title: string;
@@ -61,9 +65,72 @@ const Category = (props: ICategory) => {
 };
 
 const CategorySelect = () => {
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+
   return (
-    <Box mt="75px" pl="145px" pr="145px">
-      <SimpleGrid spacing={3} templateColumns="repeat(4, 1fr)">
+    <Box
+      mt="75px"
+      pl={isMobile ? "20px" : "145px"}
+      pr={isMobile ? "20px" : "145px"}
+    >
+      <Box mb="25px">
+        <HStack justifyContent="space-between">
+          <Text
+            textTransform="uppercase"
+            fontSize="22px"
+            fontWeight="700"
+            mb="5px"
+          >
+            nuestros productos
+          </Text>
+          {isMobile && (
+            <>
+              <Spacer />
+              <Button
+                variant="outline"
+                borderRadius="35px"
+                border="1px solid black"
+                width="110px"
+                mb="5px"
+              >
+                <Text textTransform="uppercase" color="black">
+                  Ver más
+                </Text>
+              </Button>
+            </>
+          )}
+        </HStack>
+        <Box flex={100}>
+          <Grid templateColumns={isMobile ? "100%" : "70% 30%"} gap={4}>
+            <Text textAlign="justify">
+              Explora nuestra farmacia dermatológica, encontrarás una amplia
+              gama de productos de calidad, contamos con los productos más
+              avanzados y recomendados por expertos.
+            </Text>
+            {!isMobile && (
+              <div style={{ justifySelf: "right", marginRight: "15px" }}>
+                <Button
+                  rightIcon={<LogoArrowRightCI />}
+                  variant="outline"
+                  borderRadius="35px"
+                  border="1px solid black"
+                  width="150px"
+                >
+                  <Text textTransform="uppercase" color="black">
+                    Ver más
+                  </Text>
+                </Button>
+              </div>
+            )}
+          </Grid>
+        </Box>
+      </Box>
+      <SimpleGrid
+        spacing={3}
+        templateColumns={
+          isMobile ? "repeat(auto-fit, minmax(200px, 1fr))" : "repeat(4, 1fr)"
+        }
+      >
         {DataCategory.map((item: ICategory) => {
           return <Category title={item.title} url_img={item.url_img} />;
         })}

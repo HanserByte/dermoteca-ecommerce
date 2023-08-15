@@ -1,9 +1,11 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Bottom = () => {
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+
   return (
-    <Box bg="#000" color="white">
+    <Box bg="#000" color="white" borderTop="1px solid #000">
       <Flex
         px={4}
         h="86px"
@@ -14,8 +16,13 @@ const Bottom = () => {
         width="100%"
       >
         {/* Lado izquierdo */}
+
         <Flex flex={1} pl="10px" justifyContent="center" mb="20px">
-          <Text fontSize="12px">Dermoteca © Todos los derechos reservados</Text>
+          {!isMobile && (
+            <Text fontSize="12px">
+              Dermoteca © Todos los derechos reservados
+            </Text>
+          )}
         </Flex>
 
         {/* Centro */}
@@ -44,6 +51,12 @@ const Bottom = () => {
         {/* Lado derecho */}
         <Flex alignItems="center" flex={1} justifyContent="flex-end"></Flex>
       </Flex>
+
+      {isMobile && (
+        <Flex flex={100} pl="10px" justifyContent="center" pb="30px" mt="-25px">
+          <Text fontSize="12px">Dermoteca © Todos los derechos reservados</Text>
+        </Flex>
+      )}
     </Box>
   );
 };

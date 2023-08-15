@@ -1,21 +1,36 @@
-import { Box, Button, Heading, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Image,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 
 const BasicImageText = () => {
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+
   return (
     <Box position="relative" width="100%" mt="75px">
-      <Image src="/img/lineaproductos2.png" alt="Image text" width="100%" />
+      <Image
+        src="/img/lineaproductos2.png"
+        alt="Image text"
+        width="100%"
+        height={isMobile ? "550px" : ""}
+        objectFit="cover"
+      />
       <Box
         position="absolute"
         top="0"
-        left="0"
-        width="50%"
+        left={isMobile ? "5px" : "0"}
+        width={isMobile ? "100%" : "50%"}
         maxHeight="50vh"
         overflow="auto"
         p="4"
-        pl="145px"
-        pr="95px"
+        pl={isMobile ? "" : "145px"}
+        pr={isMobile ? "20px" : "95px"}
       >
-        <Heading fontFamily="KobeBold" color="white" fontSize="60px" pt="60px">
+        <Heading fontFamily="KobeBold" color="white" fontSize="60px" pt={isMobile ? "35px" : "60px" }>
           ANTI-AGE
         </Heading>
         <Text color="white" lineHeight="normal" textAlign="justify">
