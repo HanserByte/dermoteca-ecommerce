@@ -6,15 +6,15 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install Vercel CLI
-        run: npm install -g vercel
+    - name: Install Vercel CLI
+      run: npm i -g vercel
 
-      - name: Deploy to Vercel
-        run: vercel --prod
+    - name: Deploy to Vercel
+      run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod
