@@ -11,6 +11,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { LogoArrowRightCI } from "../Icons";
+import { useStore } from "@/store";
 
 interface ICategory {
   title: string;
@@ -65,7 +66,8 @@ const Category = (props: ICategory) => {
 };
 
 const CategorySelect = () => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
     <Box

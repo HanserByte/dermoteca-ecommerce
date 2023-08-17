@@ -1,8 +1,10 @@
+import { useStore } from "@/store";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Bottom = () => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
     <Box bg="#000" color="white" borderTop="1px solid #000">

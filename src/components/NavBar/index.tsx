@@ -19,6 +19,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CiHeart, CiUser } from "react-icons/ci";
 import { TfiSearch } from "react-icons/tfi";
 import { LogoCI, LogoHamburguerCI } from "../Icons";
+import { useStore } from "@/store";
 
 interface Props {
   children: React.ReactNode;
@@ -28,7 +29,9 @@ const Links = ["FARMACIA", "TRATAMIENTOS", "ACERCA DE"];
 
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { value } = useStore();
+  
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [showDrawer, setShowDrawer] = useState(false);
 
   return (
@@ -42,7 +45,7 @@ const NavBar = () => {
       pb="20px"
       position="fixed"
       width="100%"
-      maxW="1920px"
+      maxW="2560px"
       zIndex={9999999}
     >
       {/* Lado izquierdo */}
@@ -136,7 +139,13 @@ const NavBar = () => {
         <DrawerOverlay zIndex={9999999999999}>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader>Menu</DrawerHeader>
+            <DrawerHeader>
+              <LogoCI
+                color={isMobile ? "black" : "white"}
+                width={isMobile ? "150px" : "250px"}
+                height={isMobile ? "20px" : "33px"}
+              />
+            </DrawerHeader>
             <DrawerBody>
               {Links.map((link) => (
                 <Box key={link} mb={4}>

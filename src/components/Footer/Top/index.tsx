@@ -13,9 +13,10 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import "./index.scss";
+import { useStore } from "@/store";
 
 const SampleLinks1 = [
-  { title: "BITACORA" },
+  { title: "BITÁCORA" },
   { title: "AGENDAR CITA" },
   { title: "PEDIDOS" },
 ];
@@ -28,6 +29,9 @@ const SampleLinks2 = [
 
 const TitleRedirect = (props: ITitleRedirect) => {
   const { title } = props;
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+
   return (
     <Text
       fontSize="13px"
@@ -35,8 +39,10 @@ const TitleRedirect = (props: ITitleRedirect) => {
       lineHeight="normal"
       color="white"
       cursor="pointer"
-      pl="15px"
+      pl={isMobile ? "" : "20px"}
       pt="20px"
+      pr={isMobile ? "" : "20px"}
+      whiteSpace="nowrap"
     >
       {title}
     </Text>
@@ -44,8 +50,11 @@ const TitleRedirect = (props: ITitleRedirect) => {
 };
 
 const Form = () => {
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+
   return (
-    <Flex alignItems="center" justifyContent="center" flex={2}>
+    <Flex alignItems="center" justifyContent="center" flex={2} pr={isMobile ? "" : "40px"} borderBottom="1px solid #000">
       <Box textAlign="center">
         <Box mb="4px" textTransform="uppercase">
           <Text
@@ -85,7 +94,8 @@ const Form = () => {
 };
 
 const Top = () => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
     <>
@@ -98,6 +108,7 @@ const Top = () => {
             justifyContent="center"
             pt="38px"
             borderBottom="1px solid #000"
+            mt="75px"
           >
             <LogoShortCI />
           </Flex>
@@ -141,7 +152,7 @@ const Top = () => {
         </>
       )}
       {!isMobile && (
-        <Box bg="#000" color="white">
+        <Box bg="#000" color="white" mt="75px">
           <Flex
             px={4}
             h="126px"

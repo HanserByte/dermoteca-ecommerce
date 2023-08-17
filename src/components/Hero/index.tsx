@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { LogoShortCI, LogoTreatmentCI } from "../Icons";
 import { ITitleRedirect } from "../Interfaces";
+import { useStore } from "@/store";
 
 const SampleLinks1 = [{ title: "MI HISTORIAL" }];
 const SampleLinks2 = [
@@ -60,7 +61,8 @@ const RenderOptions = (props: ITitleRedirect) => {
 };
 
 const Hero = () => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
     <Box position="relative" id="hero">

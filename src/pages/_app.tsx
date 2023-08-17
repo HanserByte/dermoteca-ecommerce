@@ -1,6 +1,7 @@
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import "../styles/globals.css";
+import Head from "next/head";
 
 const theme = extendTheme({
   fonts: {
@@ -11,10 +12,16 @@ const theme = extendTheme({
 
 function MyApp({ Component, pageProps }: any) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
-  )
+    <>
+      <Head>
+        <title>Dermoteca</title>
+        <link rel="icon" href="/favicon.ico?v=2" />
+      </Head>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </>
+  );
 }
 
 export default MyApp;

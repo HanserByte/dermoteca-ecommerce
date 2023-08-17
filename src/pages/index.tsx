@@ -7,7 +7,7 @@ import { Box } from "@chakra-ui/react";
 
 const Home = () => {
   return (
-    <Box maxW="1920px" m="0 auto" id="main-container">
+    <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar />
       <Hero />
       <CategorySelect />
