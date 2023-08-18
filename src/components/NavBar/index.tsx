@@ -30,8 +30,9 @@ const Links = ["FARMACIA", "TRATAMIENTOS", "ACERCA DE"];
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { value } = useStore();
-  
+
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  const [isPhone] = useMediaQuery(`(max-width: 400px)`);
   const [showDrawer, setShowDrawer] = useState(false);
 
   return (
@@ -79,7 +80,12 @@ const NavBar = () => {
       </Flex>
 
       {/* Centro */}
-      <Flex alignItems="center" justifyContent="center" flex={2}>
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        flex={2}
+        mr={isPhone ? "15px" : ""}
+      >
         <LogoCI
           color={isMobile ? "black" : "white"}
           width={isMobile ? "190px" : "250px"}

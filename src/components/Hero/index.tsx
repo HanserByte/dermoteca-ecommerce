@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   HStack,
   Heading,
   Image,
@@ -65,7 +66,7 @@ const Hero = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
-    <Box position="relative" id="hero">
+    <Flex position="relative" id="hero">
       <Image
         src="/img/HeroHome1.png"
         alt="Hero"
@@ -88,20 +89,19 @@ const Hero = () => {
         mt={isMobile ? "101px" : "180px"}
         zIndex={99999}
       >
-        <Box flex={100}>
+        <Flex
+          flex={100}
+          id="text-image"
+          justifyContent={isMobile ? "center" : ""}
+        >
           <Image src="/img/SampleHero.png" alt="Image Hero" />
-        </Box>
+        </Flex>
 
         {!isMobile && <MainText title={bodyText} />}
       </Box>
 
       {isMobile && (
-        <Box
-          position="absolute"
-          bottom="0"
-          width="100%"
-          p="4"
-        >
+        <Box position="absolute" bottom="0" width="100%" p="4">
           <Box pb="13px" pl="5px" pr="5px">
             <MainText title={bodyText} />
           </Box>
@@ -162,9 +162,13 @@ const Hero = () => {
                   </Text>
                   <Box flex={100} pl="10px">
                     <HStack>
-                      {SampleLinks2.map((item: ITitleRedirect, index: number) => {
-                        return <RenderOptions title={item.title} key={index} />;
-                      })}
+                      {SampleLinks2.map(
+                        (item: ITitleRedirect, index: number) => {
+                          return (
+                            <RenderOptions title={item.title} key={index} />
+                          );
+                        }
+                      )}
                     </HStack>
                   </Box>
                 </Box>
@@ -173,7 +177,7 @@ const Hero = () => {
           </HStack>
         </Box>
       )}
-    </Box>
+    </Flex>
   );
 };
 
