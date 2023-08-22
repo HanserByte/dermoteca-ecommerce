@@ -24,10 +24,6 @@ import { IDataNav } from "@/typesSanity/docs/nav";
 import { client } from "@/lib/sanity.client";
 import React from "react";
 
-interface Props {
-  children: React.ReactNode;
-}
-
 const iconArray: any = {
   LiaShoppingBagSolid: LiaShoppingBagSolid,
   CiHeart: CiHeart,
@@ -46,9 +42,14 @@ const NavBar = () => {
       },
       'links_derecha': navbar.links_derecha[]{ ... ,
         'dataUrl': *[_id == ^.link.url._ref]{
-            'url': slug.current
-          }[0]
-        }
+          'url': slug.current
+        }[0]
+      },
+      'links_derecha_mobile': navbar.links_derecha_mobile[]{ ... ,
+        'dataUrl': *[_id == ^.link.url._ref]{
+          'url': slug.current
+        }[0]
+      }
     }
   `;
 
@@ -142,24 +143,51 @@ const NavBar = () => {
       </Flex>
 
       {/* Lado derecho */}
-      <Flex alignItems="center" flex={1} justifyContent="flex-end">
-        {data?.links_derecha &&
-          data.links_derecha.length > 0 &&
-          data.links_derecha.map((item, index) => (
+      {!isMobile && (
+        <Flex alignItems="center" flex={1} justifyContent="flex-end">
+          {data?.links_derecha &&
+            data.links_derecha.length > 0 &&
+            data.links_derecha.map((item, index) => (
+              <React.Fragment key={index}>
+                {iconArray[item.icono]({
+                  style: {
+                    width: item.icono === "TfiSearch" ? "25px" : "30px",
+                    height: item.icono === "TfiSearch" ? "25px" : "30px",
+                    cursor: "pointer",
+                    color: "white",
+                  },
+                })}
+                {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
+              </React.Fragment>
+            ))}
+        </Flex>
+      )}
+
+      {/* Lado derecho mobile */}
+      {isMobile && (
+        <Flex
+          alignItems="center"
+          flex={1}
+          justifyContent="flex-end"
+          id="mobile"
+        >
+          {data?.links_derecha_mobile.map((item, index) => (
             <React.Fragment key={index}>
               {iconArray[item.icono]({
                 style: {
                   width: item.icono === "TfiSearch" ? "25px" : "30px",
                   height: item.icono === "TfiSearch" ? "25px" : "30px",
                   cursor: "pointer",
-                  color: "white",
-                  display: isMobile ? "none" : "",
+                  color: "black",
                 },
               })}
-              {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
+              {index !== data.links_derecha_mobile.length - 1 && (
+                <Box mx="3px" />
+              )}
             </React.Fragment>
           ))}
-      </Flex>
+        </Flex>
+      )}
 
       {/* Drawer para pantallas móviles */}
       <Drawer

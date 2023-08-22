@@ -10,6 +10,7 @@ export interface IDataNav extends SanityBody {
   };
   links_izquierda: ILinks[];
   links_derecha: ILinksRight[];
+  links_derecha_mobile: ILinksRight[];
 }
 
 interface ILinksRight {
