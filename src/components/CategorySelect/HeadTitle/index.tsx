@@ -81,7 +81,7 @@ const TitleNoDescription = (props: ContainerProps) => {
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
-              width="110px"
+              minW="110px"
               mb="5px"
             >
               <Text textTransform="uppercase" color="black">
@@ -95,7 +95,7 @@ const TitleNoDescription = (props: ContainerProps) => {
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
-              width="150px"
+              minW="110px"
             >
               <Text textTransform="uppercase" color="black">
                 {data?.text_button}

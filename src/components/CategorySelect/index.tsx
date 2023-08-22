@@ -1,9 +1,12 @@
 import { Box, useMediaQuery } from "@chakra-ui/react";
 import { useStore } from "@/store";
 import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
+
+import HeadTitle from "./HeadTitle";
+
 import TypeA from "./Type/TypeA";
 import TypeB from "./Type/TypeB";
-import HeadTitle from "./HeadTitle";
+import TypeC from "./Type/TypeC";
 
 interface ContainerProps {
   data: ICategorySelect;
@@ -26,6 +29,9 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "b" && (
         <TypeB data={data} isMobile={isMobile} />
+      )}
+      {data.formato_categorias === "c" && (
+        <TypeC data={data} isMobile={isMobile} />
       )}
     </Box>
   );
