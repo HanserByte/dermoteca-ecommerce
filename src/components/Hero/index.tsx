@@ -11,6 +11,8 @@ import {
 import { LogoShortCI, LogoTreatmentCI } from "../Icons";
 import { ITitleRedirect } from "../Interfaces";
 import { useStore } from "@/store";
+import { IHero, IHeroComponents } from "@/typesSanity/docs/hero";
+import { sanityImage } from "@/lib/sanity.image";
 
 const SampleLinks1 = [{ title: "MI HISTORIAL" }];
 const SampleLinks2 = [
@@ -18,12 +20,6 @@ const SampleLinks2 = [
   { title: "agendar cita" },
   { title: "pedidos" },
 ];
-const bodyText = `cada piel cuenta una historia única y apasionante. Como un diario
-que escribimos sin pensar, nuestra piel lleva consigo las huellas de
-nuestras experiencias, desde los momentos más emotivos hasta las
-aventuras más asombrosas. Cada marca, cada cicatriz y cada destello
-de juventud cuentan una parte de quiénes somos y de los caminos que
-hemos recorrido.`;
 
 const MainText = (props: { title: string }) => {
   const { title } = props;
@@ -61,14 +57,19 @@ const RenderOptions = (props: ITitleRedirect) => {
   );
 };
 
-const Hero = () => {
+interface ContainerProps {
+  data: IHeroComponents;
+}
+
+const Hero = (props: ContainerProps) => {
+  const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
     <Flex position="relative" id="hero">
       <Image
-        src="/img/HeroHome1.png"
+        src={sanityImage(data?.backgroundImage.asset._ref).url()}
         alt="Hero"
         pt={isMobile ? "81px" : ""}
         height={isMobile ? "900px" : ""}
@@ -94,16 +95,19 @@ const Hero = () => {
           id="text-image"
           justifyContent={isMobile ? "center" : ""}
         >
-          <Image src="/img/SampleHero.png" alt="Image Hero" />
+          <Image
+            src={sanityImage(data?.textImage.asset._ref).url()}
+            alt="Image Hero"
+          />
         </Flex>
 
-        {!isMobile && <MainText title={bodyText} />}
+        {!isMobile && <MainText title={data?.text || ""} />}
       </Box>
 
       {isMobile && (
         <Box position="absolute" bottom="0" width="100%" p="4">
           <Box pb="13px" pl="5px" pr="5px">
-            <MainText title={bodyText} />
+            <MainText title={data?.text || ""} />
           </Box>
         </Box>
       )}

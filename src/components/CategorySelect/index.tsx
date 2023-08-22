@@ -12,21 +12,17 @@ import {
 } from "@chakra-ui/react";
 import { LogoArrowRightCI } from "../Icons";
 import { useStore } from "@/store";
+import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
+import { sanityImage } from "@/lib/sanity.image";
 
 interface ICategory {
-  title: string;
-  url_img: string;
+  titulo_imagen: string;
+  subtitulo_imagen: string;
+  img_fondo: any;
 }
 
-const DataCategory = [
-  { title: "CREMAS", url_img: "/img/category1.png" },
-  { title: "SUEROS", url_img: "/img/category2.png" },
-  { title: "HIGIENE", url_img: "/img/category3.png" },
-  { title: "PROTECCIÓN SOLAR", url_img: "/img/category4.png" },
-];
-
 const Category = (props: ICategory) => {
-  const { title, url_img } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo } = props;
 
   return (
     <Card w="100%" cursor="pointer">
@@ -43,7 +39,7 @@ const Category = (props: ICategory) => {
             textTransform="uppercase"
             pb="4px"
           >
-            {title}
+            {titulo_imagen}
           </Text>
         </Box>
         <Box flex={100}>
@@ -56,16 +52,24 @@ const Category = (props: ICategory) => {
             pl="10px"
             pb="4px"
           >
-            Comprar ahora
+            {subtitulo_imagen}
           </Text>
         </Box>
       </Box>
-      <Image src={url_img} alt="category select" />
+      <Image
+        src={sanityImage(img_fondo.asset._ref).url()}
+        alt="category select"
+      />
     </Card>
   );
 };
 
-const CategorySelect = () => {
+interface ContainerProps {
+  data: ICategorySelect;
+}
+
+const CategorySelect = (props: ContainerProps) => {
+  const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
@@ -83,7 +87,7 @@ const CategorySelect = () => {
             fontWeight="700"
             mb="5px"
           >
-            nuestros productos
+            {data?.titulo}
           </Text>
           {isMobile && (
             <>
@@ -96,7 +100,7 @@ const CategorySelect = () => {
                 mb="5px"
               >
                 <Text textTransform="uppercase" color="black">
-                  Ver más
+                  {data?.text_button}
                 </Text>
               </Button>
             </>
@@ -104,11 +108,7 @@ const CategorySelect = () => {
         </HStack>
         <Box flex={100}>
           <Grid templateColumns={isMobile ? "100%" : "70% 30%"} gap={4}>
-            <Text textAlign="justify">
-              Explora nuestra farmacia dermatológica, encontrarás una amplia
-              gama de productos de calidad, contamos con los productos más
-              avanzados y recomendados por expertos.
-            </Text>
+            <Text textAlign="justify">{data?.descripcion}</Text>
             {!isMobile && (
               <div style={{ justifySelf: "right", marginRight: "15px" }}>
                 <Button
@@ -119,7 +119,7 @@ const CategorySelect = () => {
                   width="150px"
                 >
                   <Text textTransform="uppercase" color="black">
-                    Ver más
+                    {data?.text_button}
                   </Text>
                 </Button>
               </div>
@@ -133,8 +133,15 @@ const CategorySelect = () => {
           isMobile ? "repeat(auto-fit, minmax(200px, 1fr))" : "repeat(4, 1fr)"
         }
       >
-        {DataCategory.map((item: ICategory, index: number) => {
-          return <Category title={item.title} url_img={item.url_img} key={index}/>;
+        {data.categorias.map((item: ICategory, index: number) => {
+          return (
+            <Category
+              titulo_imagen={item.titulo_imagen}
+              subtitulo_imagen={item.subtitulo_imagen}
+              img_fondo={item.img_fondo}
+              key={index}
+            />
+          );
         })}
       </SimpleGrid>
     </Box>

@@ -1,3 +1,4 @@
+import { sanityImage } from "@/lib/sanity.image";
 import { useStore } from "@/store";
 import {
   Box,
@@ -8,7 +9,12 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 
-const BasicImageText = () => {
+interface ContainerProps {
+  data: any;
+}
+
+const BasicImageText = (props: ContainerProps) => {
+  const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
@@ -16,7 +22,9 @@ const BasicImageText = () => {
     <Box position="relative" width="100%" mt="75px">
       <Image
         src={
-          isMobile ? "/img/basicImageMobile.png" : "/img/lineaproductos2.png"
+          isMobile
+            ? sanityImage(data?.img_mobile.asset._ref).url()
+            : sanityImage(data?.img_web.asset._ref).url()
         }
         alt="Image text"
         width="100%"
@@ -40,24 +48,24 @@ const BasicImageText = () => {
           fontSize="60px"
           pt={isMobile ? "20px" : "60px"}
         >
-          ANTI-AGE
+          {data?.titulo}
         </Heading>
-        <Text color="white" lineHeight="normal" textAlign="justify">
-          Kit especializado para el cuidado, diseñado para combatir los signos
-          del envejecimiento y devolverle a tu piel su vitalidad juvenil. Con
-          una poderosa combinación de productos avanzados, este kit te ayudará a
-          reducir arrugas, líneas de expresión y a mejorar la firmeza y
-          elasticidad de tu piel.
+        <Text
+          color={data?.color_texto.value}
+          lineHeight="normal"
+          textAlign="justify"
+        >
+          {data?.texto}
         </Text>
         <Box flex={100} pt="30px">
           <Button
-            bg="#00AA4F"
+            bg={data?.color_botton.value}
             border="1px solid #00AA4F"
             borderRadius="35px"
             width="200px"
           >
             <Text textTransform="uppercase" color="white" fontSize="14px">
-              comprar colección
+              {data?.text_button}
             </Text>
           </Button>
         </Box>

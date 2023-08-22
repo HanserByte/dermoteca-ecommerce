@@ -14,18 +14,8 @@ import {
 } from "@chakra-ui/react";
 import "./index.scss";
 import { useStore } from "@/store";
-
-const SampleLinks1 = [
-  { title: "BITÁCORA" },
-  { title: "AGENDAR CITA" },
-  { title: "PEDIDOS" },
-];
-
-const SampleLinks2 = [
-  { title: "CONTACTO" },
-  { title: "FAQ" },
-  { title: "AVISO DE PRIVACIDAD" },
-];
+import { IDataFooter } from "@/typesSanity/docs/footer";
+import { useEffect, useState } from "react";
 
 const TitleRedirect = (props: ITitleRedirect) => {
   const { title } = props;
@@ -49,12 +39,19 @@ const TitleRedirect = (props: ITitleRedirect) => {
   );
 };
 
-const Form = () => {
+const Form = (props: any) => {
+  const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
-    <Flex alignItems="center" justifyContent="center" flex={2} pr={isMobile ? "" : "40px"} borderBottom="1px solid #000">
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      flex={2}
+      pr={isMobile ? "" : "40px"}
+      borderBottom="1px solid #000"
+    >
       <Box textAlign="center">
         <Box mb="4px" textTransform="uppercase">
           <Text
@@ -65,7 +62,7 @@ const Form = () => {
             pb="10px"
           >
             {" "}
-            Suscríbete a nuestro newsletter
+            {data.inputTexto}
           </Text>
         </Box>
         <InputGroup
@@ -93,9 +90,40 @@ const Form = () => {
   );
 };
 
-const Top = () => {
+interface ContainerProps {
+  data: IDataFooter;
+}
+
+const Top = (props: ContainerProps) => {
+  const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  const [linkOne, setLinkOne] = useState<{ title: string; url?: string }[]>([]);
+  const [linkTwo, setLinkTwo] = useState<{ title: string; url?: string }[]>([]);
+
+  useEffect(() => {
+    if (
+      data.sobre_nosotros_apartado_1 &&
+      data.sobre_nosotros_apartado_1.length > 0
+    ) {
+      const result = data.sobre_nosotros_apartado_1.map((item: any) => {
+        return { title: item.nombre };
+      });
+      setLinkOne(result);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      data.sobre_nosotros_apartado_2 &&
+      data.sobre_nosotros_apartado_2.length > 0
+    ) {
+      const result = data.sobre_nosotros_apartado_2.map((item: any) => {
+        return { title: item.nombre };
+      });
+      setLinkTwo(result);
+    }
+  }, []);
 
   return (
     <>
@@ -113,7 +141,7 @@ const Top = () => {
             <LogoShortCI />
           </Flex>
           <Flex flex={100} bg="#000" pt="30px" borderBottom="1px solid #000">
-            <Form />
+            <Form data={data} />
           </Flex>
           <Box bg="#000" color="white" borderBottom="1px solid #000">
             <Flex
@@ -128,9 +156,11 @@ const Top = () => {
               {/* Lado izquierdo */}
               <Flex flex={1}>
                 <Box>
-                  {SampleLinks1.map((item: { title: string; url?: string }, index: number) => {
-                    return <TitleRedirect title={item.title} key={index}/>;
-                  })}
+                  {linkOne.map(
+                    (item: { title: string; url?: string }, index: number) => {
+                      return <TitleRedirect title={item.title} key={index} />;
+                    }
+                  )}
                 </Box>
               </Flex>
 
@@ -142,9 +172,11 @@ const Top = () => {
                 textAlign="right"
               >
                 <UnorderedList>
-                  {SampleLinks2.map((item: { title: string; url?: string }, index: number) => {
-                    return <TitleRedirect title={item.title} key={index}/>;
-                  })}
+                  {linkTwo.map(
+                    (item: { title: string; url?: string }, index: number) => {
+                      return <TitleRedirect title={item.title} key={index} />;
+                    }
+                  )}
                 </UnorderedList>
               </Flex>
             </Flex>
@@ -167,21 +199,30 @@ const Top = () => {
               <Box>
                 <HStack>
                   <LogoShortCI />
-                  {SampleLinks1.map((item: { title: string; url?: string }, index: number) => {
-                    return <TitleRedirect title={item.title} key={index}/>;
-                  })}
+                  {linkOne.length > 0 &&
+                    linkOne.map(
+                      (
+                        item: { title: string; url?: string },
+                        index: number
+                      ) => {
+                        return <TitleRedirect title={item.title} key={index} />;
+                      }
+                    )}
                 </HStack>
               </Box>
             </Flex>
 
             {/* Centro */}
-            <Form />
+            <Form data={data} />
 
             {/* Lado derecho */}
             <Flex alignItems="center" flex={1} justifyContent="flex-end">
-              {SampleLinks2.map((item: { title: string; url?: string }, index: number) => {
-                return <TitleRedirect title={item.title} key={index}/>;
-              })}
+              {linkTwo.length > 0 &&
+                linkTwo.map(
+                  (item: { title: string; url?: string }, index: number) => {
+                    return <TitleRedirect title={item.title} key={index} />;
+                  }
+                )}
             </Flex>
           </Flex>
         </Box>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -20,20 +20,67 @@ import { CiHeart, CiUser } from "react-icons/ci";
 import { TfiSearch } from "react-icons/tfi";
 import { LogoCI, LogoHamburguerCI } from "../Icons";
 import { useStore } from "@/store";
+import { IDataNav } from "@/typesSanity/docs/nav";
+import { client } from "@/lib/sanity.client";
+import React from "react";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Links = ["FARMACIA", "TRATAMIENTOS", "ACERCA DE"];
+const iconArray: any = {
+  LiaShoppingBagSolid: LiaShoppingBagSolid,
+  CiHeart: CiHeart,
+  CiUser: CiUser,
+  TfiSearch: TfiSearch,
+};
 
 const NavBar = () => {
+  const query = `
+    *[_type == "settings"]{
+      'logo': navbar.logo,
+      'links_izquierda': navbar.links_izquierda[]{ ... ,
+      'dataUrl': *[_id == ^.link.url._ref]{
+          'url': slug.current
+        }[0]
+      },
+      'links_derecha': navbar.links_derecha[]{ ... ,
+        'dataUrl': *[_id == ^.link.url._ref]{
+            'url': slug.current
+          }[0]
+        }
+    }
+  `;
+
+  const [data, setData] = useState<IDataNav>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { value } = useStore();
 
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [isPhone] = useMediaQuery(`(max-width: 400px)`);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [linksLeft, setLinksLeft] = useState<{ title: string; url?: string }[]>(
+    []
+  );
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await client.fetch(query);
+      setData(data[0]);
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (data && data.links_izquierda && data.links_izquierda.length > 0) {
+      const result = data.links_izquierda.map((item: any) => {
+        return { title: item.title };
+      });
+
+      setLinksLeft(result);
+    }
+  }, [data]);
 
   return (
     <Flex
@@ -61,19 +108,20 @@ const NavBar = () => {
         ) : (
           <Box>
             <HStack>
-              {Links.map((link) => (
-                <Box key={link} mr={4}>
-                  <Text
-                    fontSize="14px"
-                    fontWeight={400}
-                    lineHeight="normal"
-                    color="white"
-                    cursor="pointer"
-                  >
-                    {link}
-                  </Text>
-                </Box>
-              ))}
+              {linksLeft.length > 0 &&
+                linksLeft.map((link: { title: string; url?: string }) => (
+                  <Box key={link.title} mr={4}>
+                    <Text
+                      fontSize="14px"
+                      fontWeight={400}
+                      lineHeight="normal"
+                      color="white"
+                      cursor="pointer"
+                    >
+                      {link.title}
+                    </Text>
+                  </Box>
+                ))}
             </HStack>
           </Box>
         )}
@@ -95,45 +143,22 @@ const NavBar = () => {
 
       {/* Lado derecho */}
       <Flex alignItems="center" flex={1} justifyContent="flex-end">
-        <CiHeart
-          style={{
-            width: "30px",
-            height: "30px",
-            marginRight: "12px",
-            cursor: "pointer",
-            color: "white",
-            display: isMobile ? "none" : "",
-          }}
-        />
-        <CiUser
-          style={{
-            width: "30px",
-            height: "30px",
-            marginRight: "12px",
-            cursor: "pointer",
-            color: "white",
-            display: isMobile ? "none" : "",
-          }}
-        />
-        <TfiSearch
-          style={{
-            width: "25px",
-            height: "25px",
-            marginRight: "12px",
-            cursor: "pointer",
-            color: isMobile ? "black" : "white",
-          }}
-        />
-        <LiaShoppingBagSolid
-          style={{
-            width: "30px",
-            height: "30px",
-            marginRight: isMobile ? "" : "12px",
-            cursor: "pointer",
-            color: isMobile ? "black" : "white",
-            strokeWidth: "-2",
-          }}
-        />
+        {data?.links_derecha &&
+          data.links_derecha.length > 0 &&
+          data.links_derecha.map((item, index) => (
+            <React.Fragment key={index}>
+              {iconArray[item.icono]({
+                style: {
+                  width: item.icono === "TfiSearch" ? "25px" : "30px",
+                  height: item.icono === "TfiSearch" ? "25px" : "30px",
+                  cursor: "pointer",
+                  color: "white",
+                  display: isMobile ? "none" : "",
+                },
+              })}
+              {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
+            </React.Fragment>
+          ))}
       </Flex>
 
       {/* Drawer para pantallas móviles */}
@@ -153,18 +178,19 @@ const NavBar = () => {
               />
             </DrawerHeader>
             <DrawerBody>
-              {Links.map((link) => (
-                <Box key={link} mb={4}>
-                  <Text
-                    fontSize="14px"
-                    fontWeight={400}
-                    lineHeight="normal"
-                    color="black"
-                  >
-                    {link}
-                  </Text>
-                </Box>
-              ))}
+              {linksLeft.length > 0 &&
+                linksLeft.map((link: { title: string; url?: string }) => (
+                  <Box key={link.title} mb={4}>
+                    <Text
+                      fontSize="14px"
+                      fontWeight={400}
+                      lineHeight="normal"
+                      color="black"
+                    >
+                      {link.title}
+                    </Text>
+                  </Box>
+                ))}
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>

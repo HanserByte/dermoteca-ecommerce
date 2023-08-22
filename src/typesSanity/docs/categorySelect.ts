@@ -1,0 +1,16 @@
+import { IImg, SanityBody } from "./default";
+
+interface ICategorias {
+  img_fondo: IImg;
+  subtitulo_imagen: string;
+  titulo_imagen: string;
+  _key: string;
+}
+
+export interface ICategorySelect extends SanityBody {
+  titulo: string;
+  text_button: string;
+  formato_categorias: string;
+  descripcion: string;
+  categorias: ICategorias[];
+}
