@@ -2,7 +2,6 @@ import { client } from "@/lib/sanity.client";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import CategorySelect from "@/components/CategorySelect";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 
@@ -32,9 +31,6 @@ const Home = () => {
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar />
-      {/* <Hero />
-      <CategorySelect />
-      <BasicImageText /> */}
       {data &&
         data.componentes.map((componente: any) => (
           <ComponentRenderer
