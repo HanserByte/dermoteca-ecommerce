@@ -67,7 +67,15 @@ const TypeB = (props: ContainerProps) => {
   }, []);
 
   return (
-    <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+    <Grid
+      templateColumns={{
+        base: "repeat(1, 1fr)",
+        sm: "repeat(2, 1fr)",
+        md: "repeat(3, 1fr)",
+        lg: "repeat(4, 1fr)",
+      }}
+      gap={4}
+    >
       {/* Primera fila: 4 tarjetas pequeñas */}
       {first.length > 0 && (
         <>
@@ -87,7 +95,7 @@ const TypeB = (props: ContainerProps) => {
       )}
 
       {/* Segunda fila: 2 tarjetas grandes */}
-			{second.length > 0 && (
+      {second.length > 0 && (
         <>
           {second.map((item: any, index: number) => {
             return (

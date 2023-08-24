@@ -16,6 +16,7 @@ const CategorySelect = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  const [isMobileIpad] = useMediaQuery(`(max-width: 662px)`);
 
   return (
     <Box
@@ -28,7 +29,10 @@ const CategorySelect = (props: ContainerProps) => {
         <TypeA data={data} isMobile={isMobile} />
       )}
       {data.formato_categorias === "b" && (
-        <TypeB data={data} isMobile={isMobile} />
+        <>
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
+          {!isMobileIpad && <TypeB data={data} isMobile={isMobile} />}
+        </>
       )}
       {data.formato_categorias === "c" && (
         <TypeC data={data} isMobile={isMobile} />

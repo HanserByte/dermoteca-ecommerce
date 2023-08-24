@@ -55,7 +55,7 @@ const TypeC = (props: ContainerProps) => {
   const { data, isMobile } = props;
 
   return (
-    <Stack direction="row" spacing={3}>
+    <Stack direction={{ base: "column", sm: "row" }} spacing={3}>
       {" "}
       {/* spacing entre las dos columnas principales */}
       {/* Primera columna: imagen grande */}

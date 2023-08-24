@@ -30,7 +30,7 @@ const TitleWithDescription = (props: ContainerProps) => {
               width="110px"
               mb="5px"
             >
-              <Text textTransform="uppercase" color="black">
+              <Text textTransform="uppercase" color="black" noOfLines={1}>
                 {data?.text_button}
               </Text>
             </Button>
@@ -49,7 +49,7 @@ const TitleWithDescription = (props: ContainerProps) => {
                 border="1px solid black"
                 width="150px"
               >
-                <Text textTransform="uppercase" color="black">
+                <Text textTransform="uppercase" color="black" noOfLines={1}>
                   {data?.text_button}
                 </Text>
               </Button>
@@ -81,10 +81,10 @@ const TitleNoDescription = (props: ContainerProps) => {
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
-              minW="110px"
+              minW={data?.text_button.length > 9 ? "170px" : "110px"}
               mb="5px"
             >
-              <Text textTransform="uppercase" color="black">
+              <Text textTransform="uppercase" color="black" noOfLines={1}>
                 {data?.text_button}
               </Text>
             </Button>
