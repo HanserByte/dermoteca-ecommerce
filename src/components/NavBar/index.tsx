@@ -60,9 +60,25 @@ const NavBar = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [isPhone] = useMediaQuery(`(max-width: 400px)`);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [linksLeft, setLinksLeft] = useState<{ title: string; url?: string }[]>(
     []
   );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) { 
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -116,7 +132,7 @@ const NavBar = () => {
                       fontSize="14px"
                       fontWeight={400}
                       lineHeight="normal"
-                      color="white"
+                      color={isScrolled ? "black" : "white"}
                       cursor="pointer"
                     >
                       {link.title}
@@ -136,7 +152,7 @@ const NavBar = () => {
         mr={isPhone ? "15px" : ""}
       >
         <LogoCI
-          color={isMobile ? "black" : "white"}
+          color={isMobile || isScrolled ? "black" : "white"}
           width={isMobile ? "190px" : "250px"}
           height={isMobile ? "27px" : "33px"}
         />
@@ -154,7 +170,7 @@ const NavBar = () => {
                     width: item.icono === "TfiSearch" ? "25px" : "30px",
                     height: item.icono === "TfiSearch" ? "25px" : "30px",
                     cursor: "pointer",
-                    color: "white",
+                    color: isScrolled ? "black" : "white",
                   },
                 })}
                 {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
