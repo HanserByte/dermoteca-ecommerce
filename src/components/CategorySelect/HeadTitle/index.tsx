@@ -3,7 +3,7 @@ import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
 import { Box, Button, Grid, HStack, Spacer, Text } from "@chakra-ui/react";
 
 interface ContainerProps {
-  data: ICategorySelect;
+  data: any;
   isMobile: boolean;
 }
 
@@ -27,7 +27,7 @@ const TitleWithDescription = (props: ContainerProps) => {
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
-              width="110px"
+              minW={data?.text_button.length > 9 ? "170px" : "120px"}
               mb="5px"
             >
               <Text textTransform="uppercase" color="black" noOfLines={1}>

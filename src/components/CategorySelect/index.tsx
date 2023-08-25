@@ -7,6 +7,7 @@ import HeadTitle from "./HeadTitle";
 import TypeA from "./Type/TypeA";
 import TypeB from "./Type/TypeB";
 import TypeC from "./Type/TypeC";
+import TypeD from "./Type/TypeD";
 
 interface ContainerProps {
   data: ICategorySelect;
@@ -24,7 +25,7 @@ const CategorySelect = (props: ContainerProps) => {
       pl={isMobile ? "20px" : "145px"}
       pr={isMobile ? "20px" : "145px"}
     >
-      <HeadTitle data={data} isMobile={isMobile} />
+      {data.text_button && <HeadTitle data={data} isMobile={isMobile} />}
       {data.formato_categorias === "a" && (
         <TypeA data={data} isMobile={isMobile} />
       )}
@@ -36,6 +37,12 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "c" && (
         <TypeC data={data} isMobile={isMobile} />
+      )}
+      {data.formato_categorias === "d" && (
+        <>
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
+          {!isMobileIpad && <TypeD data={data} isMobile={isMobile} />}
+        </>
       )}
     </Box>
   );
