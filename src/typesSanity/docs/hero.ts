@@ -19,6 +19,8 @@ export interface IHeroComponents extends ICommons {
   textImage: IImg;
   text: string;
   backgroundImage: IImg;
+  formato_hero: string;
+  isPadding?: boolean
 }
 
 export interface IHero {

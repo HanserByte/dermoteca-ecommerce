@@ -31,7 +31,7 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "b" && (
         <>
-          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} isOnlyOne={true} />}
           {!isMobileIpad && <TypeB data={data} isMobile={isMobile} />}
         </>
       )}
@@ -40,7 +40,7 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "d" && (
         <>
-          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} isOnlyOne={true} />}
           {!isMobileIpad && <TypeD data={data} isMobile={isMobile} />}
         </>
       )}

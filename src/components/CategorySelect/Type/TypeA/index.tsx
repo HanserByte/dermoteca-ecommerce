@@ -6,6 +6,7 @@ import { ICategory } from "../../Interface";
 interface ContainerProps {
   data: ICategorySelect;
   isMobile: boolean;
+  isOnlyOne?: boolean;
 }
 
 const Category = (props: ICategory) => {
@@ -52,14 +53,20 @@ const Category = (props: ICategory) => {
 };
 
 const TypeA = (props: ContainerProps) => {
-  const { data, isMobile } = props;
+  const { data, isMobile, isOnlyOne } = props;
+
+  const getGrid = () => {
+    if (isMobile && isOnlyOne) {
+      return "repeat(auto-fit, minmax(200px, 1fr))";
+    } else if (isMobile && !isOnlyOne) {
+      return "repeat(2, 1fr)";
+    } else {
+      return "repeat(4, 1fr)";
+    }
+  };
+
   return (
-    <SimpleGrid
-      spacing={3}
-      templateColumns={
-        isMobile ? "repeat(auto-fit, minmax(200px, 1fr))" : "repeat(4, 1fr)"
-      }
-    >
+    <SimpleGrid spacing={3} templateColumns={getGrid()}>
       {data.categorias.map((item: ICategory, index: number) => {
         return (
           <Category
