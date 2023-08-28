@@ -2,9 +2,7 @@ import { client } from "@/lib/sanity.client";
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import ContactUs from "@/components/ContactUs";
 
 const Home = () => {
   const [data, setData] = useState<any>();
@@ -40,7 +38,6 @@ const Home = () => {
             data={componente}
           />
         ))}
-      <Footer />
     </Box>
   );
 };
