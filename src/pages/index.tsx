@@ -30,7 +30,7 @@ const Home = () => {
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
-      <NavBar />
+      <NavBar dataN={{}} />
       {data &&
         data.componentes.map((componente: any) => (
           <ComponentRenderer
