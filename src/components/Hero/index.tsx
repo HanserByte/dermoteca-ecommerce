@@ -3,6 +3,7 @@ import { useStore } from "@/store";
 import { IHeroComponents } from "@/typesSanity/docs/hero";
 
 import TypeA from "./Type/TypeA";
+import TypeB from "./Type/TypeB";
 import TypeC from "./Type/TypeC";
 
 interface ContainerProps {
@@ -17,6 +18,7 @@ const Hero = (props: ContainerProps) => {
   return (
     <>
       {data.formato_hero === "a" && <TypeA isMobile={isMobile} data={data} />}
+      {data.formato_hero === "b" && <TypeB isMobile={isMobile} data={data} />}
       {data.formato_hero === "c" && <TypeC isMobile={isMobile} data={data} />}
     </>
   );

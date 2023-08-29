@@ -65,18 +65,23 @@ const NavBar = () => {
     []
   );
 
+  const goHome = () => {
+    const newURL = "/";
+    window.location.href = newURL
+  }
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) { 
+      if (window.scrollY > 10) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -92,7 +97,7 @@ const NavBar = () => {
   useEffect(() => {
     if (data && data.links_izquierda && data.links_izquierda.length > 0) {
       const result = data.links_izquierda.map((item: any) => {
-        return { title: item.title };
+        return { title: item.title, dataUrl: item.dataUrl };
       });
 
       setLinksLeft(result);
@@ -126,19 +131,30 @@ const NavBar = () => {
           <Box>
             <HStack>
               {linksLeft.length > 0 &&
-                linksLeft.map((link: { title: string; url?: string }) => (
-                  <Box key={link.title} mr={4}>
-                    <Text
-                      fontSize="14px"
-                      fontWeight={400}
-                      lineHeight="normal"
-                      color={isScrolled ? "black" : "white"}
-                      cursor="pointer"
-                    >
-                      {link.title}
-                    </Text>
-                  </Box>
-                ))}
+                linksLeft.map(
+                  (link: {
+                    title: string;
+                    url?: string;
+                    dataUrl?: { url: string };
+                  }) => (
+                    <Box key={link.title} mr={4}>
+                      <a
+                        href={(link.dataUrl && `/${link.dataUrl.url}`) || ""}
+                        rel="noopener noreferrer"
+                      >
+                        <Text
+                          fontSize="14px"
+                          fontWeight={400}
+                          lineHeight="normal"
+                          color={isScrolled ? "black" : "white"}
+                          cursor="pointer"
+                        >
+                          {link.title}
+                        </Text>
+                      </a>
+                    </Box>
+                  )
+                )}
             </HStack>
           </Box>
         )}
@@ -150,6 +166,8 @@ const NavBar = () => {
         justifyContent="center"
         flex={2}
         mr={isPhone ? "15px" : ""}
+        onClick={goHome}
+        cursor="pointer"
       >
         <LogoCI
           color={isMobile || isScrolled ? "black" : "white"}

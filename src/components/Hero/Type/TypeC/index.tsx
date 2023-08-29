@@ -32,8 +32,6 @@ const TypeC = (props: IContainerProps) => {
         position="absolute"
         top="0"
         left="0"
-        width="100%"
-        maxHeight="100%"
         overflow="auto"
         p="4"
         zIndex={99999}
