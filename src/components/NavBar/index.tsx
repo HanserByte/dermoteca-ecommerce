@@ -25,7 +25,7 @@ import { client } from "@/lib/sanity.client";
 import React from "react";
 
 interface IContainerProps {
-  dataN: any
+  dataN: any;
 }
 
 const iconArray: any = {
@@ -57,7 +57,7 @@ const NavBar = (props: IContainerProps) => {
     }
   `;
 
-  const { dataN } = props
+  const { dataN } = props;
   const [data, setData] = useState<IDataNav>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { value } = useStore();
@@ -66,14 +66,14 @@ const NavBar = (props: IContainerProps) => {
   const [isPhone] = useMediaQuery(`(max-width: 400px)`);
   const [showDrawer, setShowDrawer] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [linksLeft, setLinksLeft] = useState<{ title: string; url?: string }[]>(
-    []
-  );
+  const [linksLeft, setLinksLeft] = useState<
+    { title: string; url?: string; dataUrl: { url: string } }[]
+  >([]);
 
   const goHome = () => {
     const newURL = "/";
-    window.location.href = newURL
-  }
+    window.location.href = newURL;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -152,7 +152,11 @@ const NavBar = (props: IContainerProps) => {
                           fontSize="14px"
                           fontWeight={400}
                           lineHeight="normal"
-                          color={isScrolled || dataN?.isBlackNavBar ? "black" : "white"}
+                          color={
+                            isScrolled || dataN?.isBlackNavBar
+                              ? "black"
+                              : "white"
+                          }
                           cursor="pointer"
                         >
                           {link.title}
@@ -176,7 +180,9 @@ const NavBar = (props: IContainerProps) => {
         cursor="pointer"
       >
         <LogoCI
-          color={isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"}
+          color={
+            isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"
+          }
           width={isMobile ? "190px" : "250px"}
           height={isMobile ? "27px" : "33px"}
         />
@@ -194,7 +200,8 @@ const NavBar = (props: IContainerProps) => {
                     width: item.icono === "TfiSearch" ? "25px" : "30px",
                     height: item.icono === "TfiSearch" ? "25px" : "30px",
                     cursor: "pointer",
-                    color: isScrolled || dataN?.isBlackNavBar ? "black" : "white",
+                    color:
+                      isScrolled || dataN?.isBlackNavBar ? "black" : "white",
                   },
                 })}
                 {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
@@ -247,18 +254,29 @@ const NavBar = (props: IContainerProps) => {
             </DrawerHeader>
             <DrawerBody>
               {linksLeft.length > 0 &&
-                linksLeft.map((link: { title: string; url?: string }) => (
-                  <Box key={link.title} mb={4}>
-                    <Text
-                      fontSize="14px"
-                      fontWeight={400}
-                      lineHeight="normal"
-                      color="black"
-                    >
-                      {link.title}
-                    </Text>
-                  </Box>
-                ))}
+                linksLeft.map(
+                  (link: {
+                    title: string;
+                    url?: string;
+                    dataUrl: { url: string };
+                  }) => (
+                    <Box key={link.title} mb={4}>
+                      <a
+                        href={(link.dataUrl && `/${link.dataUrl.url}`) || ""}
+                        rel="noopener noreferrer"
+                      >
+                        <Text
+                          fontSize="14px"
+                          fontWeight={400}
+                          lineHeight="normal"
+                          color="black"
+                        >
+                          {link.title}
+                        </Text>
+                      </a>
+                    </Box>
+                  )
+                )}
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
