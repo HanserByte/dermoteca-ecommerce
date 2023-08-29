@@ -16,9 +16,9 @@ interface IContainerProps {
 
 const SampleLinks1 = [{ title: "MI HISTORIAL" }];
 const SampleLinks2 = [
-  { title: "bitácora" },
-  { title: "agendar cita" },
-  { title: "pedidos" },
+  { title: "bitácora", dataUrl: { url: "" } },
+  { title: "agendar cita", dataUrl: { url: "" } },
+  { title: "pedidos", dataUrl: { url: "" } },
 ];
 
 const TypeA = (props: IContainerProps) => {
@@ -107,7 +107,7 @@ const TypeA = (props: IContainerProps) => {
               <Box flex={100} pl="10px">
                 <HStack>
                   {SampleLinks2.map((item: ITitleRedirect, index: number) => {
-                    return <RenderOptions title={item.title} key={index} />;
+                    return <RenderOptions title={item.title} key={index} dataUrl={{}} />;
                   })}
                 </HStack>
               </Box>
@@ -135,7 +135,7 @@ const TypeA = (props: IContainerProps) => {
                       {SampleLinks2.map(
                         (item: ITitleRedirect, index: number) => {
                           return (
-                            <RenderOptions title={item.title} key={index} />
+                            <RenderOptions title={item.title} key={index} dataUrl={{}} />
                           );
                         }
                       )}
