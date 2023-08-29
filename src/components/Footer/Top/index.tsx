@@ -18,24 +18,26 @@ import { IDataFooter } from "@/typesSanity/docs/footer";
 import { useEffect, useState } from "react";
 
 const TitleRedirect = (props: ITitleRedirect) => {
-  const { title } = props;
+  const { title, dataUrl } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
-    <Text
-      fontSize="13px"
-      fontWeight={400}
-      lineHeight="normal"
-      color="white"
-      cursor="pointer"
-      pl={isMobile ? "" : "20px"}
-      pt="20px"
-      pr={isMobile ? "" : "20px"}
-      whiteSpace="nowrap"
-    >
-      {title}
-    </Text>
+    <a href={(dataUrl && `/${dataUrl.url}`) || ""} rel="noopener noreferrer">
+      <Text
+        fontSize="13px"
+        fontWeight={400}
+        lineHeight="normal"
+        color="white"
+        cursor="pointer"
+        pl={isMobile ? "" : "20px"}
+        pt="20px"
+        pr={isMobile ? "" : "20px"}
+        whiteSpace="nowrap"
+      >
+        {title}
+      </Text>
+    </a>
   );
 };
 
@@ -98,8 +100,12 @@ const Top = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const [linkOne, setLinkOne] = useState<{ title: string; url?: string }[]>([]);
-  const [linkTwo, setLinkTwo] = useState<{ title: string; url?: string }[]>([]);
+  const [linkOne, setLinkOne] = useState<
+    { title: string; url?: string; dataUrl: any }[]
+  >([]);
+  const [linkTwo, setLinkTwo] = useState<
+    { title: string; url?: string; dataUrl: any }[]
+  >([]);
 
   useEffect(() => {
     if (
@@ -107,7 +113,7 @@ const Top = (props: ContainerProps) => {
       data.sobre_nosotros_apartado_1.length > 0
     ) {
       const result = data.sobre_nosotros_apartado_1.map((item: any) => {
-        return { title: item.nombre };
+        return { title: item.nombre, dataUrl: item.dataUrl };
       });
       setLinkOne(result);
     }
@@ -119,7 +125,7 @@ const Top = (props: ContainerProps) => {
       data.sobre_nosotros_apartado_2.length > 0
     ) {
       const result = data.sobre_nosotros_apartado_2.map((item: any) => {
-        return { title: item.nombre };
+        return { title: item.nombre, dataUrl: item.dataUrl };
       });
       setLinkTwo(result);
     }
@@ -157,8 +163,17 @@ const Top = (props: ContainerProps) => {
               <Flex flex={1}>
                 <Box>
                   {linkOne.map(
-                    (item: { title: string; url?: string }, index: number) => {
-                      return <TitleRedirect title={item.title} key={index} />;
+                    (
+                      item: { title: string; url?: string; dataUrl: any },
+                      index: number
+                    ) => {
+                      return (
+                        <TitleRedirect
+                          title={item.title}
+                          key={index}
+                          dataUrl={item.dataUrl}
+                        />
+                      );
                     }
                   )}
                 </Box>
@@ -173,8 +188,17 @@ const Top = (props: ContainerProps) => {
               >
                 <UnorderedList>
                   {linkTwo.map(
-                    (item: { title: string; url?: string }, index: number) => {
-                      return <TitleRedirect title={item.title} key={index} />;
+                    (
+                      item: { title: string; url?: string; dataUrl: any },
+                      index: number
+                    ) => {
+                      return (
+                        <TitleRedirect
+                          title={item.title}
+                          key={index}
+                          dataUrl={item.dataUrl}
+                        />
+                      );
                     }
                   )}
                 </UnorderedList>
@@ -202,10 +226,16 @@ const Top = (props: ContainerProps) => {
                   {linkOne.length > 0 &&
                     linkOne.map(
                       (
-                        item: { title: string; url?: string },
+                        item: { title: string; url?: string; dataUrl: any },
                         index: number
                       ) => {
-                        return <TitleRedirect title={item.title} key={index} />;
+                        return (
+                          <TitleRedirect
+                            title={item.title}
+                            key={index}
+                            dataUrl={item.dataUrl}
+                          />
+                        );
                       }
                     )}
                 </HStack>
@@ -219,8 +249,17 @@ const Top = (props: ContainerProps) => {
             <Flex alignItems="center" flex={1} justifyContent="flex-end">
               {linkTwo.length > 0 &&
                 linkTwo.map(
-                  (item: { title: string; url?: string }, index: number) => {
-                    return <TitleRedirect title={item.title} key={index} />;
+                  (
+                    item: { title: string; url?: string; dataUrl: any },
+                    index: number
+                  ) => {
+                    return (
+                      <TitleRedirect
+                        title={item.title}
+                        key={index}
+                        dataUrl={item.dataUrl}
+                      />
+                    );
                   }
                 )}
             </Flex>

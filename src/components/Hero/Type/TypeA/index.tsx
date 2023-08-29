@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Image, Skeleton, Text } from "@chakra-ui/react";
 import { sanityImage } from "@/lib/sanity.image";
 
 import MainText from "../../Common/MainText";
@@ -7,6 +7,7 @@ import { IHeroComponents } from "@/typesSanity/docs/hero";
 
 import { LogoShortCI, LogoTreatmentCI } from "@/components/Icons";
 import RenderOptions from "../../Common/RenderOptions";
+import { useState } from "react";
 
 interface IContainerProps {
   data: IHeroComponents;
@@ -23,18 +24,26 @@ const SampleLinks2 = [
 const TypeA = (props: IContainerProps) => {
   const { data, isMobile } = props;
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
   return (
     <Flex position="relative" id="hero">
-      <Image
-        src={sanityImage(data?.backgroundImage.asset._ref).url()}
-        alt="Hero"
-        pt={isMobile ? "81px" : ""}
-        height={isMobile ? "900px" : ""}
-        objectFit={"cover"}
-        width="100%"
-        objectPosition={isMobile ? "90% 50%" : ""}
-      />
-
+      <Skeleton isLoaded={!isLoading}>
+        <Image
+          src={sanityImage(data?.backgroundImage.asset._ref).url()}
+          alt="Hero"
+          pt={isMobile ? "81px" : ""}
+          height={isMobile ? "900px" : ""}
+          objectFit={"cover"}
+          width="100%"
+          objectPosition={isMobile ? "90% 50%" : ""}
+          onLoad={handleImageLoad}
+        />
+      </Skeleton>
       <Box
         position="absolute"
         top="0"
@@ -142,4 +151,4 @@ const TypeA = (props: IContainerProps) => {
   );
 };
 
-export default TypeA
+export default TypeA;

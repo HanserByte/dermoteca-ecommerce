@@ -24,6 +24,10 @@ import { IDataNav } from "@/typesSanity/docs/nav";
 import { client } from "@/lib/sanity.client";
 import React from "react";
 
+interface IContainerProps {
+  dataN: any
+}
+
 const iconArray: any = {
   LiaShoppingBagSolid: LiaShoppingBagSolid,
   CiHeart: CiHeart,
@@ -31,7 +35,7 @@ const iconArray: any = {
   TfiSearch: TfiSearch,
 };
 
-const NavBar = () => {
+const NavBar = (props: IContainerProps) => {
   const query = `
     *[_type == "settings"]{
       'logo': navbar.logo,
@@ -53,6 +57,7 @@ const NavBar = () => {
     }
   `;
 
+  const { dataN } = props
   const [data, setData] = useState<IDataNav>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { value } = useStore();
@@ -114,6 +119,7 @@ const NavBar = () => {
       pt="20px"
       pb="20px"
       position="fixed"
+      top={0}
       width="100%"
       maxW="2560px"
       zIndex={9999999}
@@ -146,7 +152,7 @@ const NavBar = () => {
                           fontSize="14px"
                           fontWeight={400}
                           lineHeight="normal"
-                          color={isScrolled ? "black" : "white"}
+                          color={isScrolled || dataN?.isBlackNavBar ? "black" : "white"}
                           cursor="pointer"
                         >
                           {link.title}
@@ -170,7 +176,7 @@ const NavBar = () => {
         cursor="pointer"
       >
         <LogoCI
-          color={isMobile || isScrolled ? "black" : "white"}
+          color={isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"}
           width={isMobile ? "190px" : "250px"}
           height={isMobile ? "27px" : "33px"}
         />
@@ -188,7 +194,7 @@ const NavBar = () => {
                     width: item.icono === "TfiSearch" ? "25px" : "30px",
                     height: item.icono === "TfiSearch" ? "25px" : "30px",
                     cursor: "pointer",
-                    color: isScrolled ? "black" : "white",
+                    color: isScrolled || dataN?.isBlackNavBar ? "black" : "white",
                   },
                 })}
                 {index !== data.links_derecha.length - 1 && <Box mx="8px" />}

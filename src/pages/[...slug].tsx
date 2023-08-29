@@ -19,6 +19,7 @@ const Page = () => {
             *[_type == "pages" && slug.current == "${slug}"] {
               _id,
               title,
+              isBlackNavBar,
               "slug": slug.current,
               componentes[]-> {
                 ...
@@ -40,7 +41,7 @@ const Page = () => {
 
   return (
     <>
-      {data && <NavBar />}
+      {data && <NavBar dataN={data} />}
       {data &&
         data.componentes.map((componente: any) => (
           <ComponentRenderer

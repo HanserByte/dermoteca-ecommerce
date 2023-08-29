@@ -36,6 +36,7 @@ const TypeC = (props: IContainerProps) => {
         p="4"
         zIndex={99999}
         id="box-text-image"
+        width="100%"
       >
         <Flex
           flex={100}
