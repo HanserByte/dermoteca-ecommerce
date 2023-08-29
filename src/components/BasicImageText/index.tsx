@@ -45,8 +45,9 @@ const BasicImageText = (props: ContainerProps) => {
         <Heading
           fontFamily="KobeBold"
           color="white"
-          fontSize="60px"
+          fontSize="55px"
           pt={isMobile ? "20px" : "60px"}
+          noOfLines={2}
         >
           {data?.titulo}
         </Heading>

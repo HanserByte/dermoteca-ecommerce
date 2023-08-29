@@ -1,12 +1,8 @@
-import { Box, Flex, HStack, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Skeleton } from "@chakra-ui/react";
+
 import { sanityImage } from "@/lib/sanity.image";
-
-import MainText from "../../Common/MainText";
-import { ITitleRedirect } from "@/components/Interfaces";
 import { IHeroComponents } from "@/typesSanity/docs/hero";
-
-import { LogoShortCI, LogoTreatmentCI } from "@/components/Icons";
-import RenderOptions from "../../Common/RenderOptions";
+import { useState } from "react";
 
 interface IContainerProps {
   data: IHeroComponents;
@@ -16,18 +12,26 @@ interface IContainerProps {
 const TypeC = (props: IContainerProps) => {
   const { data, isMobile } = props;
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
   return (
     <Flex position="relative" id="hero" mt={data.isPadding ? "75px" : ""}>
-      <Image
-        src={sanityImage(data?.backgroundImage.asset._ref).url()}
-        alt="Hero"
-        pt={isMobile ? "81px" : ""}
-        height={isMobile ? "900px" : ""}
-        objectFit={"cover"}
-        width="100%"
-        objectPosition={isMobile ? "90% 50%" : ""}
-      />
-
+      <Skeleton isLoaded={!isLoading} width="100%">
+        <Image
+          src={sanityImage(data.backgroundImage.asset._ref).url()}
+          alt="Hero"
+          pt={isMobile ? "81px" : ""}
+          height={isMobile ? "900px" : ""}
+          objectFit={"cover"}
+          width="100%"
+          objectPosition={isMobile ? "90% 50%" : ""}
+          onLoad={handleImageLoad}
+        />
+      </Skeleton>
       <Box
         position="absolute"
         top="0"
@@ -45,11 +49,13 @@ const TypeC = (props: IContainerProps) => {
           alignItems="center"
           height="100%"
         >
-          <Image
-            src={sanityImage(data?.textImage.asset._ref).url()}
-            alt="Image Hero Text"
-            mt="80px"
-          />
+          {data?.textImage && (
+            <Image
+              src={sanityImage(data?.textImage?.asset?._ref || "").url()}
+              alt="Image Hero Text"
+              mt="80px"
+            />
+          )}
         </Flex>
       </Box>
     </Flex>

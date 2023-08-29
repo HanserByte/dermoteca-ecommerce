@@ -32,9 +32,9 @@ const TypeA = (props: IContainerProps) => {
 
   return (
     <Flex position="relative" id="hero">
-      <Skeleton isLoaded={!isLoading}>
+      <Skeleton isLoaded={!isLoading} width="100%">
         <Image
-          src={sanityImage(data?.backgroundImage.asset._ref).url()}
+          src={sanityImage(data.backgroundImage.asset._ref).url()}
           alt="Hero"
           pt={isMobile ? "81px" : ""}
           height={isMobile ? "900px" : ""}
@@ -61,10 +61,12 @@ const TypeA = (props: IContainerProps) => {
           id="text-image"
           justifyContent={isMobile ? "center" : ""}
         >
-          <Image
-            src={sanityImage(data?.textImage.asset._ref).url()}
-            alt="Image Hero"
-          />
+          {data?.textImage && (
+            <Image
+              src={sanityImage(data?.textImage?.asset?._ref || "").url()}
+              alt="Image Hero"
+            />
+          )}
         </Flex>
 
         {!isMobile && <MainText title={data?.text || ""} />}
@@ -107,7 +109,13 @@ const TypeA = (props: IContainerProps) => {
               <Box flex={100} pl="10px">
                 <HStack>
                   {SampleLinks2.map((item: ITitleRedirect, index: number) => {
-                    return <RenderOptions title={item.title} key={index} dataUrl={{}} />;
+                    return (
+                      <RenderOptions
+                        title={item.title}
+                        key={index}
+                        dataUrl={{}}
+                      />
+                    );
                   })}
                 </HStack>
               </Box>
@@ -135,7 +143,11 @@ const TypeA = (props: IContainerProps) => {
                       {SampleLinks2.map(
                         (item: ITitleRedirect, index: number) => {
                           return (
-                            <RenderOptions title={item.title} key={index} dataUrl={{}} />
+                            <RenderOptions
+                              title={item.title}
+                              key={index}
+                              dataUrl={{}}
+                            />
                           );
                         }
                       )}

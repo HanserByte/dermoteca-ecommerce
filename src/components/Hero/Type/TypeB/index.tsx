@@ -19,9 +19,9 @@ const TypeC = (props: IContainerProps) => {
 
   return (
     <Flex position="relative" id="hero" mt={data.isPadding ? "75px" : ""}>
-      <Skeleton isLoaded={!isLoading}>
+      <Skeleton isLoaded={!isLoading} width="100%">
         <Image
-          src={sanityImage(data?.backgroundImage.asset._ref).url()}
+          src={sanityImage(data.backgroundImage.asset._ref).url()}
           alt="Hero"
           pt={isMobile ? "81px" : ""}
           height={isMobile ? "900px" : ""}
@@ -47,11 +47,13 @@ const TypeC = (props: IContainerProps) => {
           alignItems="center"
           height="100%"
         >
-          <Image
-            src={sanityImage(data?.textImage.asset._ref).url()}
-            alt="Image Hero Text"
-            mt="80px"
-          />
+          {data?.textImage && (
+            <Image
+              src={sanityImage(data?.textImage?.asset?._ref || "").url()}
+              alt="Image Hero Text"
+              mt="80px"
+            />
+          )}
         </Flex>
       </Box>
     </Flex>
