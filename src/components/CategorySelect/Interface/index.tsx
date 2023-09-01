@@ -6,4 +6,5 @@ export interface ICategory {
   isMobile?: boolean;
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
+  type?: string;
 }

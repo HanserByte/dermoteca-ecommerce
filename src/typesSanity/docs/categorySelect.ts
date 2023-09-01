@@ -13,4 +13,6 @@ export interface ICategorySelect extends SanityBody {
   formato_categorias: string;
   descripcion: string;
   categorias: ICategorias[];
+  isPaddingTop?: boolean;
+  isPaddingBottom?: boolean;
 }

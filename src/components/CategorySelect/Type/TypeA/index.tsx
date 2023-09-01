@@ -32,6 +32,7 @@ const TypeA = (props: ContainerProps) => {
             subtitulo_imagen={item.subtitulo_imagen}
             img_fondo={item.img_fondo}
             isMobile={isMobile}
+            type={data.formato_categorias}
             key={index}
           />
         );

@@ -64,9 +64,12 @@ const TipsCards = (props: IContainerProps) => {
 
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  
+
   return (
-    <ContainerDermo>
+    <ContainerDermo
+      pt={data.isPaddingTop ? "37px" : "0px"}
+      pb={data.isPaddingBottom ? "37px" : "0px"}
+    >
       <HeadTitle data={data} isMobile={isMobile} />
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
         <Box>

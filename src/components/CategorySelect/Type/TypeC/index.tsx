@@ -9,7 +9,7 @@ interface ContainerProps {
 }
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile } = props;
 
   return (
     <Card w="100%" cursor="pointer">
@@ -45,7 +45,9 @@ const Category = (props: ICategory) => {
       </Box>
       <Image
         src={sanityImage(img_fondo.asset._ref).url()}
+        height={isMobile ? "170px" : "auto"}
         alt="category select"
+        objectFit="cover"
       />
     </Card>
   );
@@ -64,6 +66,7 @@ const TypeC = (props: ContainerProps) => {
           titulo_imagen={data.categorias[0].titulo_imagen}
           subtitulo_imagen={data.categorias[0].subtitulo_imagen}
           img_fondo={data.categorias[0].img_fondo}
+          isMobile={isMobile}
         />
       </Box>
       {/* Segunda columna: dos imágenes */}
@@ -76,6 +79,7 @@ const TypeC = (props: ContainerProps) => {
             titulo_imagen={data.categorias[1].titulo_imagen}
             subtitulo_imagen={data.categorias[1].subtitulo_imagen}
             img_fondo={data.categorias[1].img_fondo}
+            isMobile={isMobile}
           />
         </Box>
         {/* Imagen inferior */}
@@ -84,6 +88,7 @@ const TypeC = (props: ContainerProps) => {
             titulo_imagen={data.categorias[2].titulo_imagen}
             subtitulo_imagen={data.categorias[2].subtitulo_imagen}
             img_fondo={data.categorias[2].img_fondo}
+            isMobile={isMobile}
           />
         </Box>
       </VStack>

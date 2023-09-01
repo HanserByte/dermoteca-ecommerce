@@ -3,14 +3,21 @@ import { ICategory } from "../../Interface";
 import { sanityImage } from "@/lib/sanity.image";
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, type } = props;
 
   return (
     <Card w="100%" cursor="pointer">
-      <Box position="absolute" bottom="0" left="0" width="100%" p="4" mb={isMobile ? "0px" : "20px"}>
+      <Box
+        position="absolute"
+        bottom="0"
+        left="0"
+        width="100%"
+        p="4"
+        mb={isMobile ? "0px" : "20px"}
+      >
         <Box flex={100}>
           <Text
-            fontSize={isMobile ? "16px" : "22px" }
+            fontSize={isMobile ? "16px" : "22px"}
             fontWeight={700}
             lineHeight="normal"
             color="white"
@@ -25,7 +32,7 @@ const Category = (props: ICategory) => {
         </Box>
         <Box flex={100}>
           <Text
-            fontSize={isMobile ? "15px" : "17px" }
+            fontSize={isMobile ? "15px" : "17px"}
             fontWeight={400}
             lineHeight="normal"
             color="white"
@@ -40,9 +47,11 @@ const Category = (props: ICategory) => {
       <Image
         src={sanityImage(img_fondo.asset._ref).url()}
         alt="category select"
+        height={isMobile ? "273px" : "auto"}
+        objectFit="cover"
       />
     </Card>
   );
 };
 
-export default Category
+export default Category;

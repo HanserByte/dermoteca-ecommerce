@@ -21,9 +21,10 @@ const CategorySelect = (props: ContainerProps) => {
 
   return (
     <Box
-      mt="75px"
+      mt={data.isPaddingTop ? "37px" : "0px"}
       pl={isMobile ? "20px" : "145px"}
       pr={isMobile ? "20px" : "145px"}
+      mb={data.isPaddingBottom ? "37px" : "0px"}
     >
       {data.text_button && <HeadTitle data={data} isMobile={isMobile} />}
       {data.formato_categorias === "a" && (
@@ -31,7 +32,7 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "b" && (
         <>
-          {isMobileIpad && <TypeA data={data} isMobile={isMobile} isOnlyOne={true} />}
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
           {!isMobileIpad && <TypeB data={data} isMobile={isMobile} />}
         </>
       )}
@@ -40,7 +41,7 @@ const CategorySelect = (props: ContainerProps) => {
       )}
       {data.formato_categorias === "d" && (
         <>
-          {isMobileIpad && <TypeA data={data} isMobile={isMobile} isOnlyOne={true} />}
+          {isMobileIpad && <TypeA data={data} isMobile={isMobile} />}
           {!isMobileIpad && <TypeD data={data} isMobile={isMobile} />}
         </>
       )}
