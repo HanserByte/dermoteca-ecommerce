@@ -142,7 +142,6 @@ const Top = (props: ContainerProps) => {
             justifyContent="center"
             pt="38px"
             borderBottom="1px solid #000"
-            mt="75px"
           >
             <LogoShortCI />
           </Flex>
@@ -208,7 +207,7 @@ const Top = (props: ContainerProps) => {
         </>
       )}
       {!isMobile && (
-        <Box bg="#000" color="white" mt="75px">
+        <Box bg="#000" color="white">
           <Flex
             px={4}
             h="126px"

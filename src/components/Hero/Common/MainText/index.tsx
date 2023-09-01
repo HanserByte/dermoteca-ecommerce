@@ -1,10 +1,10 @@
 import { Text } from "@chakra-ui/react";
 
-const MainText = (props: { title: string }) => {
-  const { title } = props;
+const MainText = (props: { title: string, color?: string }) => {
+  const { title, color } = props;
   return (
     <Text
-      color="white"
+      color={color ? color : "white"}
       lineHeight="20px"
       textAlign="justify"
       height="100%"

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import BasicImageText60 from "@/components/BasicImageText60";
+import BasicImage50 from "@/components/BasicImage50";
 
 const Home = () => {
   const [data, setData] = useState<any>();

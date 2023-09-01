@@ -17,6 +17,7 @@ interface IImg {
 export interface IHeroComponents extends ICommons {
   title: string;
   textImage: IImg;
+  text_button?: string;
   text: string;
   backgroundImage: IImg;
   formato_hero: string;

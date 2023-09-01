@@ -28,6 +28,8 @@ export interface IDataFooter extends SanityBody {
     url: IUrl;
     dataUrl: { url: string };
   }[];
+  isPaddingTop?: boolean;
+  isPaddingBottom?: boolean;
 }
 
 export interface IUrl {

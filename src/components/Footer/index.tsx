@@ -4,6 +4,7 @@ import { client } from "@/lib/sanity.client";
 
 import Top from "./Top";
 import Bottom from "./Bottom";
+import { Box } from "@chakra-ui/react";
 
 const Footer = () => {
   const query = `*[_type == "settings"]{
@@ -22,7 +23,9 @@ const Footer = () => {
         }[0]
       },
       'logo': footer.logo,
-      'inputTexto': footer.inputTexto
+      'inputTexto': footer.inputTexto,
+      'isPaddingTop': footer.isPaddingTop,
+      'isPaddingBottom': footer.isPaddingBottom
   }`;
   const [data, setData] = useState<IDataFooter>();
 
@@ -39,10 +42,13 @@ const Footer = () => {
   return (
     <>
       {data && (
-        <>
+        <Box
+          mt={data.isPaddingTop ? "37px" : ""}
+          mb={data.isPaddingBottom ? "37px" : ""}
+        >
           <Top data={data} />
           <Bottom data={data} />
-        </>
+        </Box>
       )}
     </>
   );
