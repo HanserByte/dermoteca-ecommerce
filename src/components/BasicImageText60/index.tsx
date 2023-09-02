@@ -16,6 +16,19 @@ const BasicImageText60 = (props: ContainerProps) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const isLeft = data.orientacion === "left";
 
+  console.log(data, "datadatadata");
+  const showImg = () => {
+    if (!isMobile && !data.mostrar_imagen) {
+      return <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />;
+    } else if (isMobile && data.mostrar_imagen) {
+      return <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />;
+    } else if (isMobile && !data.mostrar_imagen) {
+      return <></>;
+    } else {
+      return <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />;
+    }
+  };
+
   return (
     <Box
       position="relative"
@@ -28,12 +41,12 @@ const BasicImageText60 = (props: ContainerProps) => {
           {isLeft ? (
             <ComponentText data={data} isMobile={isMobile} />
           ) : (
-            !isMobile && <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
+            showImg()
           )}
         </GridItem>
         <GridItem>
           {isLeft ? (
-            !isMobile && <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
+            showImg()
           ) : (
             <ComponentText data={data} isMobile={isMobile} />
           )}

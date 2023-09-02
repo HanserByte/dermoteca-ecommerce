@@ -23,7 +23,7 @@ const ComponentImg = (props: ContainerProps) => {
         <Image
           src={sanityImage(data.img.asset._ref).url()}
           alt="image-60"
-          borderRadius="185px"
+          borderRadius={data?.formato_imagen === "b" ? "0px" : "185px"}
         />
       </Flex>
     </ContainerDermo>

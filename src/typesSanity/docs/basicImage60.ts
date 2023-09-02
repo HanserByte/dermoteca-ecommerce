@@ -12,4 +12,6 @@ export interface IBasicImage extends SanityBody {
   orientacion: string;
   link_uno?: any;
   link_dos?: any;
+  formato_imagen?: string;
+  mostrar_imagen?: boolean;
 }
