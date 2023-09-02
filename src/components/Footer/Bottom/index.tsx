@@ -15,6 +15,7 @@ const Bottom = (props: ContainerProps) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   const iconArray: any = {
+    FaFacebookF: FaFacebookF,
     FaFacebook: FaFacebookF,
     FaInstagram: FaInstagram,
     FaTiktok: FaTiktok,
@@ -43,7 +44,7 @@ const Bottom = (props: ContainerProps) => {
             data.enlaces.length > 0 &&
             data.enlaces.map((item, index) => (
               <React.Fragment key={index}>
-                {iconArray[item.icono]({
+                {iconArray[item?.icono]({
                   style: {
                     width: "25px",
                     height: "25px",

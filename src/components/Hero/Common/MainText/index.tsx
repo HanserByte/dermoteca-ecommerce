@@ -1,15 +1,15 @@
 import { Text } from "@chakra-ui/react";
 
-const MainText = (props: { title: string, color?: string }) => {
-  const { title, color } = props;
+const MainText = (props: { title: string, color?: string, fontSize?: string, textAlign?: any }) => {
+  const { title, color, fontSize, textAlign } = props;
   return (
     <Text
       color={color ? color : "white"}
       lineHeight="20px"
-      textAlign="justify"
+      textAlign={textAlign ? textAlign : "justify"}
       height="100%"
       width="100%"
-      fontSize="12.5px"
+      fontSize={fontSize ? fontSize : "12.5px"}
       fontWeight={500}
       pt="17px"
       textTransform="uppercase"

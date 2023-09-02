@@ -18,6 +18,12 @@ const BasicImageText = (props: ContainerProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
+  const goLink = () => {
+    const uri = data.linkDetail === undefined ? " " : data?.linkDetail?.dataUrl?.url;
+    const newURL = "/" + uri
+    window.location.href = newURL;
+  }
+
   return (
     <Box position="relative" width="100%" mt="75px">
       <Image
@@ -64,6 +70,7 @@ const BasicImageText = (props: ContainerProps) => {
             border="1px solid #00AA4F"
             borderRadius="35px"
             width="200px"
+            onClick={goLink}
           >
             <Text textTransform="uppercase" color="white" fontSize="14px">
               {data?.text_button}

@@ -10,4 +10,6 @@ export interface IBasicImage extends SanityBody {
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
   orientacion: string;
+  link_uno?: any;
+  link_dos?: any;
 }

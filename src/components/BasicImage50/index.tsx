@@ -18,7 +18,7 @@ const BasicImage50 = (props: IContainerProps) => {
       pt={data.isPaddingTop ? "37px" : "0px"}
       pb={data.isPaddingBottom ? "37px" : "0px"}
     >
-      <Grid templateColumns={isMobile ? "1fr" : "50% 50%"} gap="15px">
+      <Grid templateColumns={"50% 50%"} gap="15px">
         <GridItem>
           <Image
             src={sanityImage(data.img_uno.asset._ref).url()}

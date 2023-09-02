@@ -26,16 +26,16 @@ const BasicImageText60 = (props: ContainerProps) => {
       <Grid templateColumns={isMobile ? "1fr" : isLeft ? "60% 40%" : "40% 60%"}>
         <GridItem>
           {isLeft ? (
-            <ComponentText data={data} />
+            <ComponentText data={data} isMobile={isMobile} />
           ) : (
-            <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
+            !isMobile && <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
           )}
         </GridItem>
         <GridItem>
           {isLeft ? (
-            <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
+            !isMobile && <ComponentImg data={data} isMobile={isMobile} isLeft={isLeft} />
           ) : (
-            <ComponentText data={data} />
+            <ComponentText data={data} isMobile={isMobile} />
           )}
         </GridItem>
       </Grid>

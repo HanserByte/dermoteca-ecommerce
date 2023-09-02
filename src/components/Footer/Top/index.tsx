@@ -75,7 +75,7 @@ const Form = (props: any) => {
           <Input
             placeholder="Ingresa tu correo"
             borderWidth="2px"
-            width="300px"
+            width={isMobile ? "250px" : "300px"}
             borderRadius="md"
             pr="4.5rem"
             color="white"

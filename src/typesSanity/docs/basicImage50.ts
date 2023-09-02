@@ -12,4 +12,8 @@ export interface IBasicImage extends SanityBody {
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
   colorFondo: string;
+  link_uno?: any;
+  link_dos?: any;
+  link_url_uno?: any;
+  link_url_dos?: any;
 }

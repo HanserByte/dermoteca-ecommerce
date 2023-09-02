@@ -22,7 +22,32 @@ const Page = () => {
               isBlackNavBar,
               "slug": slug.current,
               componentes[]-> {
-                ...
+                ...,
+                'linkDetail': link{ ... ,
+                  'dataUrl': *[_id == ^.url._ref]{
+                    'url': slug.current
+                  }[0]
+                },
+                'link_uno': link_uno{ ... ,
+                  'dataUrl': *[_id == ^.url._ref]{
+                    'url': slug.current
+                  }[0]
+                },
+                'link_dos': link_dos{ ... ,
+                  'dataUrl': *[_id == ^.url._ref]{
+                    'url': slug.current
+                  }[0]
+                },
+                'link_url_uno': link_url_uno{ ... ,
+                  'dataUrl': *[_id == ^.url._ref]{
+                    'url': slug.current
+                  }[0]
+                },
+                'link_url_dos': link_url_dos{ ... ,
+                  'dataUrl': *[_id == ^.url._ref]{
+                    'url': slug.current
+                  }[0]
+                }
               }
             }[0]
           `;

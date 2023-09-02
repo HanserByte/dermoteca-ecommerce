@@ -90,7 +90,7 @@ const CreateAccount = (props: IProps) => {
 
   return (
     <ContainerDermo
-      pt={data.isPaddingTop ? "37px" : "0px"}
+      pt={data.isPaddingTop ? "80px" : "0px"}
       pb={data.isPaddingBottom ? "37px" : "0px"}
     >
       <Box maxW="400px" mx="auto">

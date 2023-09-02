@@ -20,6 +20,7 @@ export interface IHeroComponents extends ICommons {
   text_button?: string;
   text: string;
   backgroundImage: IImg;
+  backgroundImageMobile: IImg;
   formato_hero: string;
   isPadding?: boolean
 }

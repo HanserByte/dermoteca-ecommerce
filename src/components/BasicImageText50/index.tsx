@@ -25,6 +25,14 @@ const BasicImageText50 = (props: ContainerProps) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const isBlackBg = data.colorFondo === "#000";
 
+  const goLink = (
+    type: "link_uno" | "link_dos" | "link_url_uno" | "link_url_dos"
+  ) => {
+    const uri = data[type] === undefined ? " " : data?.[type]?.dataUrl?.url;
+    const newURL = "/" + uri;
+    window.location.href = newURL;
+  };
+
   return (
     <Box
       position="relative"
@@ -33,7 +41,10 @@ const BasicImageText50 = (props: ContainerProps) => {
       mb={data.isPaddingBottom ? "37px" : ""}
     >
       <Grid templateColumns={isMobile ? "1fr" : "60% 40%"}>
-        <GridItem bg={data.colorFondo}>
+        <GridItem
+          bg={data.colorFondo}
+          borderBottom={`1px solid ${data.colorFondo}`}
+        >
           <ContainerDermo>
             <Flex flex={100}>
               <Text
@@ -51,17 +62,24 @@ const BasicImageText50 = (props: ContainerProps) => {
                 {data.texto}
               </Text>
             </Flex>
-            <Flex flex={100} mt="30px" mb="75px">
+            <Flex
+              flex={100}
+              mt="30px"
+              mb="75px"
+              justifyContent={isMobile ? "center" : ""}
+            >
               <Button
                 variant="outline"
                 borderRadius="35px"
                 mb="5px"
                 border={`1px solid ${isBlackBg ? "white" : "black"}`}
+                onClick={() => goLink("link_uno")}
               >
                 <Text
                   textTransform="uppercase"
                   color={isBlackBg ? "white" : "black"}
                   noOfLines={1}
+                  fontSize={isMobile ? "16px" : "20px"}
                 >
                   {data.text_button_uno}
                 </Text>
@@ -70,11 +88,13 @@ const BasicImageText50 = (props: ContainerProps) => {
                 bg={isBlackBg ? "white" : "black"}
                 borderRadius="35px"
                 mb="5px"
+                onClick={() => goLink("link_dos")}
               >
                 <Text
                   textTransform="uppercase"
                   color={isBlackBg ? "black" : "white"}
                   noOfLines={1}
+                  fontSize={isMobile ? "16px" : "20px"}
                 >
                   {data.text_button_dos}
                 </Text>
@@ -82,7 +102,10 @@ const BasicImageText50 = (props: ContainerProps) => {
             </Flex>
           </ContainerDermo>
         </GridItem>
-        <GridItem bg={data.colorFondo}>
+        <GridItem
+          bg={data.colorFondo}
+          borderBottom={`3px solid ${data.colorFondo}`}
+        >
           <ContainerDermo pl="0px">
             <Flex flex={100}>
               <Image
@@ -95,7 +118,8 @@ const BasicImageText50 = (props: ContainerProps) => {
                 <Text
                   textTransform="uppercase"
                   color={isBlackBg ? "white" : "black"}
-									cursor="pointer"
+                  cursor="pointer"
+                  onClick={() => goLink("link_url_uno")}
                 >
                   {data.text_link_uno}
                 </Text>
@@ -104,7 +128,8 @@ const BasicImageText50 = (props: ContainerProps) => {
                 <Text
                   textTransform="uppercase"
                   color={isBlackBg ? "white" : "black"}
-									cursor="pointer"
+                  cursor="pointer"
+                  onClick={() => goLink("link_url_dos")}
                 >
                   {data.text_link_dos}
                 </Text>
