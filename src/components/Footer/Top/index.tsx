@@ -23,7 +23,7 @@ const TitleRedirect = (props: ITitleRedirect) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
-    <a href={(dataUrl && `/${dataUrl.url}`) || ""} rel="noopener noreferrer">
+    <a href={(dataUrl && `/${dataUrl.url === "Home" ? "" : dataUrl.url }`) || ""} rel="noopener noreferrer">
       <Text
         fontSize="13px"
         fontWeight={400}

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Loading from "@/components/Loading";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
+import { Box } from "@chakra-ui/react";
 
 const Page = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const Page = () => {
               _id,
               title,
               isBlackNavBar,
+              colorFondoPagina,
               "slug": slug.current,
               componentes[]-> {
                 ...,
@@ -65,7 +67,12 @@ const Page = () => {
   }
 
   return (
-    <>
+    <Box
+      maxW="2560px"
+      m="0 auto"
+      id="main-container"
+      bg={data.colorFondoPagina}
+    >
       {data && <NavBar dataN={data} />}
       {data &&
         data.componentes.map((componente: any) => (
@@ -76,7 +83,7 @@ const Page = () => {
           />
         ))}
       {data && <Footer />}
-    </>
+    </Box>
   );
 };
 

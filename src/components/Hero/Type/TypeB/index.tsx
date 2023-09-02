@@ -26,6 +26,12 @@ const TypeC = (props: IContainerProps) => {
     setIsLoading(false);
   };
 
+  const handleOpen = () => {
+    const uri = data.linkDetail === undefined ? " " : data?.linkDetail?.dataUrl?.url;
+    const newURL = "/" + uri;
+    window.location.href = newURL;
+  };
+
   return (
     <Flex position="relative" id="hero" mt={data.isPadding ? "37px" : ""}>
       <Skeleton isLoaded={!isLoading} width="100%" height="auto">
@@ -49,6 +55,7 @@ const TypeC = (props: IContainerProps) => {
           top="0"
           left="0"
           width={"100%"}
+          height="100%"
           overflow="hidden"
           p="4"
           zIndex={99999}
@@ -57,7 +64,9 @@ const TypeC = (props: IContainerProps) => {
             <Flex
               flex={100}
               id="text-image"
-              justifyContent={isMobile ? "center" : ""}
+              alignItems="center" // Centra verticalmente
+              justifyContent="center" // Centra horizontalmente
+              height="100%"
             >
               {data?.textImage && !isMobile && (
                 <Image
@@ -93,6 +102,7 @@ const TypeC = (props: IContainerProps) => {
                     : "110px"
                 }
                 mb="5px"
+                onClick={handleOpen}
               >
                 <Text textTransform="uppercase" color="black" noOfLines={1}>
                   {data?.text_button}
@@ -104,25 +114,48 @@ const TypeC = (props: IContainerProps) => {
       )}
 
       {isMobile && (
-        <Flex
-          flex={100}
-          id="text-image"
-          justifyContent={isMobile ? "center" : ""}
+        <Box
           position="absolute"
+          top="0"
+          left="0"
           width="100%"
-          mt="20px"
+          height="100%"
           overflow="hidden"
+          p="4"
+          zIndex={99999}
         >
-          {data?.textImage && (
-            <Image
-              src={sanityImage(data?.textImage?.asset?._ref || "").url()}
-              alt="Image Hero"
-              width="100%"
-            />
-          )}
-        </Flex>
+          <Flex
+            flexDir="column"
+            alignItems="center" // Centra verticalmente
+            justifyContent="center" // Centra horizontalmente
+            height="100%"
+          >
+            {data?.textImage && (
+              <Image
+                src={sanityImage(data?.textImage?.asset?._ref || "").url()}
+                alt="Image Hero"
+              />
+            )}
+            {data.text && (
+              <Text
+                width="550px"
+                textAlign="center"
+                pl="50px"
+                pr="50px"
+                color="white"
+                mt="-50px"
+                lineHeight="20px"
+                fontSize="14px"
+                fontWeight={500}
+                letterSpacing="1.05px"
+              >
+                {data?.text}
+              </Text>
+            )}
+          </Flex>
+        </Box>
       )}
-      {isMobile && (
+      {/* {isMobile && data.text && (
         <Box
           position="absolute"
           width="100%"
@@ -139,8 +172,8 @@ const TypeC = (props: IContainerProps) => {
             />
           </Box>
         </Box>
-      )}
-      {isMobile && (
+      )} */}
+      {isMobile && data.text_button && (
         <Box
           position="absolute"
           bottom="0"
@@ -158,6 +191,7 @@ const TypeC = (props: IContainerProps) => {
                 : "110px"
             }
             mb="5px"
+            onClick={handleOpen}
           >
             <Text textTransform="uppercase" color="black" noOfLines={1}>
               {data?.text_button}

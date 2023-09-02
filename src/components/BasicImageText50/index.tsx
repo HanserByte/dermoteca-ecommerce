@@ -79,7 +79,7 @@ const BasicImageText50 = (props: ContainerProps) => {
                   textTransform="uppercase"
                   color={isBlackBg ? "white" : "black"}
                   noOfLines={1}
-                  fontSize={isMobile ? "16px" : "20px"}
+                  fontSize={isMobile ? "16px" : ""}
                 >
                   {data.text_button_uno}
                 </Text>
@@ -94,7 +94,7 @@ const BasicImageText50 = (props: ContainerProps) => {
                   textTransform="uppercase"
                   color={isBlackBg ? "black" : "white"}
                   noOfLines={1}
-                  fontSize={isMobile ? "16px" : "20px"}
+                  fontSize={isMobile ? "16px" : ""}
                 >
                   {data.text_button_dos}
                 </Text>

@@ -23,6 +23,7 @@ export interface IHeroComponents extends ICommons {
   backgroundImageMobile: IImg;
   formato_hero: string;
   isPadding?: boolean
+  linkDetail?: any
 }
 
 export interface IHero {
