@@ -6,14 +6,13 @@ import {
   Flex,
   Grid,
   GridItem,
-  Heading,
   Image,
   Text,
-  useBreakpointValue,
   useMediaQuery,
 } from "@chakra-ui/react";
 import ContainerDermo from "../Common/ContainerDermo";
 import { IBasicImage } from "@/typesSanity/docs/basicImage50";
+import { useRouter } from "next/router";
 
 interface ContainerProps {
   data: IBasicImage;
@@ -24,13 +23,15 @@ const BasicImageText50 = (props: ContainerProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const isBlackBg = data.colorFondo === "#000";
+  const router = useRouter();
 
   const goLink = (
     type: "link_uno" | "link_dos" | "link_url_uno" | "link_url_dos"
   ) => {
-    const uri = data[type] === undefined ? " " : data?.[type]?.dataUrl?.url;
-    const newURL = "/" + uri;
-    window.location.href = newURL;
+    if (data[type]) {
+      const url = data[type].dataUrl.url;
+      router.push(`/${url}`);
+    }
   };
 
   return (

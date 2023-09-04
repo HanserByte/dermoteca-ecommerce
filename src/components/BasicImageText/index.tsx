@@ -8,6 +8,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 interface ContainerProps {
   data: any;
@@ -17,12 +18,14 @@ const BasicImageText = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  const router = useRouter();
 
   const goLink = () => {
-    const uri = data.linkDetail === undefined ? " " : data?.linkDetail?.dataUrl?.url;
-    const newURL = "/" + uri
-    window.location.href = newURL;
-  }
+    if (data.linkDetail) {
+      const url = data.linkDetail.dataUrl.url;
+      router.push(`/${url}`);
+    }
+  };
 
   return (
     <Box position="relative" width="100%" mt="75px">

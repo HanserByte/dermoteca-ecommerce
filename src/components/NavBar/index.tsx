@@ -23,6 +23,7 @@ import { useStore } from "@/store";
 import { IDataNav } from "@/typesSanity/docs/nav";
 import { client } from "@/lib/sanity.client";
 import React from "react";
+import { useRouter } from "next/router";
 
 interface IContainerProps {
   dataN: any;
@@ -61,6 +62,7 @@ const NavBar = (props: IContainerProps) => {
   const [data, setData] = useState<IDataNav>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { value } = useStore();
+  const router = useRouter();
 
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [isPhone] = useMediaQuery(`(max-width: 400px)`);
@@ -71,8 +73,14 @@ const NavBar = (props: IContainerProps) => {
   >([]);
 
   const goHome = () => {
-    const newURL = "/";
-    window.location.href = newURL;
+    router.push("/");
+  };
+
+  const goToLink = (param: any) => {
+    if (param.dataUrl) {
+      const url = param.dataUrl.url
+      router.push(`/${url}`);
+    }
   };
 
   useEffect(() => {
@@ -144,24 +152,18 @@ const NavBar = (props: IContainerProps) => {
                     dataUrl?: { url: string };
                   }) => (
                     <Box key={link.title} mr={4}>
-                      <a
-                        href={(link.dataUrl && `/${link.dataUrl.url}`) || ""}
-                        rel="noopener noreferrer"
+                      <Text
+                        fontSize="14px"
+                        fontWeight={400}
+                        lineHeight="normal"
+                        color={
+                          isScrolled || dataN?.isBlackNavBar ? "black" : "white"
+                        }
+                        cursor="pointer"
+                        onClick={() => goToLink(link)}
                       >
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          lineHeight="normal"
-                          color={
-                            isScrolled || dataN?.isBlackNavBar
-                              ? "black"
-                              : "white"
-                          }
-                          cursor="pointer"
-                        >
-                          {link.title}
-                        </Text>
-                      </a>
+                        {link.title}
+                      </Text>
                     </Box>
                   )
                 )}
@@ -261,19 +263,15 @@ const NavBar = (props: IContainerProps) => {
                     dataUrl: { url: string };
                   }) => (
                     <Box key={link.title} mb={4}>
-                      <a
-                        href={(link.dataUrl && `/${link.dataUrl.url}`) || ""}
-                        rel="noopener noreferrer"
+                      <Text
+                        fontSize="14px"
+                        fontWeight={400}
+                        lineHeight="normal"
+                        color="black"
+                        onClick={() => goToLink(link)}
                       >
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          lineHeight="normal"
-                          color="black"
-                        >
-                          {link.title}
-                        </Text>
-                      </a>
+                        {link.title}
+                      </Text>
                     </Box>
                   )
                 )}

@@ -1,6 +1,7 @@
 import ContainerDermo from "@/components/Common/ContainerDermo";
 import { IBasicImage } from "@/typesSanity/docs/basicImage60";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 interface ContainerProps {
   data: IBasicImage;
@@ -9,11 +10,13 @@ interface ContainerProps {
 
 const ComponentText = (props: ContainerProps) => {
   const { data, isMobile } = props;
+  const router = useRouter();
 
   const goLink = (type: "link_uno" | "link_dos") => {
-    const uri = data[type] === undefined ? " " : data?.[type]?.dataUrl?.url;
-    const newURL = "/" + uri;
-    window.location.href = newURL;
+    if (data[type]) {
+      const url = data[type].dataUrl.url;
+      router.push(`/${url}`);
+    }
   };
 
   return (
