@@ -134,21 +134,22 @@ const Top = (props: ContainerProps) => {
   return (
     <>
       {isMobile && (
-        <>
+        <Box borderBottom="4px solid #000">
           {" "}
           <Flex
             flex={100}
             bg="#000"
             justifyContent="center"
-            pt="38px"
-            borderBottom="1px solid #000"
+            pt="35px"
+            borderBottom="2px solid #000"
+            borderTop="1px solid #000"
           >
             <LogoShortCI />
           </Flex>
           <Flex flex={100} bg="#000" pt="30px" borderBottom="1px solid #000">
             <Form data={data} />
           </Flex>
-          <Box bg="#000" color="white" borderBottom="1px solid #000">
+          <Box bg="#000" color="white" borderBottom="4px solid black">
             <Flex
               px={4}
               h="126px"
@@ -204,7 +205,7 @@ const Top = (props: ContainerProps) => {
               </Flex>
             </Flex>
           </Box>
-        </>
+        </Box>
       )}
       {!isMobile && (
         <Box bg="#000" color="white">

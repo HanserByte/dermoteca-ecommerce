@@ -22,7 +22,12 @@ const Bottom = (props: ContainerProps) => {
   };
 
   return (
-    <Box bg="#000" color="white" borderTop="1px solid #000">
+    <Box
+      bg="#000"
+      color="white"
+      borderTop="2px solid #000"
+      borderBottom="2px solid #000"
+    >
       <Flex
         px={4}
         h="86px"
@@ -31,6 +36,8 @@ const Bottom = (props: ContainerProps) => {
         pt="20px"
         pb="20px"
         width="100%"
+        borderTop="1px solid #000"
+        borderBottom="2px solid #000"
       >
         {/* Lado izquierdo */}
 
