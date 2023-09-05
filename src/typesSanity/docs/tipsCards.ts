@@ -1,13 +1,18 @@
 import { IImg, SanityBody } from "./default";
 
-interface ITips {
-    
+export interface ITips extends SanityBody {
+  content: any,
+  fecha_tip: string,
+  imagen_tip: IImg,
+  titulo: string, 
 }
 
-export interface IBasicImage extends SanityBody {
+export interface ITipsMenu extends SanityBody {
   text_button: string;
   titulo: string;
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
-  img: IImg;
+  linkDetail?: any;
+  link: any,
+  tips: ITips[]
 }

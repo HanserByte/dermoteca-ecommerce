@@ -6,22 +6,26 @@ import {
   Card,
   Text,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
+
 import HeadTitle from "../CategorySelect/HeadTitle";
 import ContainerDermo from "../Common/ContainerDermo";
+
 import { useStore } from "@/store";
 import { sanityImage } from "@/lib/sanity.image";
 
-import dayjs from "dayjs";
+import { ITips, ITipsMenu } from "@/typesSanity/docs/tipsCards";
 
 interface IContainerProps {
-  data: any;
+  data: ITipsMenu;
+  isList?: boolean;
 }
 
 const Category = (props: any) => {
-  const { titulo, fecha, img_fondo } = props;
+  const { titulo, fecha, img_fondo, isMobile } = props;
 
   return (
-    <Card w="100%" cursor="pointer">
+    <Card w="100%" cursor="pointer" height={isMobile ? "150px" : "auto"}>
       <Box position="absolute" bottom="0" left="0" width="100%" p="4" mb="0px">
         <Box flex={100}>
           <Text
@@ -54,45 +58,46 @@ const Category = (props: any) => {
       <Image
         src={sanityImage(img_fondo.asset._ref).url()}
         alt="category select"
+        height="100%"
+        objectFit="cover"
       />
     </Card>
   );
 };
 
 const TipsCards = (props: IContainerProps) => {
-  const { data } = props;
-
+  const { data, isList } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+
+  console.log(data, "data")
+  console.log(isList, "list")
+
+  const renderTips = () => {
+    const result = data.tips.map((item: ITips, index: number) => {
+      return (
+        <Box key={index}>
+          <Category
+            titulo={item.titulo}
+            fecha={item.fecha_tip}
+            img_fondo={item.imagen_tip}
+            isMobile={isMobile}
+          />
+        </Box>
+      );
+    });
+
+    return result;
+  };
 
   return (
     <ContainerDermo
       pt={data.isPaddingTop ? "37px" : "0px"}
       pb={data.isPaddingBottom ? "37px" : "0px"}
     >
-      <HeadTitle data={data} isMobile={isMobile} />
+      {!isList && <HeadTitle data={data} isMobile={isMobile} />}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
-        <Box>
-          <Category
-            titulo={data.tips[0].titulo_tip}
-            fecha={data.tips[0].fecha_tip}
-            img_fondo={data.tips[0].imagen_tip}
-          />
-        </Box>
-        <Box>
-          <Category
-            titulo={data.tips[1].titulo_tip}
-            fecha={data.tips[1].fecha_tip}
-            img_fondo={data.tips[1].imagen_tip}
-          />
-        </Box>
-        <Box>
-          <Category
-            titulo={data.tips[2].titulo_tip}
-            fecha={data.tips[2].fecha_tip}
-            img_fondo={data.tips[2].imagen_tip}
-          />
-        </Box>
+        {renderTips()}
       </SimpleGrid>
     </ContainerDermo>
   );

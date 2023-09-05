@@ -5,8 +5,8 @@ interface ITipsCardsS {
   data: ITipsMenu;
 }
 
-const TipsCardsSanity = ({ data }: ITipsCardsS) => {
-  return <TipsCards data={data} />;
+const TipsListSanity = ({ data }: ITipsCardsS) => {
+  return <TipsCards data={data} isList />;
 };
 
-export default TipsCardsSanity;
+export default TipsListSanity;

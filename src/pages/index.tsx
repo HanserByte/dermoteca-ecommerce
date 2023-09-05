@@ -38,6 +38,9 @@ const Home = () => {
           'dataUrl': *[_id == ^.url._ref]{
             'url': slug.current
           }[0]
+        },
+        'tips': tips[]-> {
+          ...
         }
       }
     }[0]
