@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useMediaQuery } from "@chakra-ui/react";
 import { client } from "@/lib/sanity.client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -7,12 +7,16 @@ import Loading from "@/components/Loading";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import ContainerNav from "@/components/ContainerNav";
+import { useStore } from "@/store";
 
 const Page = () => {
   const router = useRouter();
   const { slug } = router.query;
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
+  
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   useEffect(() => {
     async function fetchData() {
@@ -79,7 +83,7 @@ const Page = () => {
       bg={data.colorFondoPagina}
     >
       {data && <NavBar dataN={data} />}
-      {data && !data.isNavBarWhite && <ContainerNav />}
+      {data && (!data.isNavBarWhite || isMobile) && <ContainerNav />}
       {data &&
         data.componentes.map((componente: any) => (
           <ComponentRenderer

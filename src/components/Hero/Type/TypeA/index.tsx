@@ -14,7 +14,6 @@ interface IContainerProps {
   isMobile: boolean;
 }
 
-const SampleLinks1 = [{ title: "MI HISTORIAL" }];
 const SampleLinks2 = [
   { title: "bitácora", dataUrl: { url: "" } },
   { title: "agendar cita", dataUrl: { url: "" } },

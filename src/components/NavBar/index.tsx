@@ -65,6 +65,7 @@ const NavBar = (props: IContainerProps) => {
   const router = useRouter();
 
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  // se utiliza para cuando la pantalla es muy pequeña hacer un "margin right" a los iconos de la derecha
   const [isPhone] = useMediaQuery(`(max-width: 400px)`);
   const [showDrawer, setShowDrawer] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -78,7 +79,7 @@ const NavBar = (props: IContainerProps) => {
 
   const goToLink = (param: any) => {
     if (param.dataUrl) {
-      const url = param.dataUrl.url
+      const url = param.dataUrl.url;
       router.push(`/${url}`);
     }
   };
