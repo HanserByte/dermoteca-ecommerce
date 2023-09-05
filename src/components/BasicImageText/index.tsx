@@ -1,5 +1,6 @@
 import { sanityImage } from "@/lib/sanity.image";
 import { useStore } from "@/store";
+import { IBasicImageText } from "@/typesSanity/docs/basicImage";
 import {
   Box,
   Button,
@@ -11,7 +12,7 @@ import {
 import { useRouter } from "next/router";
 
 interface ContainerProps {
-  data: any;
+  data: IBasicImageText;
 }
 
 const BasicImageText = (props: ContainerProps) => {
@@ -28,7 +29,12 @@ const BasicImageText = (props: ContainerProps) => {
   };
 
   return (
-    <Box position="relative" width="100%" mt="75px">
+    <Box
+      position="relative"
+      width="100%"
+      mt={data.isPaddingTop ? "37px" : "0px"}
+      mb={data.isPaddingBottom ? "37px" : "0px"}
+    >
       <Image
         src={
           isMobile

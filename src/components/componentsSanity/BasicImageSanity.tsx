@@ -1,7 +1,8 @@
 import BasicImage from "@/components/BasicImageText";
+import { IBasicImageText } from "@/typesSanity/docs/basicImage";
 
 interface IProps {
-  data: any;
+  data: IBasicImageText;
 }
 const BasicImageSanity = ({ data }: IProps) => {
   return <BasicImage data={data} />;
