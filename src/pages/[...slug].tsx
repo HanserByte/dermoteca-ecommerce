@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { client } from "@/lib/sanity.client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -5,7 +6,7 @@ import { useRouter } from "next/router";
 import Loading from "@/components/Loading";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import { Box } from "@chakra-ui/react";
+import ContainerNav from "@/components/ContainerNav";
 
 const Page = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const Page = () => {
               _id,
               title,
               isBlackNavBar,
+              isNavBarWhite,
               colorFondoPagina,
               "slug": slug.current,
               componentes[]-> {
@@ -77,6 +79,7 @@ const Page = () => {
       bg={data.colorFondoPagina}
     >
       {data && <NavBar dataN={data} />}
+      {data && !data.isNavBarWhite && <ContainerNav />}
       {data &&
         data.componentes.map((componente: any) => (
           <ComponentRenderer

@@ -27,7 +27,10 @@ const ContactUs = (props: IContainerProps) => {
   };
 
   return (
-    <ContainerDermo pt={isMobile ? "95px" : "130px"}>
+    <ContainerDermo
+      pt={data.isPaddingTop ? "37px" : "0px"}
+      pb={data.isPaddingBottom ? "37px" : "0px"}
+    >
       <Box display="flex" flexDirection={{ base: "column", lg: "row" }}>
         <Box
           h="50px"
