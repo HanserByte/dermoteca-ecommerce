@@ -6,7 +6,7 @@ import { IRecommendedProducts } from "@/typesSanity/docs/recommendedProducts";
 import ContainerDermo from "../Common/ContainerDermo";
 import HeadTitle from "../CategorySelect/HeadTitle";
 import GridProduct from "./GridProduct";
-import SliderInstagram from "./SliderProduct";
+import SliderProduct from "./SliderProduct";
 
 interface IContainerProps {
   data: IRecommendedProducts;
@@ -22,7 +22,7 @@ const RecommendedProducts = (props: IContainerProps) => {
     <ContainerDermo>
       <HeadTitle data={data} isMobile={isMobile} />
       {!isMobile && <GridProduct data={data} />}
-      {isMobile && <SliderInstagram data={data} />}
+      {isMobile && <SliderProduct data={data} />}
     </ContainerDermo>
   );
 };
