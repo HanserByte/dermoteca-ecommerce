@@ -70,9 +70,6 @@ const TipsCards = (props: IContainerProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
-  console.log(data, "data")
-  console.log(isList, "list")
-
   const renderTips = () => {
     const result = data.tips.map((item: ITips, index: number) => {
       return (
