@@ -1,6 +1,5 @@
 import React from "react";
 import { AspectRatio, Box, Flex, Text } from "@chakra-ui/react";
-import Image from "next/image";
 
 interface ProductCardProps {
   imageSrc: string;
