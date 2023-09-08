@@ -4,18 +4,20 @@ import Footer from '@/components/Footer'
 import NavBar from '@/components/NavBar'
 import { Box, Button, Flex, Text, useMediaQuery } from '@chakra-ui/react'
 import { client } from '@/lib/sanity.client'
-import { useNavbar, useStore } from '@/store'
+import { useCartDrawer, useCartProducts, useNavbar, useStore } from '@/store'
 import ReviewStars from '@/components/ReviewStars'
 import { AiOutlineHeart } from 'react-icons/ai'
-import { useAddToCart, useCart } from '@/hooks/cart'
+import { useCart } from '@/hooks/cart'
 
 const ProductPage = () => {
   const [productData, setProductData] = useState<any>()
-  const { createCart, addToCart, cartId } = useCart()
+  const { addToCart, cartId } = useCart()
+  const { setOpen } = useCartDrawer()
   const { value } = useStore()
   const [isMobile] = useMediaQuery(`(max-width: ${value})`)
   const { height } = useNavbar()
   const router = useRouter()
+  const { setProducts } = useCartProducts()
 
   const query = `*[_type == "product" && store.slug.current == "${router.query.productHandle}"][0]{
     ...,
@@ -38,6 +40,8 @@ const ProductPage = () => {
   const handleAddToCart = async () => {
     const productId = productData?.store?.variants[0]?.store?.gid
     const response = await addToCart(cartId, productId, 1)
+    setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes)
+    setOpen(true)
   }
 
   return (

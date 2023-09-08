@@ -1,3 +1,5 @@
+import { useCart } from '@/hooks/cart'
+import { useCartDrawer, useCartProducts } from '@/store'
 import {
   Drawer,
   DrawerBody,
@@ -7,34 +9,74 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
-  Input,
-  useDisclosure,
+  Flex,
+  Box,
+  Text,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { TbTrash } from 'react-icons/tb'
 
-export default function CartDrawer({ button }) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+interface ICartDrawerProps {
+  button?: React.ReactElement
+}
+
+export default function CartDrawer({ button }: ICartDrawerProps) {
+  const router = useRouter()
+  const { open, setOpen } = useCartDrawer()
+  const { checkoutUrl } = useCart()
+  const { products } = useCartProducts()
   const btnRef = React.useRef()
+
+  const handleCheckout = () => {
+    checkoutUrl && router.push(checkoutUrl)
+  }
 
   return (
     <>
-      {button && React.cloneElement(button, { ref: btnRef, onClick: onOpen })}
+      {button && React.cloneElement(button, { ref: btnRef, onClick: () => setOpen(!open) })}
 
-      <Drawer isOpen={false} placement='right' onClose={onClose} finalFocusRef={btnRef}>
+      <Drawer isOpen={open} placement='right' onClose={() => setOpen(!open)} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader>Tu carrito</DrawerHeader>
 
           <DrawerBody>
-            <Input placeholder='Type here...' />
+            <Flex direction='column' gap={4}>
+              {products.map(product => (
+                <Flex key={product?.merchandise?.id} gap={2}>
+                  <Box w='35%'>
+                    <img
+                      src={product?.merchandise?.product?.featuredImage?.url}
+                      alt={product?.merchandise?.product?.title}
+                    />
+                  </Box>
+
+                  <Box w='65%'>
+                    <Text fontSize='sm'>{product?.merchandise?.product?.title}</Text>
+                    <Flex
+                      justifyContent='space-between'
+                      alignItems='center'
+                      fontSize='sm'
+                      fontWeight={500}
+                      color='#00AA4F'
+                    >
+                      <span>${product?.merchandise?.price?.amount}</span>
+                      <Button bg='#00AA4F' size='sm' color='white'>
+                        <TbTrash />
+                      </Button>
+                    </Flex>
+                  </Box>
+                </Flex>
+              ))}
+            </Flex>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
-              Cancel
+            <Button onClick={handleCheckout} bg='#00AA4F' color='white' w='full'>
+              Checkout
             </Button>
-            <Button colorScheme='blue'>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

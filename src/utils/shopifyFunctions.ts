@@ -58,11 +58,31 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
       query: `
       mutation CartLinesAdd($cartId: ID!, $lines:[CartLineInput!]!) {
         cartLinesAdd(cartId: $cartId, lines: $lines){
-            cart {
-                checkoutUrl
+          cart {
+            checkoutUrl
+            lines (first: 30) {
+              nodes{
+                merchandise {
+                  ... on ProductVariant {
+                      id
+                      product {
+                        title
+                        handle
+                        featuredImage {
+                          url
+                        }
+                      }
+                      price {
+                        amount
+                      }
+                    }
+                  }
+                  quantity
+                }
+              }
             }
         }
-      }
+    }
       `,
       variables: {
         cartId,

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 export const useCart = () => {
   const [cartId, setCartId] = useState<string | null>()
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>()
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setCartId(localStorage?.getItem('cartId'))
