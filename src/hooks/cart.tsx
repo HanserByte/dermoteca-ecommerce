@@ -7,3 +7,7 @@ export const useCreateCart = () => {
 
   return { createCart }
 }
+
+export const useAddToCart = () => {}
+
+export const useCartItems = () => {}
