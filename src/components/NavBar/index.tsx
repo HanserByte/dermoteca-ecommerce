@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Flex,
@@ -19,7 +19,7 @@ import { LiaShoppingBagSolid } from 'react-icons/lia'
 import { CiHeart, CiUser } from 'react-icons/ci'
 import { TfiSearch } from 'react-icons/tfi'
 import { LogoCI, LogoHamburguerCI } from '../Icons'
-import { useStore } from '@/store'
+import { useNavbar, useStore } from '@/store'
 import { IDataNav } from '@/typesSanity/docs/nav'
 import { client } from '@/lib/sanity.client'
 import React from 'react'
@@ -61,10 +61,8 @@ const NavBar = (props: IContainerProps) => {
 
   const { dataN } = props
   const [data, setData] = useState<IDataNav>()
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const { value } = useStore()
   const router = useRouter()
-
   const [isMobile] = useMediaQuery(`(max-width: ${value})`)
   // se utiliza para cuando la pantalla es muy pequeña hacer un "margin right" a los iconos de la derecha
   const [isPhone] = useMediaQuery(`(max-width: 400px)`)
@@ -72,6 +70,8 @@ const NavBar = (props: IContainerProps) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [linksLeft, setLinksLeft] = useState<{ title: string; url?: string; dataUrl: { url: string } }[]>([])
   const cartBtnRef = React.useRef()
+  const { setHeight } = useNavbar()
+  const navbarRef = useRef<HTMLDivElement>(null)
 
   const goHome = () => {
     router.push('/')
@@ -83,6 +83,11 @@ const NavBar = (props: IContainerProps) => {
       router.push(`/${url}`)
     }
   }
+
+  useEffect(() => {
+    // @ts-ignore
+    setHeight(navbarRef?.current?.clientHeight)
+  }, [navbarRef.current])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -120,6 +125,7 @@ const NavBar = (props: IContainerProps) => {
 
   return (
     <Flex
+      ref={navbarRef}
       px={4}
       h='86px'
       bg={isMobile ? '#fff' : ''}
