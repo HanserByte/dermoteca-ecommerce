@@ -16,13 +16,11 @@ export default function CartDrawer({ button }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
 
-  console.log(button)
-
   return (
     <>
       {button && React.cloneElement(button, { ref: btnRef, onClick: onOpen })}
 
-      <Drawer isOpen={true} placement='right' onClose={onClose} finalFocusRef={btnRef}>
+      <Drawer isOpen={false} placement='right' onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
