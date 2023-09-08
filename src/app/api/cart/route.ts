@@ -13,7 +13,5 @@ export async function GET(request: Request) {
       break
   }
 
-  console.log(response)
-
   return new Response(JSON.stringify(response))
 }
