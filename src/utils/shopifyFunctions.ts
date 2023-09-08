@@ -11,25 +11,36 @@ const HEADERS = {
  * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
  */
 export const createCart = async (): Promise<object> => {
-  const response = await fetch(API_ENDPOINT, {
-    method: 'POST',
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-        mutation cartCreate {
-          cartCreate {
-            cart {
-              id
-              checkoutUrl
+  try {
+    const response = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      // @ts-ignore
+      headers: HEADERS,
+      body: JSON.stringify({
+        query: `
+          mutation cartCreate {
+            cartCreate {
+              cart {
+                id
+                checkoutUrl
+              }
             }
           }
-        }
-      `,
-    }),
-  })
-  const data = await response.json()
-  return data
+        `,
+      }),
+    })
+
+    if (!response.ok) {
+      // Handle non-successful HTTP responses (e.g., 4xx or 5xx errors)
+      throw new Error('Failed to create a cart.')
+    }
+
+    const data = await response.json()
+    return data.data.cartCreate.cart
+  } catch (error) {
+    // @ts-ignore
+    return { error: error.message }
+  }
 }
 
 /**
