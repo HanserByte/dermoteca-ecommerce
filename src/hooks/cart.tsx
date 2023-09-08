@@ -1,13 +1,32 @@
-export const useCreateCart = () => {
+import { useEffect, useState } from 'react'
+
+export const useCart = () => {
+  const [cartId, setCartId] = useState<string | null>()
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>()
+
+  useEffect(() => {
+    setCartId(localStorage?.getItem('cartId'))
+    setCheckoutUrl(localStorage?.getItem('checkoutUrl'))
+    if (!localStorage?.getItem('cartId')) createCart()
+  }, [])
+
   async function createCart() {
     const res = await fetch('/api/cart?action=create-cart')
+    const data = await res.json()
+    localStorage.setItem('cartId', data.id)
+    localStorage.setItem('checkoutUrl', data.checkoutUrl)
+    setCartId(data.id)
+    setCheckoutUrl(data.checkoutUrl)
+    return data
+  }
+
+  async function addToCart(cartId: string | null | undefined, productId: string, quantity: number) {
+    const res = await fetch(`/api/cart?action=add-to-cart&cartId=${cartId}&productId=${productId}&quantity=${quantity}`)
     const data = await res.json()
     return data
   }
 
-  return { createCart }
+  return { cartId, checkoutUrl, addToCart, createCart }
 }
-
-export const useAddToCart = () => {}
 
 export const useCartItems = () => {}

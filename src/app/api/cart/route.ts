@@ -1,4 +1,4 @@
-import { createCart } from '@/utils/shopifyFunctions'
+import { addProductToCart, createCart } from '@/utils/shopifyFunctions'
 
 export async function GET(request: Request) {
   let response
@@ -8,6 +8,14 @@ export async function GET(request: Request) {
   switch (action) {
     case 'create-cart':
       response = await createCart()
+      break
+    case 'add-to-cart':
+      const cartId = url.searchParams.get('cartId')
+      const merchandiseId = url.searchParams.get('productId')
+      const quantity = url.searchParams.get('quantity')
+      const lines = [{ merchandiseId, quantity: Number(quantity) }]
+      // @ts-ignore
+      response = await addProductToCart(cartId, lines)
       break
     default:
       break

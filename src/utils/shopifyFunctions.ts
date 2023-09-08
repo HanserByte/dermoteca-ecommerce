@@ -45,11 +45,11 @@ export const createCart = async (): Promise<object> => {
 
 /**
  * Adds a product to the cart by making a POST request to the API_ENDPOINT.
- * @param {string} cartId - The ID of the cart to which the product will be added.
+ * @param {string | null} cartId - The ID of the cart to which the product will be added.
  * @param {ICartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
  * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
  */
-export const addProductToCart = async (cartId: string, lines: ICartLineInput[]): Promise<object> => {
+export const addProductToCart = async (cartId: string | null, lines: ICartLineInput[]): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
     method: 'POST',
     // @ts-ignore

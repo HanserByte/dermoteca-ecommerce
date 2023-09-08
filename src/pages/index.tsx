@@ -4,12 +4,9 @@ import { useEffect, useState } from 'react'
 
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
-import { createCart } from '@/utils/shopifyFunctions'
-import { useCreateCart } from '@/hooks/cart'
 
 const Home = () => {
   const [data, setData] = useState<any>()
-  const { createCart } = useCreateCart()
 
   const query = `
     *[_type == "homeDoc"] {

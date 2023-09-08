@@ -7,9 +7,11 @@ import { client } from '@/lib/sanity.client'
 import { useNavbar, useStore } from '@/store'
 import ReviewStars from '@/components/ReviewStars'
 import { AiOutlineHeart } from 'react-icons/ai'
+import { useAddToCart, useCart } from '@/hooks/cart'
 
 const ProductPage = () => {
   const [productData, setProductData] = useState<any>()
+  const { createCart, addToCart, cartId } = useCart()
   const { value } = useStore()
   const [isMobile] = useMediaQuery(`(max-width: ${value})`)
   const { height } = useNavbar()
@@ -27,14 +29,16 @@ const ProductPage = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await client.fetch(query)
-      console.log(data)
       setProductData(data)
     }
 
     fetchData()
   }, [router.query.productHandle])
 
-  console.log(productData)
+  const handleAddToCart = async () => {
+    const productId = productData?.store?.variants[0]?.store?.gid
+    const response = await addToCart(cartId, productId, 1)
+  }
 
   return (
     <Box maxW='2560px' m='0 auto'>
@@ -75,7 +79,7 @@ const ProductPage = () => {
             {/* Variant options */}
 
             <Flex mt='6' gap={8} alignItems='center'>
-              <Button bg='#00AA4F' color='white' rounded='full' _hover={{ opacity: 0.8 }}>
+              <Button onClick={handleAddToCart} bg='#00AA4F' color='white' rounded='full' _hover={{ opacity: 0.8 }}>
                 AGREGAR AL CARRITO
               </Button>
 
