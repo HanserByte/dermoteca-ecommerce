@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Footer from '@/components/Footer'
 import NavBar from '@/components/NavBar'
-import { Box, Flex, Text, useMediaQuery } from '@chakra-ui/react'
+import { Box, Button, Flex, Text, useMediaQuery } from '@chakra-ui/react'
 import { client } from '@/lib/sanity.client'
 import { useNavbar, useStore } from '@/store'
+import ReviewStars from '@/components/ReviewStars'
+import { AiOutlineHeart } from 'react-icons/ai'
 
 const ProductPage = () => {
   const [productData, setProductData] = useState<any>()
@@ -53,17 +55,34 @@ const ProductPage = () => {
           <Box w='50%'>
             <img src={productData?.store?.previewImageUrl} alt={productData?.store?.title} />
           </Box>
-          <Flex w='50%' gap={2} direction='column'>
+          <Flex w='50%' gap={3} direction='column'>
             <Text fontSize='2xl' fontWeight={700}>
               {productData?.store?.title}
             </Text>
-            <Text fontSize='xl' fontWeight='400'>
+            <Text fontSize='xl' fontWeight='500'>
               ${productData?.store?.variants[0]?.store?.price}
             </Text>
-            <div
+
+            <ReviewStars rating={4} />
+
+            <Text
+              fontSize='lg'
+              fontWeight='400'
               dangerouslySetInnerHTML={{ __html: productData?.store?.descriptionHtml }}
               style={{ listStylePosition: 'inside' }}
             />
+
+            {/* Variant options */}
+
+            <Flex mt='6' gap={8} alignItems='center'>
+              <Button bg='#00AA4F' color='white' rounded='full' _hover={{ opacity: 0.8 }}>
+                AGREGAR AL CARRITO
+              </Button>
+
+              <Button bg='transparent' color='grey' _hover={{ color: '#00AA4F' }}>
+                <AiOutlineHeart size={40} />
+              </Button>
+            </Flex>
           </Flex>
         </Flex>
       </Box>
