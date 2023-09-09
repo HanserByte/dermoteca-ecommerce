@@ -10,12 +10,10 @@ import {
   DrawerCloseButton,
   Button,
   Flex,
-  Box,
-  Text,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { TbTrash } from 'react-icons/tb'
+import CartProductCard from '../CartProductCard'
 
 interface ICartDrawerProps {
   button?: React.ReactElement
@@ -54,30 +52,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
           <DrawerBody>
             <Flex direction='column' gap={4}>
               {products?.map(product => (
-                <Flex key={product?.merchandise?.id} gap={2}>
-                  <Box w='35%'>
-                    <img
-                      src={product?.merchandise?.product?.featuredImage?.url}
-                      alt={product?.merchandise?.product?.title}
-                    />
-                  </Box>
-
-                  <Box w='65%'>
-                    <Text fontSize='sm'>{product?.merchandise?.product?.title}</Text>
-                    <Flex
-                      justifyContent='space-between'
-                      alignItems='center'
-                      fontSize='sm'
-                      fontWeight={500}
-                      color='#00AA4F'
-                    >
-                      <span>${product?.merchandise?.price?.amount}</span>
-                      <Button bg='#00AA4F' size='sm' color='white'>
-                        <TbTrash />
-                      </Button>
-                    </Flex>
-                  </Box>
-                </Flex>
+                <CartProductCard key={product?.merchandise?.id} product={product} />
               ))}
             </Flex>
           </DrawerBody>

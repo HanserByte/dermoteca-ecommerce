@@ -21,19 +21,23 @@ export const useCart = () => {
     return data
   }
 
-  async function addToCart(cartId: string | null | undefined, productId: string, quantity: number) {
-    const res = await fetch(`/api/cart?action=add-to-cart&cartId=${cartId}&productId=${productId}&quantity=${quantity}`)
-    const data = await res.json()
-    return data
-  }
-
   async function getCart(cartId: string | null | undefined) {
     const res = await fetch(`/api/cart?action=get-cart&cartId=${cartId}`)
     const data = await res.json()
     return data
   }
 
-  return { cartId, checkoutUrl, addToCart, createCart, getCart }
-}
+  async function addToCart(cartId: string | null | undefined, productId: string, quantity: number) {
+    const res = await fetch(`/api/cart?action=add-to-cart&cartId=${cartId}&productId=${productId}&quantity=${quantity}`)
+    const data = await res.json()
+    return data
+  }
 
-export const useCartItems = () => {}
+  async function removeFromCart(cartId: string | null | undefined, productId: string) {
+    const res = await fetch(`/api/cart?action=remove-from-cart&cartId=${cartId}&productId=${productId}`)
+    const data = await res.json()
+    return data
+  }
+
+  return { cartId, checkoutUrl, addToCart, createCart, getCart, removeFromCart }
+}

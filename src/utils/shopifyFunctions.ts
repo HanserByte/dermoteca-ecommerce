@@ -44,6 +44,54 @@ export const createCart = async (): Promise<object> => {
 }
 
 /**
+ * Retrieves cart information by making a POST request to the API_ENDPOINT.
+ * @param {string} cartId - The ID of the cart to retrieve.
+ * @returns {Promise<object>} A Promise that resolves to the cart data returned by the API.
+ */
+export const getCart = async (cartId: string): Promise<object> => {
+  const response = await fetch(API_ENDPOINT, {
+    method: 'POST',
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+        query Cart {
+          cart(id:  "${cartId}") {
+            id
+            checkoutUrl
+            lines(first: 30) {
+              nodes{
+                id
+                merchandise {
+                  ... on ProductVariant {
+                      id
+                      product {
+                        title
+                        handle
+                        featuredImage {
+                          url
+                        }
+                      }
+                      price {
+                        amount
+                      }
+                    }
+                  }
+                  quantity
+                }
+              }
+            }
+          }
+        
+      `,
+    }),
+  })
+
+  const data = await response.json()
+  return data
+}
+
+/**
  * Adds a product to the cart by making a POST request to the API_ENDPOINT.
  * @param {string | null} cartId - The ID of the cart to which the product will be added.
  * @param {ICartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
@@ -62,6 +110,7 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
             checkoutUrl
             lines (first: 30) {
               nodes{
+                id
                 merchandise {
                   ... on ProductVariant {
                       id
@@ -94,23 +143,18 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
   return data
 }
 
-/**
- * Retrieves cart information by making a POST request to the API_ENDPOINT.
- * @param {string} cartId - The ID of the cart to retrieve.
- * @returns {Promise<object>} A Promise that resolves to the cart data returned by the API.
- */
-export const getCart = async (cartId: string): Promise<object> => {
+export const removeProductFromCart = async (cartId: string | null, lineIds: string[]): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
     method: 'POST',
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-        query Cart {
-          cart(id:  "${cartId}") {
-            id
+      mutation CartLinesRemove($cartId: ID!, $lineIds:[ID!]!) {
+        cartLinesRemove(cartId: $cartId, lineIds: $lineIds){
+          cart {
             checkoutUrl
-            lines(first: 30) {
+            lines (first: 30) {
               nodes{
                 merchandise {
                   ... on ProductVariant {
@@ -131,12 +175,15 @@ export const getCart = async (cartId: string): Promise<object> => {
                 }
               }
             }
-          }
-        
+        }
+    }
       `,
+      variables: {
+        cartId,
+        lineIds,
+      },
     }),
   })
-
   const data = await response.json()
   return data
 }
