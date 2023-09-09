@@ -143,6 +143,17 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
   return data
 }
 
+/**
+ * Removes one or more product lines from a user's shopping cart.
+ *
+ * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
+ * @param {string[]} lineIds - An array of line IDs representing the product lines to be removed from the cart.
+ * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
+ * The object typically includes information about the updated cart, such as checkout URL and cart lines.
+ *
+ * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
+ *
+ */
 export const removeProductFromCart = async (cartId: string | null, lineIds: string[]): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
     method: 'POST',
