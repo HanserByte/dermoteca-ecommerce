@@ -27,7 +27,13 @@ export const useCart = () => {
     return data
   }
 
-  return { cartId, checkoutUrl, addToCart, createCart }
+  async function getCart(cartId: string | null | undefined) {
+    const res = await fetch(`/api/cart?action=get-cart&cartId=${cartId}`)
+    const data = await res.json()
+    return data
+  }
+
+  return { cartId, checkoutUrl, addToCart, createCart, getCart }
 }
 
 export const useCartItems = () => {}

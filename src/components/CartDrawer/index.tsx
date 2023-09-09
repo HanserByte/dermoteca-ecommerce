@@ -14,7 +14,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TbTrash } from 'react-icons/tb'
 
 interface ICartDrawerProps {
@@ -24,19 +24,28 @@ interface ICartDrawerProps {
 export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter()
   const { open, setOpen } = useCartDrawer()
-  const { checkoutUrl } = useCart()
-  const { products } = useCartProducts()
+  const { checkoutUrl, cartId, getCart } = useCart()
+  const { products, setProducts } = useCartProducts()
   const btnRef = React.useRef()
 
   const handleCheckout = () => {
     checkoutUrl && router.push(checkoutUrl)
   }
 
+  useEffect(() => {
+    ;(async function () {
+      if (cartId && products?.length === 0) {
+        const response = await getCart(cartId)
+        setProducts(response?.data?.cart?.lines?.nodes)
+      }
+    })()
+  }, [cartId])
+
   return (
     <>
       {button && React.cloneElement(button, { ref: btnRef, onClick: () => setOpen(!open) })}
 
-      <Drawer isOpen={open} placement='right' onClose={() => setOpen(!open)} finalFocusRef={btnRef}>
+      <Drawer size='sm' isOpen={open} placement='right' onClose={() => setOpen(!open)} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
@@ -44,7 +53,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
 
           <DrawerBody>
             <Flex direction='column' gap={4}>
-              {products.map(product => (
+              {products?.map(product => (
                 <Flex key={product?.merchandise?.id} gap={2}>
                   <Box w='35%'>
                     <img

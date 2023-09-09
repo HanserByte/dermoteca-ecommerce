@@ -107,43 +107,32 @@ export const getCart = async (cartId: string): Promise<object> => {
     body: JSON.stringify({
       query: `
         query Cart {
-          cart(id:  "gid://shopify/Cart/c1-b4823c6929ba1e24356b8490d64ff04c") {
+          cart(id:  "${cartId}") {
             id
             checkoutUrl
-            lines(first: 100) {
-              edges {
-                node {
-                  id
-                  quantity
-                  merchandise {
-                    ... on ProductVariant {
-                      id  
+            lines(first: 30) {
+              nodes{
+                merchandise {
+                  ... on ProductVariant {
+                      id
                       product {
                         title
-                        vendor
-                        productType
-                        id
                         handle
+                        featuredImage {
+                          url
+                        }
                       }
-                      title
                       price {
                         amount
-                        currencyCode
-                      }
-                      image {
-                        url
-                        id
-                        altText
-                        width
-                        height
                       }
                     }
                   }
+                  quantity
                 }
               }
             }
           }
-        }
+        
       `,
     }),
   })
