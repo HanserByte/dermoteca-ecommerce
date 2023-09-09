@@ -2,6 +2,10 @@ export interface ICartLineInput {
   quantity: number
   merchandiseId: string
 }
+export interface IUpdateCartLineInput {
+  quantity: number
+  id: string
+}
 
 export interface IPrice {
   amount: string

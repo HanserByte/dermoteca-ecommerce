@@ -1,4 +1,4 @@
-import { ICartLineInput } from '@/typesSanity/shopify'
+import { ICartLineInput, IUpdateCartLineInput } from '@/typesSanity/shopify'
 
 const API_ENDPOINT = 'https://6a8516-2.myshopify.com/api/2023-07/graphql.json'
 const HEADERS = {
@@ -145,7 +145,6 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
 
 /**
  * Removes one or more product lines from a user's shopping cart.
- *
  * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
  * @param {string[]} lineIds - An array of line IDs representing the product lines to be removed from the cart.
  * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
@@ -192,6 +191,61 @@ export const removeProductFromCart = async (cartId: string | null, lineIds: stri
       variables: {
         cartId,
         lineIds,
+      },
+    }),
+  })
+  const data = await response.json()
+  return data
+}
+
+/**
+ * Updates the product lines in a user's shopping cart.
+ * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
+ * @param {IUpdateCartLineInput[]} lines - An array of objects representing the updated product lines to be applied to the cart.
+ * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
+ * The object typically includes information about the updated cart, such as checkout URL and cart lines.
+ *
+ * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
+ */
+export const updateProduct = async (cartId: string | null, lines: IUpdateCartLineInput[]): Promise<object> => {
+  const response = await fetch(API_ENDPOINT, {
+    method: 'POST',
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      mutation CartLinesUpdate($cartId: ID!, $lines:[CartLineUpdateInput!]!) {
+        cartLinesUpdate(cartId: $cartId, lines: $lines) {
+          cart {
+            checkoutUrl
+            lines (first: 30) {
+              nodes{
+                id
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    product {
+                      title
+                      handle
+                      featuredImage {
+                        url
+                      }
+                    }
+                    price {
+                      amount
+                    }
+                  }
+                }
+                quantity
+              }
+            }
+          }
+        }
+      }
+      `,
+      variables: {
+        cartId,
+        lines,
       },
     }),
   })

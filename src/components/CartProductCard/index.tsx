@@ -10,12 +10,17 @@ interface ICartProductCardProps {
 }
 
 const CartProductCard = ({ product }: ICartProductCardProps) => {
-  const { cartId, removeFromCart } = useCart()
+  const { cartId, removeFromCart, updateProduct } = useCart()
   const { setProducts } = useCartProducts()
 
   const handleRemoveFromCart = async () => {
     const response = await removeFromCart(cartId, product.id)
     setProducts(response?.data?.cartLinesRemove?.cart?.lines?.nodes)
+  }
+
+  const handleQuantityChange = async (quantity: number) => {
+    const response = await updateProduct(cartId, product.id, quantity)
+    setProducts(response?.data?.cartLinesUpdate?.cart?.lines?.nodes)
   }
 
   return (
@@ -34,11 +39,23 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
         </Flex>
 
         <Flex alignItems='center' gap={3}>
-          <Button bg='#00AA4F' size='sm' color='white' rounded='full'>
+          <Button
+            onClick={() => handleQuantityChange(product?.quantity - 1)}
+            bg='#00AA4F'
+            size='sm'
+            color='white'
+            rounded='full'
+          >
             -
           </Button>
           <Text>{product?.quantity}</Text>
-          <Button bg='#00AA4F' size='sm' color='white' rounded='full'>
+          <Button
+            onClick={() => handleQuantityChange(product?.quantity + 1)}
+            bg='#00AA4F'
+            size='sm'
+            color='white'
+            rounded='full'
+          >
             +
           </Button>
         </Flex>

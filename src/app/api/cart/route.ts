@@ -1,34 +1,36 @@
-import { addProductToCart, createCart, getCart, removeProductFromCart } from '@/utils/shopifyFunctions'
+import { addProductToCart, createCart, getCart, removeProductFromCart, updateProduct } from '@/utils/shopifyFunctions'
 
 export async function GET(request: Request) {
   let response
   const url = new URL(request.url)
   const action = url.searchParams.get('action')
-  let cartId
+  const cartId = url.searchParams.get('cartId')
+  const quantity = url.searchParams.get('quantity')
+  const merchandiseId = url.searchParams.get('productId')
+  let lines
 
   switch (action) {
     case 'create-cart':
       response = await createCart()
       break
     case 'get-cart':
-      cartId = url.searchParams.get('cartId')
       // @ts-ignore
       response = await getCart(cartId)
       break
     case 'add-to-cart':
-      cartId = url.searchParams.get('cartId')
-      const merchandiseId = url.searchParams.get('productId')
-      const quantity = url.searchParams.get('quantity')
-      const lines = [{ merchandiseId, quantity: Number(quantity) }]
+      lines = [{ merchandiseId, quantity: Number(quantity) }]
       // @ts-ignore
       response = await addProductToCart(cartId, lines)
       break
     case 'remove-from-cart':
-      cartId = url.searchParams.get('cartId')
-      const merchandiseIds = url.searchParams.get('productId')
-      const lineIds = [merchandiseIds]
+      const lineIds = [merchandiseId]
       // @ts-ignore
       response = await removeProductFromCart(cartId, lineIds)
+      break
+    case 'update-product':
+      lines = [{ id: merchandiseId, quantity: Number(quantity) }]
+      // @ts-ignore
+      response = await updateProduct(cartId, lines)
       break
     default:
       break

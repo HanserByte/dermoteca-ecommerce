@@ -39,5 +39,13 @@ export const useCart = () => {
     return data
   }
 
-  return { cartId, checkoutUrl, addToCart, createCart, getCart, removeFromCart }
+  async function updateProduct(cartId: string | null | undefined, productId: string, quantity: number) {
+    const res = await fetch(
+      `/api/cart?action=update-product&cartId=${cartId}&productId=${productId}&quantity=${quantity}`
+    )
+    const data = await res.json()
+    return data
+  }
+
+  return { cartId, checkoutUrl, addToCart, createCart, getCart, removeFromCart, updateProduct }
 }
