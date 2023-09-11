@@ -39,8 +39,12 @@ type CartProductsState = {
     quantity: number
   }[]
   setProducts: (products: any[]) => void
+  price: number
+  setPrice: (price: number) => void
 }
 export const useCartProducts = create<CartProductsState>((set: any) => ({
   products: [],
   setProducts: (products: any[]) => set({ products }),
+  price: 0,
+  setPrice: (price: number) => set({ price }),
 }))

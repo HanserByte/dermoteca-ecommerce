@@ -10,6 +10,7 @@ import {
   DrawerCloseButton,
   Button,
   Flex,
+  Text,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
@@ -23,7 +24,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter()
   const { open, setOpen } = useCartDrawer()
   const { checkoutUrl, cartId, getCart } = useCart()
-  const { products, setProducts } = useCartProducts()
+  const { products, setProducts, setPrice, price } = useCartProducts()
   const btnRef = React.useRef()
 
   const handleCheckout = () => {
@@ -35,6 +36,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
       if (cartId && products?.length === 0) {
         const response = await getCart(cartId)
         setProducts(response?.data?.cart?.lines?.nodes)
+        setPrice(response?.data?.cart?.cost?.totalAmount?.amount)
       }
     })()
   }, [cartId])
@@ -57,8 +59,16 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
             </Flex>
           </DrawerBody>
 
-          <DrawerFooter>
-            <Button onClick={handleCheckout} bg='#00AA4F' color='white' w='full'>
+          <DrawerFooter as={Flex} direction='column' gap='2'>
+            <Flex w='full' justifyContent='space-between'>
+              <Text fontSize='lg' fontWeight='600' w='100%'>
+                Total:
+              </Text>
+              <Text fontSize='lg' fontWeight='600' w='100%' align='end'>
+                ${price}
+              </Text>
+            </Flex>
+            <Button w='100%' onClick={handleCheckout} bg='#00AA4F' color='white' w='full'>
               Checkout
             </Button>
           </DrawerFooter>

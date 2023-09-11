@@ -23,6 +23,11 @@ export const createCart = async (): Promise<object> => {
               cart {
                 id
                 checkoutUrl
+                cost {
+                  subtotalAmount {
+                    amount
+                  }
+                } 
               }
             }
           }
@@ -58,6 +63,11 @@ export const getCart = async (cartId: string): Promise<object> => {
         query Cart {
           cart(id:  "${cartId}") {
             id
+            cost {
+              subtotalAmount {
+                amount
+              }
+            } 
             checkoutUrl
             lines(first: 30) {
               nodes{
@@ -107,6 +117,11 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
       mutation CartLinesAdd($cartId: ID!, $lines:[CartLineInput!]!) {
         cartLinesAdd(cartId: $cartId, lines: $lines){
           cart {
+            cost {
+              subtotalAmount {
+                amount
+              }
+            } 
             checkoutUrl
             lines (first: 30) {
               nodes{
@@ -163,6 +178,11 @@ export const removeProductFromCart = async (cartId: string | null, lineIds: stri
       mutation CartLinesRemove($cartId: ID!, $lineIds:[ID!]!) {
         cartLinesRemove(cartId: $cartId, lineIds: $lineIds){
           cart {
+            cost {
+              subtotalAmount {
+                amount
+              }
+            } 
             checkoutUrl
             lines (first: 30) {
               nodes{
@@ -217,6 +237,11 @@ export const updateProduct = async (cartId: string | null, lines: IUpdateCartLin
       mutation CartLinesUpdate($cartId: ID!, $lines:[CartLineUpdateInput!]!) {
         cartLinesUpdate(cartId: $cartId, lines: $lines) {
           cart {
+            cost {
+              subtotalAmount {
+                amount
+              }
+            } 
             checkoutUrl
             lines (first: 30) {
               nodes{

@@ -2,6 +2,7 @@ import { useCart } from '@/hooks/cart'
 import { useCartProducts } from '@/store'
 import { ICartProductLine } from '@/typesSanity/shopify'
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
+import Link from 'next/link'
 import React from 'react'
 import { TbTrash } from 'react-icons/tb'
 
@@ -11,21 +12,23 @@ interface ICartProductCardProps {
 
 const CartProductCard = ({ product }: ICartProductCardProps) => {
   const { cartId, removeFromCart, updateProduct } = useCart()
-  const { setProducts } = useCartProducts()
+  const { setProducts, setPrice } = useCartProducts()
 
   const handleRemoveFromCart = async () => {
     const response = await removeFromCart(cartId, product.id)
     setProducts(response?.data?.cartLinesRemove?.cart?.lines?.nodes)
+    setPrice(response?.data?.cartLinesRemove?.cart?.cost?.subtotalAmount?.amount)
   }
 
   const handleQuantityChange = async (quantity: number) => {
     const response = await updateProduct(cartId, product.id, quantity)
     setProducts(response?.data?.cartLinesUpdate?.cart?.lines?.nodes)
+    setPrice(response?.data?.cartLinesUpdate?.cart?.cost?.subtotalAmount?.amount)
   }
 
   return (
     <Flex gap={2}>
-      <Box w='35%'>
+      <Box as={Link} href={`/products/${product?.merchandise?.product?.handle}`} w='35%'>
         <img src={product?.merchandise?.product?.featuredImage?.url} alt={product?.merchandise?.product?.title} />
       </Box>
 

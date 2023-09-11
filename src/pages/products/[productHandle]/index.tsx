@@ -17,7 +17,7 @@ const ProductPage = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`)
   const { height } = useNavbar()
   const router = useRouter()
-  const { setProducts } = useCartProducts()
+  const { setProducts, setPrice } = useCartProducts()
 
   const query = `*[_type == "product" && store.slug.current == "${router.query.productHandle}"][0]{
     ...,
@@ -41,6 +41,7 @@ const ProductPage = () => {
     const productId = productData?.store?.variants[0]?.store?.gid
     const response = await addToCart(cartId, productId, 1)
     setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes)
+    setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount)
     setOpen(true)
   }
 
