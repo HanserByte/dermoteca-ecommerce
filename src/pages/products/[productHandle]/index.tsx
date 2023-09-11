@@ -18,6 +18,7 @@ const ProductPage = () => {
   const { height } = useNavbar()
   const router = useRouter()
   const { setProducts, setPrice } = useCartProducts()
+  const [quantity, setQuantity] = useState(1)
 
   const query = `*[_type == "product" && store.slug.current == "${router.query.productHandle}"][0]{
     ...,
@@ -39,7 +40,7 @@ const ProductPage = () => {
 
   const handleAddToCart = async () => {
     const productId = productData?.store?.variants[0]?.store?.gid
-    const response = await addToCart(cartId, productId, 1)
+    const response = await addToCart(cartId, productId, quantity)
     setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes)
     setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount)
     setOpen(true)
@@ -84,6 +85,23 @@ const ProductPage = () => {
             {/* Variant options */}
 
             <Flex mt='6' gap={8} alignItems='center'>
+              <Flex alignItems='center' gap={3}>
+                <Button
+                  onClick={() => setQuantity(quantity - 1 > 0 ? quantity - 1 : 1)}
+                  bg='#00AA4F'
+                  size='sm'
+                  color='white'
+                  rounded='full'
+                >
+                  -
+                </Button>
+                <Text fontSize='xl' fontWeight='500'>
+                  {quantity}
+                </Text>
+                <Button onClick={() => setQuantity(quantity + 1)} bg='#00AA4F' size='sm' color='white' rounded='full'>
+                  +
+                </Button>
+              </Flex>
               <Button onClick={handleAddToCart} bg='#00AA4F' color='white' rounded='full' _hover={{ opacity: 0.8 }}>
                 AGREGAR AL CARRITO
               </Button>
