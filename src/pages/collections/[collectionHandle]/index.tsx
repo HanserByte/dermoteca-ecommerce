@@ -42,9 +42,13 @@ const CollectionPage = () => {
         pr={isMobile ? "20px" : "145px"}
       >
         <Text fontWeight={700}>FARMACIA DERMATOLÓGICA</Text>
-        <Text fontWeight={600} w="50%">
+        <Text
+          fontWeight={600}
+          fontSize={isMobile ? "xs" : "md"}
+          w={isMobile ? "100%" : "50%"}
+        >
           Explora el exclusivo catálogo de productos dermatológicos de calidad
-          que hemos <br />
+          que hemos {!isMobile && <br />}
           seleccionado cuidadosamente para brindarte resultados efectivos y
           confiables.
         </Text>
@@ -58,7 +62,8 @@ const CollectionPage = () => {
           py={2}
         >
           <Select
-            placeholder="Select option"
+            fontSize={isMobile ? "xs" : "md"}
+            placeholder="Ordenar"
             w="max-content"
             icon={<GoChevronDown />}
             border="none"
@@ -72,7 +77,8 @@ const CollectionPage = () => {
 
           <Flex>
             <Select
-              placeholder="Select option"
+              fontSize={isMobile ? "xs" : "md"}
+              placeholder="Condicion"
               icon={<GoChevronDown />}
               border="none"
               fontWeight={600}
@@ -83,7 +89,8 @@ const CollectionPage = () => {
               <option value="option3">Option 3</option>
             </Select>
             <Select
-              placeholder="Select option"
+              fontSize={isMobile ? "xs" : "md"}
+              placeholder="Categoria"
               icon={<GoChevronDown />}
               border="none"
               fontWeight={600}
