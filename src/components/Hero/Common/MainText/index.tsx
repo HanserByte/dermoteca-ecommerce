@@ -1,6 +1,11 @@
 import { Text } from "@chakra-ui/react";
 
-const MainText = (props: { title: string, color?: string, fontSize?: string, textAlign?: any }) => {
+const MainText = (props: {
+  title: string;
+  color?: string;
+  fontSize?: string;
+  textAlign?: any;
+}) => {
   const { title, color, fontSize, textAlign } = props;
   return (
     <Text
