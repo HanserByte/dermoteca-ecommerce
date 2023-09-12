@@ -1,10 +1,10 @@
-import { ICartLineInput, IUpdateCartLineInput } from '@/typesSanity/shopify'
+import { ICartLineInput, IUpdateCartLineInput } from "@/typesSanity/shopify";
 
-const API_ENDPOINT = 'https://6a8516-2.myshopify.com/api/2023-07/graphql.json'
+const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
-  'Content-Type': 'application/json',
-  'X-Shopify-Storefront-Access-Token': process.env.NEXT_STOREFRONT_ACCESS_TOKEN,
-}
+  "Content-Type": "application/json",
+  "X-Shopify-Storefront-Access-Token": process.env.NEXT_STOREFRONT_ACCESS_TOKEN,
+};
 
 /**
  * Creates a cart by making a POST request to the API_ENDPOINT.
@@ -13,7 +13,7 @@ const HEADERS = {
 export const createCart = async (): Promise<object> => {
   try {
     const response = await fetch(API_ENDPOINT, {
-      method: 'POST',
+      method: "POST",
       // @ts-ignore
       headers: HEADERS,
       body: JSON.stringify({
@@ -33,20 +33,20 @@ export const createCart = async (): Promise<object> => {
           }
         `,
       }),
-    })
+    });
 
     if (!response.ok) {
       // Handle non-successful HTTP responses (e.g., 4xx or 5xx errors)
-      throw new Error('Failed to create a cart.')
+      throw new Error("Failed to create a cart.");
     }
 
-    const data = await response.json()
-    return data.data.cartCreate.cart
+    const data = await response.json();
+    return data.data.cartCreate.cart;
   } catch (error) {
     // @ts-ignore
-    return { error: error.message }
+    return { error: error.message };
   }
-}
+};
 
 /**
  * Retrieves cart information by making a POST request to the API_ENDPOINT.
@@ -55,7 +55,7 @@ export const createCart = async (): Promise<object> => {
  */
 export const getCart = async (cartId: string): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
-    method: 'POST',
+    method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
@@ -95,11 +95,11 @@ export const getCart = async (cartId: string): Promise<object> => {
         
       `,
     }),
-  })
+  });
 
-  const data = await response.json()
-  return data
-}
+  const data = await response.json();
+  return data;
+};
 
 /**
  * Adds a product to the cart by making a POST request to the API_ENDPOINT.
@@ -107,9 +107,12 @@ export const getCart = async (cartId: string): Promise<object> => {
  * @param {ICartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
  * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
  */
-export const addProductToCart = async (cartId: string | null, lines: ICartLineInput[]): Promise<object> => {
+export const addProductToCart = async (
+  cartId: string | null,
+  lines: ICartLineInput[]
+): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
-    method: 'POST',
+    method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
@@ -153,10 +156,10 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
         lines,
       },
     }),
-  })
-  const data = await response.json()
-  return data
-}
+  });
+  const data = await response.json();
+  return data;
+};
 
 /**
  * Removes one or more product lines from a user's shopping cart.
@@ -168,9 +171,12 @@ export const addProductToCart = async (cartId: string | null, lines: ICartLineIn
  * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
  *
  */
-export const removeProductFromCart = async (cartId: string | null, lineIds: string[]): Promise<object> => {
+export const removeProductFromCart = async (
+  cartId: string | null,
+  lineIds: string[]
+): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
-    method: 'POST',
+    method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
@@ -213,10 +219,10 @@ export const removeProductFromCart = async (cartId: string | null, lineIds: stri
         lineIds,
       },
     }),
-  })
-  const data = await response.json()
-  return data
-}
+  });
+  const data = await response.json();
+  return data;
+};
 
 /**
  * Updates the product lines in a user's shopping cart.
@@ -227,9 +233,12 @@ export const removeProductFromCart = async (cartId: string | null, lineIds: stri
  *
  * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
  */
-export const updateProduct = async (cartId: string | null, lines: IUpdateCartLineInput[]): Promise<object> => {
+export const updateProduct = async (
+  cartId: string | null,
+  lines: IUpdateCartLineInput[]
+): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
-    method: 'POST',
+    method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
@@ -273,7 +282,48 @@ export const updateProduct = async (cartId: string | null, lines: IUpdateCartLin
         lines,
       },
     }),
-  })
-  const data = await response.json()
-  return data
-}
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches a collection of products from a GraphQL API.
+ * @param {string} collectionHandle - The handle of the collection to retrieve.
+ * @returns {Promise<Object>} A Promise that resolves to the collection data fetched from the API.
+ * @throws {Error} If there is an issue with the API request or response.
+ */
+export const getCollection = async (collectionHandle: string | null) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query SingleCollection($handle: String) {
+        collection(handle: $handle) {
+            products(first: 30) {
+                nodes {
+                    featuredImage {
+                        url
+                    }
+                    handle
+                    title
+                    priceRange {
+                        maxVariantPrice{
+                            amount
+                        }
+                    }
+                }
+            }
+        }
+    }
+      `,
+      variables: {
+        handle: collectionHandle,
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};

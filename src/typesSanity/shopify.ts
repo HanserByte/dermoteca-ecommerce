@@ -1,3 +1,4 @@
+import { IPriceRange } from "./shopify";
 export interface ICartLineInput {
   quantity: number;
   merchandiseId: string;
@@ -19,6 +20,7 @@ export interface IProduct {
   featuredImage: IImage;
   handle: string;
   title: string;
+  priceRange: IPriceRange;
 }
 
 export interface ISanityProduct {
@@ -30,8 +32,8 @@ export interface ISlug {
 }
 
 export interface IPriceRange {
-  maxVariantPrice: number;
-  minVariantPrice: number;
+  maxVariantPrice: number | { amount: string };
+  minVariantPrice: number | { amount: string };
 }
 
 export interface IStore {
