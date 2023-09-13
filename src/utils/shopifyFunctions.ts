@@ -327,3 +327,42 @@ export const getCollection = async (collectionHandle: string | null) => {
   const data = await response.json();
   return data;
 };
+
+/**
+ * Fetches recommended products based on a given product ID.
+ * @async
+ * @param {string | null} productId - The ID of the product for which recommendations are requested.
+ * @returns {Promise<Object>} - A Promise that resolves to the recommended product data.
+ * @throws {Error} - If there's an issue with the network request or response.
+ */
+export const getRecommendedProducts = async (productId: string | null) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query RecommendedProducts ($productId: ID!) {
+        productRecommendations(productId: $productId) {
+            id
+            title
+            handle
+            featuredImage {
+              url
+            }
+            priceRange {
+                maxVariantPrice {
+                    amount
+                }
+            }
+        }
+       }
+      `,
+      variables: {
+        productId,
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};

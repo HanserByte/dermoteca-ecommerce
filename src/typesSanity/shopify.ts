@@ -1,4 +1,3 @@
-import { IPriceRange } from "./shopify";
 export interface ICartLineInput {
   quantity: number;
   merchandiseId: string;
@@ -17,6 +16,7 @@ export interface IImage {
 }
 
 export interface IProduct {
+  id: string;
   featuredImage: IImage;
   handle: string;
   title: string;
