@@ -21,10 +21,10 @@ const ProductCard = (props: ProductCardProps) => {
           {/* TODO: change img to next Image component when rendering final product image */}
           <img src={props.imageSrc} alt={props.title} />
         </AspectRatio>
-        <Text fontSize={isMobile ? "sm" : "lg"} pt="6px">
+        <Text fontSize={isMobile ? "md" : "lg"} pt="6px">
           {props.title}
         </Text>
-        <Text fontSize={isMobile ? "sm" : "xl"} fontWeight={700}>
+        <Text fontSize={isMobile ? "lg" : "xl"} fontWeight={700}>
           ${props.price}
         </Text>
       </Flex>

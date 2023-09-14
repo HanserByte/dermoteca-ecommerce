@@ -15,6 +15,7 @@ import "@splidejs/react-splide/css";
 
 import ProductCard from "../ProductCard";
 import { useStore } from "@/store";
+import Link from "next/link";
 
 interface ProductRecommendationsProps {
   products: IProduct[];
@@ -26,9 +27,24 @@ const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
   return (
     <VStack my={12} w="full">
       <Flex w="full" justifyContent="space-between" alignItems="center">
-        <Text fontWeight={600}>Productos Recomendados</Text>
-        <Button rounded="full" border={1} bg="transparent">
-          VER TODO <BsArrowRight />
+        <Text fontWeight={700} fontSize={isMobile ? "md" : "xl"}>
+          Productos Recomendados
+        </Text>
+        <Button
+          as={Link}
+          href="/collections"
+          border="1px"
+          borderColor="black"
+          rounded="full"
+          bg="transparent"
+          size={isMobile ? "sm" : "lg"}
+          _hover={{
+            bg: "transparent",
+            borderColor: "#00AA4F",
+            textColor: "#00AA4F",
+          }}
+        >
+          VER TODO {!isMobile && <BsArrowRight />}
         </Button>
       </Flex>
       <Box w="full">
@@ -46,6 +62,7 @@ const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
               <ProductCard
                 imageSrc={product.featuredImage.url}
                 title={product?.title}
+                // @ts-ignore
                 price={product?.priceRange?.maxVariantPrice?.amount}
                 handle={product?.handle}
               />
