@@ -366,3 +366,193 @@ export const getRecommendedProducts = async (productId: string | null) => {
   const data = await response.json();
   return data;
 };
+
+/**
+ * Creates a new customer using the specified user information.
+ * @param {string} email - The email address of the customer.
+ * @param {string} firstName - The first name of the customer.
+ * @param {string} lastName - The last name of the customer.
+ * @param {string} password - The password for the customer's account.
+ * @returns {Promise<object>} A promise that resolves to the response data from the server.
+ * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
+ */
+export const createCustomer = async (
+  email: string,
+  firstName: string,
+  lastName: string,
+  password: string
+) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+        mutation CustomerCreate($input: CustomerCreateInput!) {
+          customerCreate(input: $input) {
+            customer {
+              firstName
+            }
+          }
+        }
+      `,
+      variables: {
+        input: {
+          email,
+          firstName,
+          lastName,
+          password,
+        },
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Creates a customer access token using the provided email and password for authentication.
+ * @param {string} email - The email address of the customer.
+ * @param {string} password - The password for the customer's account.
+ * @returns {Promise<object>} A promise that resolves to the response data from the server, including the access token and expiration information.
+ * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
+ */
+export const customerAccesTokenCreate = async (
+  email: string,
+  password: string
+) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      mutation CustomerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+        customerAccessTokenCreate(input: $input) {
+          customerAccessToken {
+              accessToken
+              expiresAt
+          }
+          customerUserErrors {
+              message
+          }
+        }
+      }
+      `,
+      variables: {
+        input: {
+          email,
+          password,
+        },
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Retrieves customer information using a customer access token.
+ * @param {string} customerAccessToken - The customer access token used for authentication and identification.
+ * @returns {Promise<object>} A promise that resolves to the customer's information fetched from the server.
+ * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
+ */
+export const getCustomerByAccessToken = async (customerAccesToken: string) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query GetCustomer() {
+        customer(customerAccessToken: ${customerAccesToken}) {
+          id
+          firstName
+          lastName
+          acceptsMarketing
+          email
+          phone
+          defaultAddress {
+              address1
+              address1
+              city
+              country
+              province
+              zip
+          }
+          metafield(namespace: "wishlist", key: "wishlist_ids") {
+              id
+              value
+          }
+        }
+      }
+      `,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+export const resetCustomerPasswordByUrl = async (
+  password: string,
+  resetUrl: any
+) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      mutation CustomerResetByUrl($password: String!, $resetUrl: URL!) {
+        customerResetByUrl(password: $password, resetUrl: $resetUrl) {
+            customerAccessToken {
+                accessToken
+                expiresAt
+            }
+            customerUserErrors {
+                code
+                field
+                message
+            }
+        }
+    }
+      `,
+      variables: {
+        password,
+        resetUrl,
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Initiates the account recovery process for a customer using their email address.
+ * @param {string} email - The email address of the customer requesting account recovery.
+ * @returns {Promise<object>} A promise that resolves to the response data from the server, including potential error messages.
+ * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
+ */
+export const customerRecover = async (email: string) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      mutation CustomerRecover($email: String!) {
+        customerRecover(email: $email) {
+          customerUserErrors {
+            message
+          }
+        }
+      }
+      `,
+      variables: {
+        email,
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
