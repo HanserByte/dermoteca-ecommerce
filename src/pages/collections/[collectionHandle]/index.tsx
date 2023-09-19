@@ -6,17 +6,36 @@ import { useNavbar, useStore } from "@/store";
 import { Select } from "@chakra-ui/react";
 import { GoChevronDown } from "react-icons/go";
 import ProductCard from "@/components/ProductCard";
-import { IProduct, ISanityProduct } from "@/typesSanity/shopify";
+import { IProduct } from "@/typesSanity/shopify";
 import { useRouter } from "next/router";
 import { useCollections } from "@/hooks/collections";
+import { client } from "@/lib/sanity.client";
+import PortableText from "@/components/PortableText";
+import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 
 const CollectionPage = () => {
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionProducts, setCollectionProducts] = useState<any>();
+  const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const router = useRouter();
   const { getCollection } = useCollections();
+
+  const query = `*[_type == "collectionPage"]  {
+    collectionContent,
+    components[]-> 
+  }[0]
+  `;
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await client.fetch(query);
+      setCollectionData(data);
+    }
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function getCollectionProducts() {
@@ -41,17 +60,9 @@ const CollectionPage = () => {
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        <Text fontWeight={700}>FARMACIA DERMATOLÓGICA</Text>
-        <Text
-          fontWeight={600}
-          fontSize={isMobile ? "xs" : "md"}
-          w={isMobile ? "100%" : "50%"}
-        >
-          Explora el exclusivo catálogo de productos dermatológicos de calidad
-          que hemos {!isMobile && <br />}
-          seleccionado cuidadosamente para brindarte resultados efectivos y
-          confiables.
-        </Text>
+        {collectionData?.collectionContent && (
+          <PortableText blocks={collectionData?.collectionContent} />
+        )}
       </Box>
 
       <Box w="full">

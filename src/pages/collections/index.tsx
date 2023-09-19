@@ -8,21 +8,36 @@ import { GoChevronDown } from "react-icons/go";
 import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
 import { ISanityProduct } from "@/typesSanity/shopify";
+import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
+import PortableText from "@/components/PortableText";
 
 const AllCollectionsPage = () => {
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionProducts, setCollectionProducts] = useState<any>();
+  const [collectionData, setCollectionData] = useState<ICollectionPageData>();
 
   const query = `*[_type == "product"]`;
 
+  const collectionQuery = `*[_type == "collectionPage"]  {
+    collectionContent,
+    components[]-> 
+  }[0]
+  `;
+
   useEffect(() => {
+    async function fetchData() {
+      const data = await client.fetch(collectionQuery);
+      setCollectionData(data);
+    }
+
     async function fetchcollection() {
       const collections = await client.fetch(query);
       setCollectionProducts(collections);
     }
 
+    fetchData();
     fetchcollection();
   }, []);
 
@@ -36,13 +51,9 @@ const AllCollectionsPage = () => {
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        <Text fontWeight={700}>FARMACIA DERMATOLÓGICA</Text>
-        <Text fontWeight={600} w="50%">
-          Explora el exclusivo catálogo de productos dermatológicos de calidad
-          que hemos <br />
-          seleccionado cuidadosamente para brindarte resultados efectivos y
-          confiables.
-        </Text>
+        {collectionData?.collectionContent && (
+          <PortableText blocks={collectionData?.collectionContent} />
+        )}
       </Box>
 
       <Box w="full">
