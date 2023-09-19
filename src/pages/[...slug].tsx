@@ -8,13 +8,14 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import ContainerNav from "@/components/ContainerNav";
 import { useStore } from "@/store";
+import ComponentRenderer from "@/components/ComponentRenderer";
 
 const Page = () => {
   const router = useRouter();
   const { slug } = router.query;
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
-  
+
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
@@ -96,17 +97,3 @@ const Page = () => {
     </Box>
   );
 };
-
-const ComponentRenderer = ({
-  component,
-  data,
-}: {
-  component: string;
-  data: any;
-}) => {
-  const Component =
-    require(`../components/componentsSanity/${component}`).default;
-  return <Component data={data} />;
-};
-
-export default Page;

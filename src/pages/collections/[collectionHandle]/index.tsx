@@ -12,6 +12,7 @@ import { useCollections } from "@/hooks/collections";
 import { client } from "@/lib/sanity.client";
 import PortableText from "@/components/PortableText";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
+import ComponentRenderer from "@/components/ComponentRenderer";
 
 const CollectionPage = () => {
   const { height } = useNavbar();
@@ -54,7 +55,6 @@ const CollectionPage = () => {
     <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar dataN={{ isBlackNavBar: true }} />
       <Box h={`${height}px`} bg="white" w="100%" />
-
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
@@ -64,7 +64,6 @@ const CollectionPage = () => {
           <PortableText blocks={collectionData?.collectionContent} />
         )}
       </Box>
-
       <Box w="full">
         <Flex
           pl={isMobile ? "20px" : "145px"}
@@ -114,7 +113,6 @@ const CollectionPage = () => {
           </Flex>
         </Flex>
       </Box>
-
       <Box w="full" bg="#E7D4C7">
         <Box
           pl={isMobile ? "20px" : "145px"}
@@ -124,7 +122,6 @@ const CollectionPage = () => {
           <Text fontWeight={600}>Filtros</Text>
         </Box>
       </Box>
-
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
@@ -147,6 +144,14 @@ const CollectionPage = () => {
           ))}
         </Grid>
       </Box>
+      {collectionData &&
+        collectionData?.components.map((componente: any) => (
+          <ComponentRenderer
+            key={componente._id}
+            component={componente._type}
+            data={componente}
+          />
+        ))}
       <Footer />
     </Box>
   );
