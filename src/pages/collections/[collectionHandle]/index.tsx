@@ -8,10 +8,9 @@ import { GoChevronDown } from "react-icons/go";
 import ProductCard from "@/components/ProductCard";
 import { IProduct } from "@/typesSanity/shopify";
 import { useRouter } from "next/router";
-import { useCollections } from "@/hooks/collections";
+import { useCollectionData } from "@/hooks/collections";
 import { client } from "@/lib/sanity.client";
 import PortableText from "@/components/PortableText";
-import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import ComponentRenderer from "@/components/ComponentRenderer";
 
 const CollectionPage = () => {
@@ -19,9 +18,11 @@ const CollectionPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionProducts, setCollectionProducts] = useState<any>();
-  const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const router = useRouter();
-  const { getCollection } = useCollections();
+  const [collectionPage, setCollectionPage] = useState();
+  const { collectionData } = useCollectionData(
+    router.query.collectionHandle as string
+  );
 
   const query = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -32,7 +33,7 @@ const CollectionPage = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await client.fetch(query);
-      setCollectionData(data);
+      setCollectionPage(data);
     }
 
     fetchData();
@@ -40,10 +41,6 @@ const CollectionPage = () => {
 
   useEffect(() => {
     async function getCollectionProducts() {
-      const collectionProducts = await getCollection(
-        router.query.collectionHandle as string
-      );
-
       setCollectionProducts(
         collectionProducts?.data?.collection?.products?.nodes
       );
@@ -60,8 +57,8 @@ const CollectionPage = () => {
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        {collectionData?.collectionContent && (
-          <PortableText blocks={collectionData?.collectionContent} />
+        {collectionPage?.collectionContent && (
+          <PortableText blocks={collectionPage?.collectionContent} />
         )}
       </Box>
       <Box w="full">
@@ -132,20 +129,22 @@ const CollectionPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {collectionProducts?.map((product: IProduct) => (
-            <ProductCard
-              handle={product.handle}
-              imageSrc={product.featuredImage.url}
-              title={product.title}
-              // @ts-ignore
-              price={Number(product?.priceRange?.maxVariantPrice?.amount)}
-              key={product?.handle}
-            />
-          ))}
+          {collectionData?.data?.collection?.products?.nodes?.map(
+            (product: IProduct) => (
+              <ProductCard
+                handle={product.handle}
+                imageSrc={product.featuredImage.url}
+                title={product.title}
+                // @ts-ignore
+                price={Number(product?.priceRange?.maxVariantPrice?.amount)}
+                key={product?.handle}
+              />
+            )
+          )}
         </Grid>
       </Box>
-      {collectionData &&
-        collectionData?.components.map((componente: any) => (
+      {collectionPage &&
+        collectionPage?.components.map((componente: any) => (
           <ComponentRenderer
             key={componente._id}
             component={componente._type}

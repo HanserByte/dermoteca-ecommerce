@@ -1,11 +1,15 @@
-export const useCollections = () => {
-  async function getCollection(collectionHandle: string) {
-    const res = await fetch(
-      `/api/collections?collectionHandle=${collectionHandle}`
-    );
-    const data = await res.json();
-    return data;
-  }
+import { useQuery } from "@tanstack/react-query";
 
-  return { getCollection };
+export const useCollectionData = (collectionHandle?: string) => {
+  const collectionData = useQuery(["collections", collectionHandle], () =>
+    fetch(`/api/collections?collectionHandle=${collectionHandle}`).then((res) =>
+      res.json()
+    )
+  )?.data;
+
+  const allCollectionsData = useQuery(["collections"], () =>
+    fetch(`/api/collections`).then((res) => res.json())
+  )?.data;
+
+  return { collectionData, allCollectionsData };
 };

@@ -7,19 +7,18 @@ import { Select } from "@chakra-ui/react";
 import { GoChevronDown } from "react-icons/go";
 import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
-import { ISanityProduct } from "@/typesSanity/shopify";
+import { IProduct, ISanityProduct } from "@/typesSanity/shopify";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
+import { useCollectionData } from "@/hooks/collections";
 
 const AllCollectionsPage = () => {
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const [collectionProducts, setCollectionProducts] = useState<any>();
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
-
-  const query = `*[_type == "product"]`;
+  const { allCollectionsData } = useCollectionData();
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -33,13 +32,7 @@ const AllCollectionsPage = () => {
       setCollectionData(data);
     }
 
-    async function fetchcollection() {
-      const collections = await client.fetch(query);
-      setCollectionProducts(collections);
-    }
-
     fetchData();
-    fetchcollection();
   }, []);
 
   return (
@@ -124,26 +117,28 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {collectionProducts?.map((product: ISanityProduct) => (
-            <ProductCard
-              handle={product.store.slug.current}
-              imageSrc={product.store.previewImageUrl}
-              title={product.store.title}
-              price={product?.store.priceRange?.minVariantPrice}
-              key={product?.store.gid}
-            />
-          ))}
+          {allCollectionsData?.data?.products?.nodes?.map(
+            (product: IProduct) => (
+              <ProductCard
+                handle={product.handle}
+                imageSrc={product.featuredImage.url}
+                title={product.title}
+                // @ts-ignore
+                price={product?.priceRange?.maxVariantPrice?.amount}
+                key={product?.id}
+              />
+            )
+          )}
         </Grid>
       </Box>
 
-      {collectionData &&
-        collectionData?.components.map((componente: any) => (
-          <ComponentRenderer
-            key={componente._id}
-            component={componente._type}
-            data={componente}
-          />
-        ))}
+      {collectionData?.components.map((componente: any) => (
+        <ComponentRenderer
+          key={componente._id}
+          component={componente._type}
+          data={componente}
+        />
+      ))}
       <Footer />
     </Box>
   );

@@ -3,7 +3,7 @@ import { ICartLineInput, IUpdateCartLineInput } from "@/typesSanity/shopify";
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
   "Content-Type": "application/json",
-  "X-Shopify-Storefront-Access-Token": process.env.NEXT_STOREFRONT_ACCESS_TOKEN,
+  "X-Shopify-Storefront-Access-Token": process.env.STOREFRONT_ACCESS_TOKEN,
 };
 
 /**
@@ -324,8 +324,7 @@ export const getCollection = async (collectionHandle: string | null) => {
       },
     }),
   });
-  const data = await response.json();
-  return data;
+  return await response.json();
 };
 
 /**
@@ -493,6 +492,13 @@ export const getCustomerByAccessToken = async (customerAccesToken: string) => {
   return data;
 };
 
+/**
+ * Reset a customer's password using a reset URL.
+ * @param {string} password - The new password to set for the customer.
+ * @param {string} resetUrl - The URL containing the reset token for the customer.
+ * @returns {Promise<Object>} A promise that resolves to the response data from the API.
+ * @throws {Error} If there is an issue with the fetch request or the response.
+ */
 export const resetCustomerPasswordByUrl = async (
   password: string,
   resetUrl: any
@@ -551,6 +557,43 @@ export const customerRecover = async (email: string) => {
       variables: {
         email,
       },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches information about all products from the API.
+ * @returns {Promise<Object>} A promise that resolves to the response data containing product information.
+ * @throws {Error} If there is an issue with the fetch request or the response.
+ */
+export const getAllProduct = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllProducts {
+        products (first: 40) {
+          nodes {
+            id
+            title
+            featuredImage {
+              url
+            }
+            handle
+            title
+            priceRange {
+              maxVariantPrice {
+                    amount
+              }
+            }  
+          }
+        }
+      }
+    `,
     }),
   });
   const data = await response.json();

@@ -97,3 +97,5 @@ const Page = () => {
     </Box>
   );
 };
+
+export default Page;
