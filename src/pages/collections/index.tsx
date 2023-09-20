@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { Box, Flex, Grid, Text, useMediaQuery } from "@chakra-ui/react";
@@ -12,6 +12,12 @@ import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { useCollectionData } from "@/hooks/collections";
+import {
+  initialState,
+  collectionReducer,
+  actionTypes,
+} from "./collectionReducer";
+import { useRouter } from "next/router";
 
 const AllCollectionsPage = () => {
   const { height } = useNavbar();
@@ -19,6 +25,8 @@ const AllCollectionsPage = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const { allCollectionsData } = useCollectionData();
+  const router = useRouter();
+  const [state, dispatch] = useReducer(collectionReducer, initialState);
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -31,9 +39,29 @@ const AllCollectionsPage = () => {
       const data = await client.fetch(collectionQuery);
       setCollectionData(data);
     }
-
     fetchData();
   }, []);
+
+  const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value.split(",")?.[0]);
+    dispatch({
+      action: actionTypes.SET_COLLECTION_SORT,
+      payload: e.target.value.split(",")?.[0],
+    }); // Collection order
+
+    dispatch({
+      action: actionTypes.SET_COLLECTION_ORDER,
+      payload: e.target.value.split(",")?.[0],
+    }); // Reverse state
+
+    console.log(e.target.value.length);
+
+    if (e.target.value.length > 1) {
+      router.query.sort = e.target.value.split(",")?.[0];
+      router.query.order = e.target.value.split(",")?.[1];
+      router.push(router);
+    } else router.replace("/collections", undefined, { shallow: true });
+  };
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -58,21 +86,26 @@ const AllCollectionsPage = () => {
           py={2}
         >
           <Select
-            placeholder="Select option"
-            w="max-content"
+            placeholder="Ordenar - Todos los productos"
+            w="auto"
             icon={<GoChevronDown />}
             border="none"
             fontWeight={600}
             variant="unstyled"
+            onChange={handleOrderChange}
           >
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="created_at,false">Mas reciente</option>
+            <option value="created_at,true">Mas antiguos</option>
+            <option value="title,false">Alfabeticamente A - Z</option>
+            <option value="title,true">Alfabeticamente Z - A</option>
+            <option value="price,false">Precio Menor - Mayor</option>
+            <option value="price,true">Precio Mayor - Menor</option>
           </Select>
 
           <Flex>
             <Select
-              placeholder="Select option"
+              w="auto"
+              placeholder="Etiquetas"
               icon={<GoChevronDown />}
               border="none"
               fontWeight={600}
@@ -83,7 +116,8 @@ const AllCollectionsPage = () => {
               <option value="option3">Option 3</option>
             </Select>
             <Select
-              placeholder="Select option"
+              w="auto"
+              placeholder="Colleccion"
               icon={<GoChevronDown />}
               border="none"
               fontWeight={600}
