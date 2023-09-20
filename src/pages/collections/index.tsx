@@ -10,6 +10,7 @@ import ProductCard from "@/components/ProductCard";
 import { ISanityProduct } from "@/typesSanity/shopify";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
+import ComponentRenderer from "@/components/ComponentRenderer";
 
 const AllCollectionsPage = () => {
   const { height } = useNavbar();
@@ -134,6 +135,15 @@ const AllCollectionsPage = () => {
           ))}
         </Grid>
       </Box>
+
+      {collectionData &&
+        collectionData?.components.map((componente: any) => (
+          <ComponentRenderer
+            key={componente._id}
+            component={componente._type}
+            data={componente}
+          />
+        ))}
       <Footer />
     </Box>
   );
