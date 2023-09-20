@@ -43,7 +43,6 @@ const AllCollectionsPage = () => {
   }, []);
 
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value.split(",")?.[0]);
     dispatch({
       action: actionTypes.SET_COLLECTION_SORT,
       payload: e.target.value.split(",")?.[0],
@@ -54,8 +53,7 @@ const AllCollectionsPage = () => {
       payload: e.target.value.split(",")?.[0],
     }); // Reverse state
 
-    console.log(e.target.value.length);
-
+    // Add query params and remove them if sort is inactive
     if (e.target.value.length > 1) {
       router.query.sort = e.target.value.split(",")?.[0];
       router.query.order = e.target.value.split(",")?.[1];
