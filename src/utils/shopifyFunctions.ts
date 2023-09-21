@@ -1,4 +1,8 @@
-import { ICartLineInput, IUpdateCartLineInput } from "@/typesSanity/shopify";
+import {
+  ICartLineInput,
+  IUpdateCartLineInput,
+  SortKey as ProductSortKey,
+} from "@/typesSanity/shopify";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
@@ -568,15 +572,19 @@ export const customerRecover = async (email: string) => {
  * @returns {Promise<Object>} A promise that resolves to the response data containing product information.
  * @throws {Error} If there is an issue with the fetch request or the response.
  */
-export const getAllProduct = async () => {
+
+export const getAllProducts = async (
+  sortKey: ProductSortKey = "BEST_SELLING",
+  reverse: boolean = false
+) => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query AllProducts {
-        products (first: 40) {
+      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean) {
+        products (first: 40, sortKey: $sortKey, reverse: $reverse) {
           nodes {
             id
             title
@@ -594,6 +602,10 @@ export const getAllProduct = async () => {
         }
       }
     `,
+      variables: {
+        sortKey,
+        reverse,
+      },
     }),
   });
   const data = await response.json();

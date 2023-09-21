@@ -7,11 +7,15 @@ import { Select } from "@chakra-ui/react";
 import { GoChevronDown } from "react-icons/go";
 import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
-import { IProduct, ISanityProduct } from "@/typesSanity/shopify";
+import {
+  IProduct,
+  ISanityProduct,
+  ProductSortKey,
+} from "@/typesSanity/shopify";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
-import { useCollectionData } from "@/hooks/collections";
+import { useAllProducts } from "@/hooks/collections";
 import {
   initialState,
   collectionReducer,
@@ -20,12 +24,15 @@ import {
 import { useRouter } from "next/router";
 
 const AllCollectionsPage = () => {
+  const router = useRouter();
+  // @ts-ignore
+  const sortKey = router.query?.sort?.toUpperCase();
+  const order = router.query?.order === "true";
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
-  const { allCollectionsData } = useCollectionData();
-  const router = useRouter();
+  const allProductsData = useAllProducts(sortKey, order);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
 
   const collectionQuery = `*[_type == "collectionPage"]  {
@@ -43,15 +50,15 @@ const AllCollectionsPage = () => {
   }, []);
 
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      action: actionTypes.SET_COLLECTION_SORT,
-      payload: e.target.value.split(",")?.[0],
-    }); // Collection order
+    // dispatch({
+    //   action: actionTypes.SET_COLLECTION_SORT,
+    //   payload: e.target.value.split(",")?.[0],
+    // }); // Collection order
 
-    dispatch({
-      action: actionTypes.SET_COLLECTION_ORDER,
-      payload: e.target.value.split(",")?.[0],
-    }); // Reverse state
+    // dispatch({
+    //   action: actionTypes.SET_COLLECTION_ORDER,
+    //   payload: e.target.value.split(",")?.[0],
+    // }); // Reverse state
 
     // Add query params and remove them if sort is inactive
     if (e.target.value.length > 1) {
@@ -149,18 +156,16 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {allCollectionsData?.data?.products?.nodes?.map(
-            (product: IProduct) => (
-              <ProductCard
-                handle={product.handle}
-                imageSrc={product.featuredImage.url}
-                title={product.title}
-                // @ts-ignore
-                price={product?.priceRange?.maxVariantPrice?.amount}
-                key={product?.id}
-              />
-            )
-          )}
+          {allProductsData?.data?.products?.nodes?.map((product: IProduct) => (
+            <ProductCard
+              handle={product.handle}
+              imageSrc={product.featuredImage.url}
+              title={product.title}
+              // @ts-ignore
+              price={product?.priceRange?.maxVariantPrice?.amount}
+              key={product?.id}
+            />
+          ))}
         </Grid>
       </Box>
 

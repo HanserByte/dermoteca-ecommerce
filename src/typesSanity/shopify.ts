@@ -55,3 +55,15 @@ export interface ICartProductLine {
   merchandise: IMerchandise;
   quantity: number;
 }
+
+export enum ProductSortKey {
+  BEST_SELLING = "BEST SELLING",
+  CREATED_AT = "CREATED_AT",
+  ID = "ID",
+  PRICE = "PRICE",
+  PRODUCT_TYPE = "PRODUCT_TYPE",
+  RELEVANCE = "RELEVANCE",
+  TITLE = "TITLE",
+  UPDATED_AT = "UPDATED_AT",
+  VENDOR = "VENDOR",
+}
