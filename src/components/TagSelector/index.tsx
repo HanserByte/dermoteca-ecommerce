@@ -21,20 +21,26 @@ const TagSelector = () => {
 
   const handleCheckboxSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tag = encodeURIComponent(e.target.value);
+    const queryTagsArray = queryTags
+      ?.split(",")
+      .filter((tag: string) => tag != "undefined");
 
     //  Add tag to query params
-    if (!queryTags?.includes(e.target.value)) {
-      router.query.tags = router.query.tags
-        ? `${router.query.tags},${tag}`
-        : `${tag}`;
-      router.push(router);
+    if (!queryTagsArray?.includes(e.target.value)) {
+      router.query.tags =
+        queryTagsArray.length > 0
+          ? [encodeURIComponent(queryTagsArray.join(",")), tag].join(",")
+          : tag;
     } else {
       // Remove tag from query params
-      router.query.tags = router?.query?.tags?.replace(tag, "");
-      router.query.tags?.[0] === "," &&
-        (router.query.tags = router.query.tags?.slice(1));
-      router.push(router);
+      router.query.tags = encodeURIComponent(
+        queryTagsArray
+          ?.filter((tagItem: string) => tagItem !== e.target.value)
+          .join(",")
+      );
     }
+
+    router.push(router);
   };
 
   return (

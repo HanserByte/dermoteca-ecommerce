@@ -37,11 +37,12 @@ const AllCollectionsPage = () => {
   const allProductsData = useAllProducts(sortKey, order);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
   // @ts-ignore
-
-  // Clean up taps in query params
-  const queryTags = decodeURIComponent(router?.query?.tags)
+  const queryTags = decodeURIComponent(router?.query?.tags);
+  const queryTagsArray = queryTags
     ?.split(",")
-    ?.filter((tag) => tag !== "" && tag !== "undefined");
+    .filter((tag: string) => tag != "undefined" && tag != "");
+
+  console.log(queryTagsArray);
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -67,10 +68,10 @@ const AllCollectionsPage = () => {
   };
 
   const handleRemoveTag = (tag: string) => {
-    const encodedTag = encodeURIComponent(tag);
-    router.query.tags = router?.query?.tags?.replace(encodedTag, "");
-    router.query.tags?.[0] === "," &&
-      (router.query.tags = router.query.tags?.slice(1));
+    // Remove tag from query params
+    router.query.tags = encodeURIComponent(
+      queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
+    );
     router.push(router);
   };
 
@@ -140,7 +141,7 @@ const AllCollectionsPage = () => {
           py={2}
         >
           <Text fontWeight={600}>Filtros</Text>
-          {queryTags?.map((tag) => (
+          {queryTagsArray?.map((tag) => (
             <Tag
               size="md"
               key={tag}

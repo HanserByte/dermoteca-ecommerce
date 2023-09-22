@@ -4,6 +4,9 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const sortKey = url.searchParams.get("sortKey");
   const reverse = url.searchParams.get("reverse") === "true";
+  const tags = url.searchParams.get("tags");
+
+  console.log(sortKey);
   const response =
     sortKey !== "undefined"
       ? await getAllProducts(sortKey, reverse)
