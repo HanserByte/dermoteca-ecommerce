@@ -34,6 +34,7 @@ const CollectionsSelector = () => {
               (collection: any) => {
                 return (
                   <Button
+                    key={collection.handle}
                     _hover={{
                       bg: "#E7D4C7",
                     }}

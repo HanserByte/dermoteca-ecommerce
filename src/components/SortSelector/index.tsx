@@ -7,15 +7,15 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Select,
-  Text,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { GoChevronDown } from "react-icons/go";
 
 const SortSelector = () => {
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const router = useRouter();
   const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
 
@@ -26,9 +26,15 @@ const SortSelector = () => {
       router.query.order = e.target.value.split(",")?.[1];
       router.push(router);
     } else router.replace("/collections", undefined, { shallow: true });
+    onClose();
   };
   return (
-    <Popover placement="bottom-start">
+    <Popover
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      placement="bottom-start"
+    >
       <PopoverTrigger>
         <Button p="0px" bg="transparent" _hover={{ bg: "transparent" }}>
           Ordenar <GoChevronDown />

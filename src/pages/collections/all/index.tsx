@@ -21,11 +21,12 @@ import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { useAllProducts } from "@/hooks/collections";
-import { initialState, collectionReducer } from "./collectionReducer";
+import { initialState, collectionReducer } from "../collectionReducer";
 import { useRouter } from "next/router";
 import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
 import SortSelector from "@/components/SortSelector";
+import { getOrderTag } from "@/utils";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -45,7 +46,7 @@ const AllCollectionsPage = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
-  const [state, dispatch] = useReducer(collectionReducer, initialState);
+  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -67,6 +68,15 @@ const AllCollectionsPage = () => {
       queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
     );
     router.push(router);
+  };
+
+  const removeQueryParam = (param: string) => {
+    const { pathname, query } = router;
+    const params = new URLSearchParams(query);
+    params.delete(param);
+    router.replace({ pathname, query: params.toString() }, undefined, {
+      shallow: true,
+    });
   };
 
   return (
@@ -109,6 +119,18 @@ const AllCollectionsPage = () => {
           py={2}
         >
           <Text fontWeight={600}>Filtros</Text>
+          {activeOrder && (
+            <Tag
+              bg="white"
+              textColor="black"
+              size="md"
+              borderRadius="full"
+              variant="solid"
+            >
+              <TagLabel>{activeOrder?.name}</TagLabel>
+              <TagCloseButton onClick={() => removeQueryParam("sort")} />
+            </Tag>
+          )}
           {queryTagsArray?.map((tag) => (
             <Tag
               bg="white"
