@@ -7,22 +7,14 @@ import { Select } from "@chakra-ui/react";
 import { GoChevronDown } from "react-icons/go";
 import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
-import {
-  IProduct,
-  ISanityProduct,
-  ProductSortKey,
-} from "@/typesSanity/shopify";
+import { IProduct } from "@/typesSanity/shopify";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { useAllProducts } from "@/hooks/collections";
-import {
-  initialState,
-  collectionReducer,
-  actionTypes,
-} from "./collectionReducer";
+import { initialState, collectionReducer } from "./collectionReducer";
 import { useRouter } from "next/router";
-import { useAllTags } from "@/hooks/products";
+import TagSelector from "@/components/TagSelector";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -35,7 +27,6 @@ const AllCollectionsPage = () => {
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
-  const allTagsData = useAllTags();
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -52,16 +43,6 @@ const AllCollectionsPage = () => {
   }, []);
 
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // dispatch({
-    //   action: actionTypes.SET_COLLECTION_SORT,
-    //   payload: e.target.value.split(",")?.[0],
-    // }); // Collection order
-
-    // dispatch({
-    //   action: actionTypes.SET_COLLECTION_ORDER,
-    //   payload: e.target.value.split(",")?.[0],
-    // }); // Reverse state
-
     // Add query params and remove them if sort is inactive
     if (e.target.value.length > 1) {
       router.query.sort = e.target.value.split(",")?.[0];
@@ -110,18 +91,7 @@ const AllCollectionsPage = () => {
           </Select>
 
           <Flex>
-            <Select
-              w="auto"
-              placeholder="Etiquetas"
-              icon={<GoChevronDown />}
-              border="none"
-              fontWeight={600}
-              variant="unstyled"
-            >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
+            <TagSelector />
             <Select
               w="auto"
               placeholder="Colleccion"
