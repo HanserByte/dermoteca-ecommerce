@@ -14,11 +14,15 @@ import { GoChevronDown } from "react-icons/go";
 
 const CollectionsSelector = () => {
   const allCollectionsData = useAllCollections();
-  console.log(allCollectionsData?.data?.collections?.nodes);
   return (
-    <Popover>
+    <Popover placement="bottom-end">
       <PopoverTrigger>
-        <Button>
+        <Button
+          variant="ghost"
+          _hover={{
+            bg: "#E7D4C7",
+          }}
+        >
           Collecciones <GoChevronDown />
         </Button>
       </PopoverTrigger>

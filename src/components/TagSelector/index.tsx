@@ -44,9 +44,14 @@ const TagSelector = () => {
   };
 
   return (
-    <Popover>
+    <Popover placement="bottom-end">
       <PopoverTrigger>
-        <Button>
+        <Button
+          variant="ghost"
+          _hover={{
+            bg: "#E7D4C7",
+          }}
+        >
           Etiquetas <GoChevronDown />
         </Button>
       </PopoverTrigger>
