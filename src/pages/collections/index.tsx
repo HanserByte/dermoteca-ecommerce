@@ -1,7 +1,16 @@
 import React, { useEffect, useReducer, useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { Box, Flex, Grid, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  Tag,
+  TagCloseButton,
+  TagLabel,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { useNavbar, useStore } from "@/store";
 import { Select } from "@chakra-ui/react";
 import { GoChevronDown } from "react-icons/go";
@@ -27,6 +36,12 @@ const AllCollectionsPage = () => {
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
+  // @ts-ignore
+
+  // Clean up taps in query params
+  const queryTags = decodeURIComponent(router?.query?.tags)
+    ?.split(",")
+    ?.filter((tag) => tag !== "" && tag !== "undefined");
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -49,6 +64,14 @@ const AllCollectionsPage = () => {
       router.query.order = e.target.value.split(",")?.[1];
       router.push(router);
     } else router.replace("/collections", undefined, { shallow: true });
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    const encodedTag = encodeURIComponent(tag);
+    router.query.tags = router?.query?.tags?.replace(encodedTag, "");
+    router.query.tags?.[0] === "," &&
+      (router.query.tags = router.query.tags?.slice(1));
+    router.push(router);
   };
 
   return (
@@ -109,13 +132,27 @@ const AllCollectionsPage = () => {
       </Box>
 
       <Box w="full" bg="#E7D4C7">
-        <Box
+        <Flex
+          gap={2}
+          alignItems="center"
           pl={isMobile ? "20px" : "145px"}
           pr={isMobile ? "20px" : "145px"}
           py={2}
         >
           <Text fontWeight={600}>Filtros</Text>
-        </Box>
+          {queryTags?.map((tag) => (
+            <Tag
+              size="md"
+              key={tag}
+              borderRadius="full"
+              variant="solid"
+              colorScheme="green"
+            >
+              <TagLabel>{tag}</TagLabel>
+              <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+            </Tag>
+          ))}
+        </Flex>
       </Box>
 
       <Box

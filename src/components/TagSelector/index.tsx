@@ -19,8 +19,6 @@ const TagSelector = () => {
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
 
-  console.log(queryTags);
-
   const handleCheckboxSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tag = encodeURIComponent(e.target.value);
 
@@ -32,7 +30,6 @@ const TagSelector = () => {
       router.push(router);
     } else {
       // Remove tag from query params
-      console.log(router?.query?.tags?.replace(tag, ""));
       router.query.tags = router?.query?.tags?.replace(tag, "");
       router.query.tags?.[0] === "," &&
         (router.query.tags = router.query.tags?.slice(1));
