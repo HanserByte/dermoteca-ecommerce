@@ -1,12 +1,26 @@
-import { getAllCollections, getCollection } from "@/utils/shopifyFunctions";
+import { getCollection } from "@/utils/shopifyFunctions";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const collectionHandle = url.searchParams.get("collectionHandle");
+  const sortKey = url.searchParams.get("sortKey");
+  const reverse = url.searchParams.get("reverse") === "true";
+  const tags = url.searchParams.get("tags");
+
   const response =
-    collectionHandle !== "undefined"
-      ? await getAllCollections()
-      : await getCollection(collectionHandle);
+    sortKey !== "undefined"
+      ? await getCollection(
+          collectionHandle,
+          sortKey,
+          reverse,
+          JSON.parse(tags)
+        )
+      : await getCollection(
+          collectionHandle,
+          "BEST_SELLING",
+          false,
+          JSON.parse(tags)
+        );
 
   return new Response(JSON.stringify(response));
 }

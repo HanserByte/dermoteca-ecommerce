@@ -21,7 +21,6 @@ import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { useAllProducts } from "@/hooks/collections";
-import { initialState, collectionReducer } from "../collectionReducer";
 import { useRouter } from "next/router";
 import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";

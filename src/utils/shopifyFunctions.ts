@@ -297,17 +297,24 @@ export const updateProduct = async (
  * @returns {Promise<Object>} A Promise that resolves to the collection data fetched from the API.
  * @throws {Error} If there is an issue with the API request or response.
  */
-export const getCollection = async (collectionHandle: string | null) => {
+export const getCollection = async (
+  collectionHandle: string | null,
+  sortKey: ProductSortKey = "BEST_SELLING",
+  reverse: boolean = false,
+  tags: string | null
+) => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query SingleCollection($handle: String) {
+      query SingleCollection($handle: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $tags: [ProductFilter!]) {
         collection(handle: $handle) {
-            products(first: 30) {
+            products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $tags) {
                 nodes {
+                    tags
+                    createdAt
                     featuredImage {
                         url
                     }
@@ -325,6 +332,9 @@ export const getCollection = async (collectionHandle: string | null) => {
       `,
       variables: {
         handle: collectionHandle,
+        sortKey,
+        reverse,
+        tags,
       },
     }),
   });

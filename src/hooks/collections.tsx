@@ -2,21 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useAllCollections = () => {
   const allCollectionsData = useQuery(["collections"], () =>
-    fetch("/api/collections").then((res) => res.json())
+    fetch("/api/collections/tags").then((res) => res.json())
   )?.data;
 
   return allCollectionsData;
 };
 
 export const useCollection = (
-  collectionHandle: string,
+  collectionHandle: string | string[] | undefined,
   sortKey: string,
-  reverse: boolean
+  reverse: boolean,
+  tags: any = []
 ) => {
-  const collectionData = useQuery(["collections", collectionHandle], () =>
-    fetch(`/api/collections?collectionHandle=${collectionHandle}`).then((res) =>
-      res.json()
-    )
+  const collectionData = useQuery(
+    ["collections", collectionHandle, { sortKey, reverse, tags }],
+    () =>
+      fetch(
+        `/api/collections?collectionHandle=${collectionHandle}&sortKey=${sortKey}&reverse=${reverse}&tags=${JSON.stringify(
+          tags
+        )}`
+      ).then((res) => res.json()),
+    { enabled: !!collectionHandle, keepPreviousData: true }
   )?.data;
 
   return collectionData;

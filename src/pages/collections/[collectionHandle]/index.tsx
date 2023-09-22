@@ -1,27 +1,54 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { Box, Flex, Grid, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  Tag,
+  TagCloseButton,
+  TagLabel,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import { useNavbar, useStore } from "@/store";
-import { Select } from "@chakra-ui/react";
-import { GoChevronDown } from "react-icons/go";
 import ProductCard from "@/components/ProductCard";
 import { IProduct } from "@/typesSanity/shopify";
 import { useRouter } from "next/router";
-import { useCollectionData } from "@/hooks/collections";
+import { useCollection } from "@/hooks/collections";
 import { client } from "@/lib/sanity.client";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
+import SortSelector from "@/components/SortSelector";
+import TagSelector from "@/components/TagSelector";
+import CollectionsSelector from "@/components/CollectionsSelector";
+import { getOrderTag } from "@/utils";
+import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 
 const CollectionPage = () => {
+  const router = useRouter();
+  // @ts-ignore
+  const sortKey = router.query?.sort?.toUpperCase();
+  const order = router.query?.order === "true";
+  // @ts-ignore
+  const queryTags = decodeURIComponent(router?.query?.tags);
+  const queryTagsArray = queryTags
+    ?.split(",")
+    .filter((tag: string) => tag != "undefined" && tag != "");
+  const gqlQueryTags = queryTagsArray?.map((tag: string) => {
+    return { tag };
+  });
+
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const [collectionProducts, setCollectionProducts] = useState<any>();
-  const router = useRouter();
-  const [collectionPage, setCollectionPage] = useState();
-  const { collectionData } = useCollectionData(
-    router.query.collectionHandle as string
+  const [collectionPage, setCollectionPage] = useState<ICollectionPageData>();
+  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const collectionData = useCollection(
+    router?.query?.collectionHandle,
+    sortKey,
+    order,
+    gqlQueryTags
   );
 
   const query = `*[_type == "collectionPage"]  {
@@ -39,14 +66,22 @@ const CollectionPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    async function getCollectionProducts() {
-      setCollectionProducts(
-        collectionProducts?.data?.collection?.products?.nodes
-      );
-    }
-    getCollectionProducts();
-  }, [router.query.collectionHandle]);
+  const handleRemoveTag = (tag: string) => {
+    // Remove tag from query params
+    router.query.tags = encodeURIComponent(
+      queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
+    );
+    router.push(router);
+  };
+
+  const removeQueryParam = (param: string) => {
+    const { pathname, query } = router;
+    const params = new URLSearchParams(query);
+    params.delete(param);
+    router.replace({ pathname, query: params.toString() }, undefined, {
+      shallow: true,
+    });
+  };
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -61,6 +96,7 @@ const CollectionPage = () => {
           <PortableText blocks={collectionPage?.collectionContent} />
         )}
       </Box>
+
       <Box w="full">
         <Flex
           pl={isMobile ? "20px" : "145px"}
@@ -68,57 +104,52 @@ const CollectionPage = () => {
           pr={isMobile ? "20px" : "145px"}
           py={2}
         >
-          <Select
-            fontSize={isMobile ? "xs" : "md"}
-            placeholder="Ordenar"
-            w="max-content"
-            icon={<GoChevronDown />}
-            border="none"
-            fontWeight={600}
-            variant="unstyled"
-          >
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-          </Select>
+          <SortSelector useCollectionSort />
 
           <Flex>
-            <Select
-              fontSize={isMobile ? "xs" : "md"}
-              placeholder="Condicion"
-              icon={<GoChevronDown />}
-              border="none"
-              fontWeight={600}
-              variant="unstyled"
-            >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
-            <Select
-              fontSize={isMobile ? "xs" : "md"}
-              placeholder="Categoria"
-              icon={<GoChevronDown />}
-              border="none"
-              fontWeight={600}
-              variant="unstyled"
-            >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
+            <TagSelector />
+            <CollectionsSelector />
           </Flex>
         </Flex>
       </Box>
+
       <Box w="full" bg="#E7D4C7">
-        <Box
+        <Flex
+          gap={2}
+          alignItems="center"
           pl={isMobile ? "20px" : "145px"}
           pr={isMobile ? "20px" : "145px"}
           py={2}
         >
           <Text fontWeight={600}>Filtros</Text>
-        </Box>
+          {activeOrder && (
+            <Tag
+              bg="white"
+              textColor="black"
+              size="md"
+              borderRadius="full"
+              variant="solid"
+            >
+              <TagLabel>{activeOrder?.name}</TagLabel>
+              <TagCloseButton onClick={() => removeQueryParam("sort")} />
+            </Tag>
+          )}
+          {queryTagsArray?.map((tag) => (
+            <Tag
+              bg="white"
+              textColor="black"
+              size="md"
+              key={tag}
+              borderRadius="full"
+              variant="solid"
+            >
+              <TagLabel>{tag}</TagLabel>
+              <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+            </Tag>
+          ))}
+        </Flex>
       </Box>
+
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}

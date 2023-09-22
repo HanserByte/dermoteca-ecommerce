@@ -1,5 +1,8 @@
 import { getOrderTag } from "@/utils";
-import { SORT_OPTIONS } from "@/utils/constants";
+import {
+  COLLECTION_PRODUCTS_SORT_OPTIONS,
+  ALL_PRODUCTS_SORT_OPTIONS,
+} from "@/utils/constants";
 import {
   Button,
   Popover,
@@ -14,10 +17,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { GoChevronDown } from "react-icons/go";
 
-const SortSelector = () => {
+const SortSelector = ({ useCollectionSort = false }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const router = useRouter();
   const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const SORT_OPTIONS = useCollectionSort
+    ? COLLECTION_PRODUCTS_SORT_OPTIONS
+    : ALL_PRODUCTS_SORT_OPTIONS;
 
   const handleOrderChange = (e: React.ClickEvent<HTMLSelectElement>) => {
     // Add query params and remove them if sort is inactive
