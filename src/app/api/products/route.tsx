@@ -6,11 +6,10 @@ export async function GET(request: Request) {
   const reverse = url.searchParams.get("reverse") === "true";
   const tags = url.searchParams.get("tags");
 
-  console.log(sortKey);
   const response =
     sortKey !== "undefined"
-      ? await getAllProducts(sortKey, reverse)
-      : await getAllProducts();
+      ? await getAllProducts(sortKey, reverse, tags)
+      : await getAllProducts("BEST_SELLING", false, tags);
 
   return new Response(JSON.stringify(response));
 }

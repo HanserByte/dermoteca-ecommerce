@@ -575,7 +575,8 @@ export const customerRecover = async (email: string) => {
 
 export const getAllProducts = async (
   sortKey: ProductSortKey = "BEST_SELLING",
-  reverse: boolean = false
+  reverse: boolean = false,
+  tags: string
 ) => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
@@ -583,8 +584,8 @@ export const getAllProducts = async (
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean) {
-        products (first: 40, sortKey: $sortKey, reverse: $reverse) {
+      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean, $tags: String) {
+        products (first: 40, sortKey: $sortKey, reverse: $reverse, query: $tags) {
           nodes {
             id
             title
@@ -605,6 +606,7 @@ export const getAllProducts = async (
       variables: {
         sortKey,
         reverse,
+        tags,
       },
     }),
   });

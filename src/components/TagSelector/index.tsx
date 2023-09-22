@@ -57,6 +57,7 @@ const TagSelector = () => {
             {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
               return (
                 <Checkbox
+                  size="md"
                   value={tag.node}
                   onChange={handleCheckboxSelect}
                   key={tag.node}

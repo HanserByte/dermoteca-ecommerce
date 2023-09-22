@@ -28,21 +28,22 @@ import TagSelector from "@/components/TagSelector";
 const AllCollectionsPage = () => {
   const router = useRouter();
   // @ts-ignore
+  const queryTags = decodeURIComponent(router?.query?.tags);
+  const queryTagsArray = queryTags
+    ?.split(",")
+    .filter((tag: string) => tag != "undefined" && tag != "");
+  const gqlQueryTags = queryTagsArray
+    ?.map((tag: string) => `(tag:${tag})`)
+    .join(" OR ");
+  // @ts-ignore
   const sortKey = router.query?.sort?.toUpperCase();
   const order = router.query?.order === "true";
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
-  const allProductsData = useAllProducts(sortKey, order);
+  const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
-  // @ts-ignore
-  const queryTags = decodeURIComponent(router?.query?.tags);
-  const queryTagsArray = queryTags
-    ?.split(",")
-    .filter((tag: string) => tag != "undefined" && tag != "");
-
-  console.log(queryTagsArray);
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -143,11 +144,12 @@ const AllCollectionsPage = () => {
           <Text fontWeight={600}>Filtros</Text>
           {queryTagsArray?.map((tag) => (
             <Tag
+              bg="white"
+              textColor="black"
               size="md"
               key={tag}
               borderRadius="full"
               variant="solid"
-              colorScheme="green"
             >
               <TagLabel>{tag}</TagLabel>
               <TagCloseButton onClick={() => handleRemoveTag(tag)} />

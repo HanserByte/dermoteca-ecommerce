@@ -26,7 +26,7 @@ export const useAllProducts = (
 ) => {
   const sortKey = activeSortKey !== "0" ? activeSortKey : "BEST_SELLING";
   const allProductsData = useQuery(
-    ["products", { sortKey, reverse }],
+    ["products", { sortKey, reverse, tags }],
     () =>
       fetch(
         `/api/products?sortKey=${sortKey}&reverse=${reverse}&tags=${tags}`
