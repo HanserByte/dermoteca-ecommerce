@@ -611,3 +611,30 @@ export const getAllProducts = async (
   const data = await response.json();
   return data;
 };
+
+/**
+ * Fetches a list of all product tags from the specified API endpoint.
+ * @function
+ * @returns {Promise<object>} A Promise that resolves to an object containing the fetched data.
+ * @throws {Error} Throws an error if the fetch request fails or the response cannot be parsed as JSON.
+ */
+export const getAllTags = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllTags {
+        productTags(first: 100) {
+            edges {
+                node
+            }
+        }
+    }
+    `,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};

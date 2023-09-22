@@ -2,8 +2,8 @@ import { ProductSortKey } from "@/typesSanity/shopify";
 import { useQuery } from "@tanstack/react-query";
 
 export const useCollection = (
-  collectionHandle?: string,
-  sortKey,
+  collectionHandle: string,
+  sortKey: string,
   reverse: boolean
 ) => {
   const collectionData = useQuery(["collections", collectionHandle], () =>

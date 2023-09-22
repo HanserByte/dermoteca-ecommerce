@@ -22,6 +22,7 @@ import {
   actionTypes,
 } from "./collectionReducer";
 import { useRouter } from "next/router";
+import { useAllTags } from "@/hooks/products";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -34,6 +35,7 @@ const AllCollectionsPage = () => {
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order);
   const [state, dispatch] = useReducer(collectionReducer, initialState);
+  const allTagsData = useAllTags();
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
