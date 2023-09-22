@@ -1,5 +1,12 @@
-import { ProductSortKey } from "@/typesSanity/shopify";
 import { useQuery } from "@tanstack/react-query";
+
+export const useAllCollections = () => {
+  const allCollectionsData = useQuery(["collections"], () =>
+    fetch("/api/collections").then((res) => res.json())
+  )?.data;
+
+  return allCollectionsData;
+};
 
 export const useCollection = (
   collectionHandle: string,
@@ -12,11 +19,7 @@ export const useCollection = (
     )
   )?.data;
 
-  const allCollectionsData = useQuery(["collections", {}], () =>
-    fetch(`/api/collections`).then((res) => res.json())
-  )?.data;
-
-  return { collectionData, allCollectionsData };
+  return collectionData;
 };
 
 export const useAllProducts = (

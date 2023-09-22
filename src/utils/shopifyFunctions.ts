@@ -576,7 +576,7 @@ export const customerRecover = async (email: string) => {
 export const getAllProducts = async (
   sortKey: ProductSortKey = "BEST_SELLING",
   reverse: boolean = false,
-  tags: string
+  tags: string | null
 ) => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
@@ -631,6 +631,34 @@ export const getAllTags = async () => {
         productTags(first: 100) {
             edges {
                 node
+            }
+        }
+    }
+    `,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches all collections from a GraphQL API.
+ * @function getAllCollections
+ * @returns {Promise<object>} A Promise that resolves to the response data from the API.
+ * @throws {Error} If there is an issue with the API request or response.
+ */
+export const getAllCollections = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllCollections {
+        collections(first: 100) {
+            nodes {
+                title
+                handle
             }
         }
     }

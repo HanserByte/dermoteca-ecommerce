@@ -24,6 +24,7 @@ import { useAllProducts } from "@/hooks/collections";
 import { initialState, collectionReducer } from "./collectionReducer";
 import { useRouter } from "next/router";
 import TagSelector from "@/components/TagSelector";
+import CollectionsSelector from "@/components/CollectionsSelector";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -117,18 +118,7 @@ const AllCollectionsPage = () => {
 
           <Flex>
             <TagSelector />
-            <Select
-              w="auto"
-              placeholder="Colleccion"
-              icon={<GoChevronDown />}
-              border="none"
-              fontWeight={600}
-              variant="unstyled"
-            >
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
+            <CollectionsSelector />
           </Flex>
         </Flex>
       </Box>

@@ -62,6 +62,7 @@ const TagSelector = () => {
                   onChange={handleCheckboxSelect}
                   key={tag.node}
                   isChecked={queryTags?.includes(tag.node)}
+                  fontWeight={600}
                 >
                   {tag.node}
                 </Checkbox>
