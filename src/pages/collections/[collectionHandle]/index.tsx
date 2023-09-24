@@ -43,7 +43,11 @@ const CollectionPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionPage, setCollectionPage] = useState<ICollectionPageData>();
-  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const activeOrder = getOrderTag(
+    router?.query?.sort,
+    router?.query?.order,
+    true
+  );
   const collectionData = useCollection(
     router?.query?.collectionHandle,
     sortKey,
