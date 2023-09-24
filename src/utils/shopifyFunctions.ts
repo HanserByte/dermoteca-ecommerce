@@ -1,9 +1,13 @@
-import { ICartLineInput, IUpdateCartLineInput } from "@/typesSanity/shopify";
+import {
+  ICartLineInput,
+  IUpdateCartLineInput,
+  SortKey as ProductSortKey,
+} from "@/typesSanity/shopify";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
   "Content-Type": "application/json",
-  "X-Shopify-Storefront-Access-Token": process.env.NEXT_STOREFRONT_ACCESS_TOKEN,
+  "X-Shopify-Storefront-Access-Token": process.env.STOREFRONT_ACCESS_TOKEN,
 };
 
 /**
@@ -293,17 +297,24 @@ export const updateProduct = async (
  * @returns {Promise<Object>} A Promise that resolves to the collection data fetched from the API.
  * @throws {Error} If there is an issue with the API request or response.
  */
-export const getCollection = async (collectionHandle: string | null) => {
+export const getCollection = async (
+  collectionHandle: string | null,
+  sortKey: ProductSortKey = "BEST_SELLING",
+  reverse: boolean = false,
+  tags: string | null
+) => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query SingleCollection($handle: String) {
+      query SingleCollection($handle: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $tags: [ProductFilter!]) {
         collection(handle: $handle) {
-            products(first: 30) {
+            products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $tags) {
                 nodes {
+                    tags
+                    createdAt
                     featuredImage {
                         url
                     }
@@ -321,11 +332,13 @@ export const getCollection = async (collectionHandle: string | null) => {
       `,
       variables: {
         handle: collectionHandle,
+        sortKey,
+        reverse,
+        tags,
       },
     }),
   });
-  const data = await response.json();
-  return data;
+  return await response.json();
 };
 
 /**
@@ -493,6 +506,13 @@ export const getCustomerByAccessToken = async (customerAccesToken: string) => {
   return data;
 };
 
+/**
+ * Reset a customer's password using a reset URL.
+ * @param {string} password - The new password to set for the customer.
+ * @param {string} resetUrl - The URL containing the reset token for the customer.
+ * @returns {Promise<Object>} A promise that resolves to the response data from the API.
+ * @throws {Error} If there is an issue with the fetch request or the response.
+ */
 export const resetCustomerPasswordByUrl = async (
   password: string,
   resetUrl: any
@@ -551,6 +571,108 @@ export const customerRecover = async (email: string) => {
       variables: {
         email,
       },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches information about all products from the API.
+ * @returns {Promise<Object>} A promise that resolves to the response data containing product information.
+ * @throws {Error} If there is an issue with the fetch request or the response.
+ */
+
+export const getAllProducts = async (
+  sortKey: ProductSortKey = "BEST_SELLING",
+  reverse: boolean = false,
+  tags: string | null
+) => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean, $tags: String) {
+        products (first: 40, sortKey: $sortKey, reverse: $reverse, query: $tags) {
+          nodes {
+            id
+            title
+            featuredImage {
+              url
+            }
+            handle
+            title
+            priceRange {
+              maxVariantPrice {
+                    amount
+              }
+            }  
+          }
+        }
+      }
+    `,
+      variables: {
+        sortKey,
+        reverse,
+        tags,
+      },
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches a list of all product tags from the specified API endpoint.
+ * @function
+ * @returns {Promise<object>} A Promise that resolves to an object containing the fetched data.
+ * @throws {Error} Throws an error if the fetch request fails or the response cannot be parsed as JSON.
+ */
+export const getAllTags = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllTags {
+        productTags(first: 100) {
+            edges {
+                node
+            }
+        }
+    }
+    `,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+/**
+ * Fetches all collections from a GraphQL API.
+ * @function getAllCollections
+ * @returns {Promise<object>} A Promise that resolves to the response data from the API.
+ * @throws {Error} If there is an issue with the API request or response.
+ */
+export const getAllCollections = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllCollections {
+        collections(first: 100) {
+            nodes {
+                title
+                handle
+            }
+        }
+    }
+    `,
     }),
   });
   const data = await response.json();

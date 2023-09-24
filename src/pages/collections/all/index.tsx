@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import {
@@ -12,50 +12,42 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useNavbar, useStore } from "@/store";
+import { Select } from "@chakra-ui/react";
+import { GoChevronDown } from "react-icons/go";
+import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
 import { IProduct } from "@/typesSanity/shopify";
-import { useRouter } from "next/router";
-import { useCollection } from "@/hooks/collections";
-import { client } from "@/lib/sanity.client";
+import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
-import SortSelector from "@/components/SortSelector";
+import { useAllProducts } from "@/hooks/collections";
+import { useRouter } from "next/router";
 import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
+import SortSelector from "@/components/SortSelector";
 import { getOrderTag } from "@/utils";
-import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 
-const CollectionPage = () => {
+const AllCollectionsPage = () => {
   const router = useRouter();
-  // @ts-ignore
-  const sortKey = router.query?.sort?.toUpperCase();
-  const order = router.query?.order === "true";
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
   const queryTagsArray = queryTags
     ?.split(",")
     .filter((tag: string) => tag != "undefined" && tag != "");
-  const gqlQueryTags = queryTagsArray?.map((tag: string) => {
-    return { tag };
-  });
-
+  const gqlQueryTags = queryTagsArray
+    ?.map((tag: string) => `(tag:${tag})`)
+    .join(" OR ");
+  // @ts-ignore
+  const sortKey = router.query?.sort?.toUpperCase();
+  const order = router.query?.order === "true";
   const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const [collectionPage, setCollectionPage] = useState<ICollectionPageData>();
-  const activeOrder = getOrderTag(
-    router?.query?.sort,
-    router?.query?.order,
-    true
-  );
-  const collectionData = useCollection(
-    router?.query?.collectionHandle,
-    sortKey,
-    order,
-    gqlQueryTags
-  );
+  const [collectionData, setCollectionData] = useState<ICollectionPageData>();
+  const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
+  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
 
-  const query = `*[_type == "collectionPage"]  {
+  const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
     components[]-> 
   }[0]
@@ -63,10 +55,9 @@ const CollectionPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await client.fetch(query);
-      setCollectionPage(data);
+      const data = await client.fetch(collectionQuery);
+      setCollectionData(data);
     }
-
     fetchData();
   }, []);
 
@@ -91,13 +82,14 @@ const CollectionPage = () => {
     <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar dataN={{ isBlackNavBar: true }} />
       <Box h={`${height}px`} bg="white" w="100%" />
+
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        {collectionPage?.collectionContent && (
-          <PortableText blocks={collectionPage?.collectionContent} />
+        {collectionData?.collectionContent && (
+          <PortableText blocks={collectionData?.collectionContent} />
         )}
       </Box>
 
@@ -108,7 +100,7 @@ const CollectionPage = () => {
           pr={isMobile ? "20px" : "145px"}
           py={2}
         >
-          <SortSelector useCollectionSort />
+          <SortSelector />
 
           <Flex>
             <TagSelector />
@@ -164,31 +156,29 @@ const CollectionPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {collectionData?.data?.collection?.products?.nodes?.map(
-            (product: IProduct) => (
-              <ProductCard
-                handle={product.handle}
-                imageSrc={product.featuredImage.url}
-                title={product.title}
-                // @ts-ignore
-                price={Number(product?.priceRange?.maxVariantPrice?.amount)}
-                key={product?.handle}
-              />
-            )
-          )}
+          {allProductsData?.data?.products?.nodes?.map((product: IProduct) => (
+            <ProductCard
+              handle={product.handle}
+              imageSrc={product.featuredImage.url}
+              title={product.title}
+              // @ts-ignore
+              price={product?.priceRange?.maxVariantPrice?.amount}
+              key={product?.id}
+            />
+          ))}
         </Grid>
       </Box>
-      {collectionPage &&
-        collectionPage?.components.map((componente: any) => (
-          <ComponentRenderer
-            key={componente._id}
-            component={componente._type}
-            data={componente}
-          />
-        ))}
+
+      {collectionData?.components.map((componente: any) => (
+        <ComponentRenderer
+          key={componente._id}
+          component={componente._type}
+          data={componente}
+        />
+      ))}
       <Footer />
     </Box>
   );
 };
 
-export default CollectionPage;
+export default AllCollectionsPage;
