@@ -13,13 +13,13 @@ export async function GET(request: Request) {
           collectionHandle,
           sortKey,
           reverse,
-          JSON.parse(tags)
+          JSON.parse(String(tags))
         )
       : await getCollection(
           collectionHandle,
           "BEST_SELLING",
           false,
-          JSON.parse(tags)
+          JSON.parse(String(tags))
         );
 
   return new Response(JSON.stringify(response));
