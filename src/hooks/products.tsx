@@ -1,5 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { client } from "@/lib/sanity.client";
+
+export const useSanityProduct = (handle: string) => {
+  const query = `*[_type == "product" && store.slug.current == "${handle}"][0]{
+    ...,
+    store {
+      ...,
+      variants[]->
+    }
+  }
+  `;
+  const sanityProductData = useQuery(
+    ["sanityProduct", handle],
+    () => client.fetch(query),
+    { enabled: !!handle }
+  );
+
+  return sanityProductData;
+};
 
 export const useShopifyProduct = (handle: string) => {
   const shopifyProductData = useQuery(

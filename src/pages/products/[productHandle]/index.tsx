@@ -8,7 +8,11 @@ import { useCartDrawer, useCartProducts, useNavbar, useStore } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useCart } from "@/hooks/cart";
-import { useProductRecommendations, useShopifyProduct } from "@/hooks/products";
+import {
+  useProductRecommendations,
+  useSanityProduct,
+  useShopifyProduct,
+} from "@/hooks/products";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import ProductAccordion from "@/components/ProductAccordion";
 import BreadCrumbs from "@/components/BreadCrumbs";
@@ -18,10 +22,10 @@ const ProductPage = () => {
 
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
-  const [productData, setProductData] = useState<any>();
+  const sanityProductData = useSanityProduct(router.query.productHandle);
   const { addToCart, cartId } = useCart();
   const { productRecommendations } = useProductRecommendations(
-    productData?.store?.gid
+    sanityProductData?.data?.store?.gid
   );
   const { setOpen } = useCartDrawer();
   const { value } = useStore();
@@ -29,28 +33,10 @@ const ProductPage = () => {
   const { height } = useNavbar();
   const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
-  const hasAccordions = productData?.productAccordions?.length > 0;
-
-  const query = `*[_type == "product" && store.slug.current == "${router.query.productHandle}"][0]{
-    ...,
-    store {
-      ...,
-      variants[]->
-    }
-  }
-  `;
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await client.fetch(query);
-      setProductData(data);
-    }
-
-    fetchData();
-  }, [router.query.productHandle]);
+  const hasAccordions = sanityProductData?.data?.productAccordions?.length > 0;
 
   const handleAddToCart = async () => {
-    const productId = productData?.store?.variants[0]?.store?.gid;
+    const productId = sanityProductData?.data?.store?.variants[0]?.store?.gid;
     const response = await addToCart(cartId, productId, quantity);
     setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes);
     setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
@@ -69,7 +55,7 @@ const ProductPage = () => {
         bg="#E7D4C7"
         w="100%"
       >
-        <BreadCrumbs productTitle={productData?.store.title} />
+        <BreadCrumbs productTitle={sanityProductData?.data?.store?.title} />
       </Flex>
       <Box
         my="6"
@@ -80,16 +66,16 @@ const ProductPage = () => {
           <Box w="50%">
             <img
               style={{ position: "sticky", top: "86px" }}
-              src={productData?.store?.previewImageUrl}
-              alt={productData?.store?.title}
+              src={sanityProductData?.data?.store?.previewImageUrl}
+              alt={sanityProductData?.data?.store?.title}
             />
           </Box>
           <Flex w="50%" gap={3} direction="column">
             <Text fontSize="2xl" fontWeight={700}>
-              {productData?.store?.title}
+              {sanityProductData?.data?.store?.title}
             </Text>
             <Text fontSize="xl" fontWeight="500">
-              ${productData?.store?.variants[0]?.store?.price}
+              ${sanityProductData?.data?.store?.variants[0]?.store?.price}
             </Text>
 
             <ReviewStars rating={4} />
@@ -98,7 +84,7 @@ const ProductPage = () => {
               fontSize="lg"
               fontWeight="400"
               dangerouslySetInnerHTML={{
-                __html: productData?.store?.descriptionHtml,
+                __html: sanityProductData?.data?.store?.descriptionHtml,
               }}
               style={{ listStylePosition: "inside" }}
             />
@@ -151,7 +137,9 @@ const ProductPage = () => {
             </Flex>
 
             {hasAccordions && (
-              <ProductAccordion accordions={productData?.productAccordions} />
+              <ProductAccordion
+                accordions={sanityProductData?.data?.productAccordions}
+              />
             )}
           </Flex>
         </Flex>
