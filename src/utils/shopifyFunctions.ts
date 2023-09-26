@@ -3,6 +3,7 @@ import {
   IUpdateCartLineInput,
   SortKey as ProductSortKey,
 } from "@/typesSanity/shopify";
+import { SingleProductQuery } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
@@ -678,3 +679,40 @@ export const getAllCollections = async () => {
   const data = await response.json();
   return data;
 };
+
+export const makeShopifyRequest = async (
+  query: string,
+  variables: Record<string, unknown> = {}
+) => {
+  const HEADERS = {
+    "Content-Type": "application/json",
+    "X-Shopify-Storefront-Access-Token": process.env.STOREFRONT_ACCESS_TOKEN,
+  };
+
+  const options = {
+    method: "POST",
+    headers: HEADERS,
+    body: JSON.stringify({ query, variables }),
+  };
+
+  // @ts-ignore
+  const response = await fetch(API_ENDPOINT, options);
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`${response.status} ${body}`);
+  }
+
+  const json = await response.json();
+  if (json.errors) {
+    throw new Error(json.errors.map((e: Error) => e.message).join("\n"));
+  }
+
+  return json.data;
+};
+
+export async function getShopifyProduct(handle: string) {
+  const data = await makeShopifyRequest(SingleProductQuery, { handle });
+
+  return data;
+}

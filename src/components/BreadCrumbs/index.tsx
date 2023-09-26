@@ -2,7 +2,11 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 
-const BreadCrumbs = ({ productTitle }) => {
+interface IBreadCrumbsProps {
+  productTitle: string;
+}
+
+const BreadCrumbs = ({ productTitle }: IBreadCrumbsProps) => {
   return (
     <Breadcrumb>
       <BreadcrumbItem>

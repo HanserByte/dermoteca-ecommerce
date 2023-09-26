@@ -8,12 +8,16 @@ import { useCartDrawer, useCartProducts, useNavbar, useStore } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useCart } from "@/hooks/cart";
-import { useProductRecommendations } from "@/hooks/products";
+import { useProductRecommendations, useShopifyProduct } from "@/hooks/products";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import ProductAccordion from "@/components/ProductAccordion";
 import BreadCrumbs from "@/components/BreadCrumbs";
 
 const ProductPage = () => {
+  const router = useRouter();
+
+  // @ts-ignore
+  const shopifyProductData = useShopifyProduct(router.query.productHandle);
   const [productData, setProductData] = useState<any>();
   const { addToCart, cartId } = useCart();
   const { productRecommendations } = useProductRecommendations(
@@ -23,7 +27,6 @@ const ProductPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const { height } = useNavbar();
-  const router = useRouter();
   const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
   const hasAccordions = productData?.productAccordions?.length > 0;
