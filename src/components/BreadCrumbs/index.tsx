@@ -1,3 +1,4 @@
+import { useMobileView } from "@/hooks/responsive";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
@@ -14,16 +15,22 @@ const BreadCrumbs = ({
   productTitle,
   productCollection,
 }: IBreadCrumbsProps) => {
+  const { isMobile } = useMobileView();
+
   return (
-    <Breadcrumb>
+    <Breadcrumb
+      listProps={{ flexWrap: "wrap", justifyContent: "center" }}
+      fontSize={isMobile ? "sm" : "base"}
+      fontWeight={600}
+    >
       <BreadcrumbItem>
-        <BreadcrumbLink as={Link} href="/" fontWeight={600}>
+        <BreadcrumbLink as={Link} href="/">
           Inicio
         </BreadcrumbLink>
       </BreadcrumbItem>
 
       <BreadcrumbItem>
-        <BreadcrumbLink as={Link} href="/collections/all" fontWeight={600}>
+        <BreadcrumbLink as={Link} href="/collections/all">
           Colecciones
         </BreadcrumbLink>
       </BreadcrumbItem>
@@ -32,16 +39,13 @@ const BreadCrumbs = ({
         <BreadcrumbLink
           as={Link}
           href={`/collections/${productCollection?.handle}`}
-          fontWeight={600}
         >
           {productCollection?.title}
         </BreadcrumbLink>
       </BreadcrumbItem>
 
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#" fontWeight={600}>
-          {productTitle}
-        </BreadcrumbLink>
+        <BreadcrumbLink href="#">{productTitle}</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
   );

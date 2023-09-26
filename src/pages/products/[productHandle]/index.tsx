@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import { client } from "@/lib/sanity.client";
-import { useCartDrawer, useCartProducts, useNavbar, useStore } from "@/store";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { useCartDrawer, useCartProducts, useNavbar } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useCart } from "@/hooks/cart";
@@ -17,6 +16,7 @@ import ProductRecommendations from "@/components/ProductRecommendations";
 import ProductAccordion from "@/components/ProductAccordion";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import ProductVariantSelector from "@/components/ProductVariantSelector";
+import { useMobileView } from "@/hooks/responsive";
 
 const ProductPage = () => {
   const router = useRouter();
@@ -29,11 +29,10 @@ const ProductPage = () => {
     sanityProductData?.data?.store?.gid
   );
   const { setOpen } = useCartDrawer();
-  const { value } = useStore();
-  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const { height } = useNavbar();
   const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
+  const { isMobile } = useMobileView();
 
   const hasAccordions = sanityProductData?.data?.productAccordions?.length > 0;
   const hasOptions =
@@ -73,21 +72,22 @@ const ProductPage = () => {
           }
         />
       </Flex>
+
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        <Flex gap={6}>
-          <Box w="50%">
+        <Flex gap={6} flexDirection={isMobile ? "column" : "row"}>
+          <Box w={isMobile ? "100%" : "50%"}>
             <img
               style={{ position: "sticky", top: "86px" }}
               src={sanityProductData?.data?.store?.previewImageUrl}
               alt={sanityProductData?.data?.store?.title}
             />
           </Box>
-          <Flex w="50%" gap={3} direction="column">
-            <Text fontSize="2xl" fontWeight={700}>
+          <Flex w={isMobile ? "100%" : "50%"} gap={3} direction="column">
+            <Text fontSize={isMobile ? "xl" : "2xl"} fontWeight={700}>
               {sanityProductData?.data?.store?.title}
             </Text>
             <Text fontSize="xl" fontWeight="500">
@@ -97,7 +97,7 @@ const ProductPage = () => {
             <ReviewStars rating={4} />
 
             <Text
-              fontSize="lg"
+              fontSize={isMobile ? "md" : "lg"}
               fontWeight="400"
               dangerouslySetInnerHTML={{
                 __html: sanityProductData?.data?.store?.descriptionHtml,
@@ -115,7 +115,7 @@ const ProductPage = () => {
               )}
             </div>
 
-            <Flex gap={8} alignItems="center">
+            <Flex gap={isMobile ? 1 : 8} alignItems="center">
               <Flex alignItems="center" gap={3}>
                 <Button
                   onClick={() =>
@@ -153,6 +153,7 @@ const ProductPage = () => {
                 AGREGAR AL CARRITO
               </Button>
               <Button
+                p={0}
                 bg="transparent"
                 color="grey"
                 _hover={{ color: "#00AA4F" }}

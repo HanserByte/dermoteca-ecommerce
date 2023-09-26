@@ -14,6 +14,7 @@ import {
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import React from "react";
 import { useRouter } from "next/router";
+import { useMobileView } from "@/hooks/responsive";
 
 interface IProductVariantSelectorProps {
   variants: IVariant[];
@@ -25,6 +26,8 @@ interface IVariant {
 }
 
 const ProductVariantSelector = ({ variants }: IProductVariantSelectorProps) => {
+  const { isMobile } = useMobileView();
+
   const { onOpen, onClose, isOpen } = useDisclosure();
   const router = useRouter();
   // @ts-ignore
@@ -46,6 +49,7 @@ const ProductVariantSelector = ({ variants }: IProductVariantSelectorProps) => {
     >
       <PopoverTrigger>
         <Button
+          w={isMobile ? "full" : "auto"}
           rounded="full"
           pr={2}
           color="white"
