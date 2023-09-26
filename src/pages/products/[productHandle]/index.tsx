@@ -16,6 +16,7 @@ import {
 import ProductRecommendations from "@/components/ProductRecommendations";
 import ProductAccordion from "@/components/ProductAccordion";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import ProductVariantSelector from "@/components/ProductVariantSelector";
 
 const ProductPage = () => {
   const router = useRouter();
@@ -33,10 +34,20 @@ const ProductPage = () => {
   const { height } = useNavbar();
   const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
+
   const hasAccordions = sanityProductData?.data?.productAccordions?.length > 0;
+  const hasOptions =
+    shopifyProductData?.data?.product?.variants?.nodes?.length > 1;
 
   const handleAddToCart = async () => {
-    const productId = sanityProductData?.data?.store?.variants[0]?.store?.gid;
+    // @ts-ignore
+    const queryVariant = decodeURIComponent(router.query.variant);
+    const variantId = shopifyProductData?.data?.product?.variants?.nodes?.find(
+      (variant) => variant.title === queryVariant
+    );
+
+    const productId =
+      variantId?.id || sanityProductData?.data?.store?.variants[0]?.store?.gid;
     const response = await addToCart(cartId, productId, quantity);
     setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes);
     setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
@@ -96,7 +107,15 @@ const ProductPage = () => {
 
             {/* Variant options */}
 
-            <Flex mt="6" gap={8} alignItems="center">
+            <div>
+              {hasOptions && (
+                <ProductVariantSelector
+                  variants={shopifyProductData?.data?.product?.variants?.nodes}
+                />
+              )}
+            </div>
+
+            <Flex gap={8} alignItems="center">
               <Flex alignItems="center" gap={3}>
                 <Button
                   onClick={() =>
@@ -106,6 +125,7 @@ const ProductPage = () => {
                   size="sm"
                   color="white"
                   rounded="full"
+                  _hover={{ opacity: 0.8 }}
                 >
                   -
                 </Button>
@@ -118,6 +138,7 @@ const ProductPage = () => {
                   size="sm"
                   color="white"
                   rounded="full"
+                  _hover={{ opacity: 0.8 }}
                 >
                   +
                 </Button>
@@ -131,7 +152,6 @@ const ProductPage = () => {
               >
                 AGREGAR AL CARRITO
               </Button>
-
               <Button
                 bg="transparent"
                 color="grey"

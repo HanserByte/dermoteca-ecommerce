@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { FaInstagram } from "react-icons/fa";
 import {
   IProducts,
   IRecommendedProducts,
