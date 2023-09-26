@@ -10,6 +10,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useCart } from "@/hooks/cart";
 import { useProductRecommendations } from "@/hooks/products";
 import ProductRecommendations from "@/components/ProductRecommendations";
+import ProductAccordion from "@/components/ProductAccordion";
 
 const ProductPage = () => {
   const [productData, setProductData] = useState<any>();
@@ -24,6 +25,7 @@ const ProductPage = () => {
   const router = useRouter();
   const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
+  const hasAccordions = productData?.productAccordions?.length > 0;
 
   const query = `*[_type == "product" && store.slug.current == "${router.query.productHandle}"][0]{
     ...,
@@ -73,6 +75,7 @@ const ProductPage = () => {
         <Flex gap={6}>
           <Box w="50%">
             <img
+              style={{ position: "sticky", top: "86px" }}
               src={productData?.store?.previewImageUrl}
               alt={productData?.store?.title}
             />
@@ -142,6 +145,10 @@ const ProductPage = () => {
                 <AiOutlineHeart size={40} />
               </Button>
             </Flex>
+
+            {hasAccordions && (
+              <ProductAccordion accordions={productData?.productAccordions} />
+            )}
           </Flex>
         </Flex>
         <ProductRecommendations products={productRecommendations} />

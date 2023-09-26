@@ -131,7 +131,7 @@ const NavBar = (props: IContainerProps) => {
       ref={navbarRef}
       px={4}
       h="86px"
-      bg={isMobile ? "#fff" : ""}
+      bg={isMobile || dataN.isBlackNavBar ? "#fff" : ""}
       alignItems="center"
       justifyContent="space-between"
       pt="20px"
