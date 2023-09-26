@@ -15,3 +15,7 @@ export const COLLECTION_PRODUCTS_SORT_OPTIONS = [
   { name: "Precio Menor - Mayor", value: "price,false" },
   { name: "Precio Mayor - Menor", value: "price,true" },
 ];
+
+export const COLORS = {
+  GREEN: "#00AA4F",
+};
