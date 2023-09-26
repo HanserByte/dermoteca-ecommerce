@@ -4,9 +4,16 @@ import React from "react";
 
 interface IBreadCrumbsProps {
   productTitle: string;
+  productCollection: {
+    handle: string;
+    title: string;
+  };
 }
 
-const BreadCrumbs = ({ productTitle }: IBreadCrumbsProps) => {
+const BreadCrumbs = ({
+  productTitle,
+  productCollection,
+}: IBreadCrumbsProps) => {
   return (
     <Breadcrumb>
       <BreadcrumbItem>
@@ -18,6 +25,16 @@ const BreadCrumbs = ({ productTitle }: IBreadCrumbsProps) => {
       <BreadcrumbItem>
         <BreadcrumbLink as={Link} href="/collections/all" fontWeight={600}>
           Colecciones
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+
+      <BreadcrumbItem>
+        <BreadcrumbLink
+          as={Link}
+          href={`/collections/${productCollection?.handle}`}
+          fontWeight={600}
+        >
+          {productCollection?.title}
         </BreadcrumbLink>
       </BreadcrumbItem>
 

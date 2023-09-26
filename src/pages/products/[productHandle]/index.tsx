@@ -55,7 +55,12 @@ const ProductPage = () => {
         bg="#E7D4C7"
         w="100%"
       >
-        <BreadCrumbs productTitle={sanityProductData?.data?.store?.title} />
+        <BreadCrumbs
+          productTitle={sanityProductData?.data?.store?.title}
+          productCollection={
+            shopifyProductData?.data?.product?.collections?.nodes[0]
+          }
+        />
       </Flex>
       <Box
         my="6"

@@ -25,7 +25,7 @@ export const useShopifyProduct = (handle: string) => {
     ["shopifyProduct", handle],
     () => fetch(`/api/products/${handle}`).then((res) => res.json()),
     { enabled: !!handle }
-  )?.data;
+  );
 
   return shopifyProductData;
 };
