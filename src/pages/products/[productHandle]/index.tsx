@@ -11,6 +11,7 @@ import { useCart } from "@/hooks/cart";
 import { useProductRecommendations } from "@/hooks/products";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import ProductAccordion from "@/components/ProductAccordion";
+import BreadCrumbs from "@/components/BreadCrumbs";
 
 const ProductPage = () => {
   const [productData, setProductData] = useState<any>();
@@ -65,7 +66,7 @@ const ProductPage = () => {
         bg="#E7D4C7"
         w="100%"
       >
-        Breadcrums
+        <BreadCrumbs productTitle={productData?.store.title} />
       </Flex>
       <Box
         my="6"
