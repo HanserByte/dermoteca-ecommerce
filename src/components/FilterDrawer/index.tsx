@@ -33,7 +33,12 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
   const router = useRouter();
   const allTagsData = useAllTags();
   const allCollectionsData = useAllCollections();
-  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const activeOrder = getOrderTag(
+    router?.query?.sort,
+    router?.query?.order,
+    true
+  );
+
   const activeCollection = router?.query?.collectionHandle;
   const queryTags = decodeURIComponent(router?.query?.tags);
   const SORT_OPTIONS = useCollectionSort

@@ -24,6 +24,7 @@ import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
 import { getOrderTag } from "@/utils";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
+import FilterDrawer from "@/components/FilterDrawer";
 
 const CollectionPage = () => {
   const router = useRouter();
@@ -101,21 +102,27 @@ const CollectionPage = () => {
         )}
       </Box>
 
-      <Box w="full">
-        <Flex
-          pl={isMobile ? "20px" : "145px"}
-          justifyContent="space-between"
-          pr={isMobile ? "20px" : "145px"}
-          py={2}
-        >
-          <SortSelector useCollectionSort />
+      <Flex my="6" pl={"20px"} pr={"20px"}>
+        {isMobile && <FilterDrawer useCollectionSort />}
+      </Flex>
 
-          <Flex>
-            <TagSelector />
-            <CollectionsSelector />
+      {!isMobile && (
+        <Box w="full">
+          <Flex
+            pl={isMobile ? "20px" : "145px"}
+            justifyContent="space-between"
+            pr={isMobile ? "20px" : "145px"}
+            py={2}
+          >
+            <SortSelector useCollectionSort />
+
+            <Flex>
+              <TagSelector />
+              <CollectionsSelector />
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
+        </Box>
+      )}
 
       <Box w="full" bg="#E7D4C7">
         <Box
