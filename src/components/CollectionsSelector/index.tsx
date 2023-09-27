@@ -26,7 +26,7 @@ const CollectionsSelector = () => {
             bg: "#E7D4C7",
           }}
         >
-          Collecciones <GoChevronDown />
+          Colecciones <GoChevronDown />
         </Button>
       </PopoverTrigger>
       <PopoverContent w="min-content">
