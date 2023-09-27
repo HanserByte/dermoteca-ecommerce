@@ -119,7 +119,11 @@ const ProductPage = () => {
               )}
             </Box>
 
-            <Flex gap={isMobile ? 1 : 8} alignItems="center">
+            <Flex
+              gap={isMobile ? 1 : 8}
+              justifyContent={isMobile ? "space-between" : "flex-start"}
+              alignItems="center"
+            >
               <Flex alignItems="center" gap={3}>
                 <Button
                   onClick={() =>
@@ -147,6 +151,7 @@ const ProductPage = () => {
                   +
                 </Button>
               </Flex>
+
               <Button
                 onClick={handleAddToCart}
                 bg="#00AA4F"
@@ -156,6 +161,7 @@ const ProductPage = () => {
               >
                 AGREGAR AL CARRITO
               </Button>
+
               <Button
                 p={0}
                 bg="transparent"

@@ -26,6 +26,7 @@ export const createCart = async (): Promise<object> => {
           mutation cartCreate {
             cartCreate {
               cart {
+                totalQuantity
                 id
                 checkoutUrl
                 cost {
@@ -67,6 +68,7 @@ export const getCart = async (cartId: string): Promise<object> => {
       query: `
         query Cart {
           cart(id:  "${cartId}") {
+            totalQuantity
             id
             cost {
               subtotalAmount {
@@ -128,6 +130,7 @@ export const addProductToCart = async (
       mutation CartLinesAdd($cartId: ID!, $lines:[CartLineInput!]!) {
         cartLinesAdd(cartId: $cartId, lines: $lines){
           cart {
+            totalQuantity
             cost {
               subtotalAmount {
                 amount
@@ -195,6 +198,7 @@ export const removeProductFromCart = async (
       mutation CartLinesRemove($cartId: ID!, $lineIds:[ID!]!) {
         cartLinesRemove(cartId: $cartId, lineIds: $lineIds){
           cart {
+            totalQuantity
             cost {
               subtotalAmount {
                 amount
@@ -260,6 +264,7 @@ export const updateProduct = async (
       mutation CartLinesUpdate($cartId: ID!, $lines:[CartLineUpdateInput!]!) {
         cartLinesUpdate(cartId: $cartId, lines: $lines) {
           cart {
+            totalQuantity
             cost {
               subtotalAmount {
                 amount
