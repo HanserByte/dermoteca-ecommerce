@@ -80,6 +80,9 @@ export const getCart = async (cartId: string): Promise<object> => {
                 merchandise {
                   ... on ProductVariant {
                       id
+                      selectedOptions {
+                        value
+                      }
                       product {
                         title
                         handle
@@ -137,6 +140,9 @@ export const addProductToCart = async (
                 merchandise {
                   ... on ProductVariant {
                       id
+                      selectedOptions {
+                        value
+                      }
                       product {
                         title
                         handle
@@ -200,6 +206,9 @@ export const removeProductFromCart = async (
                 merchandise {
                   ... on ProductVariant {
                       id
+                      selectedOptions {
+                        value
+                      }
                       product {
                         title
                         handle
@@ -263,6 +272,9 @@ export const updateProduct = async (
                 merchandise {
                   ... on ProductVariant {
                     id
+                    selectedOptions {
+                      value
+                    }
                     product {
                       title
                       handle

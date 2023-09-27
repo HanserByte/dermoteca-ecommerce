@@ -48,6 +48,12 @@ export interface IMerchandise {
   id: string;
   price: IPrice;
   product: IProduct;
+  selectedOptions: ISelectedOptions[];
+}
+
+export interface ISelectedOptions {
+  name: string;
+  value: string;
 }
 
 export interface ICartProductLine {
