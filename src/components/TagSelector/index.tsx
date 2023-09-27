@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/router";
 import React from "react";
 import { GoChevronDown } from "react-icons/go";
+import customTheme from "./theme";
 
 const TagSelector = () => {
   const allTagsData = useAllTags();
@@ -62,6 +63,7 @@ const TagSelector = () => {
             {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
               return (
                 <Checkbox
+                  theme={customTheme}
                   size="md"
                   value={tag.node}
                   onChange={handleCheckboxSelect}
