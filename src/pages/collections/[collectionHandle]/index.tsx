@@ -118,16 +118,21 @@ const CollectionPage = () => {
       </Box>
 
       <Box w="full" bg="#E7D4C7">
-        <Flex
+        <Box
+          overflowX="auto"
+          whiteSpace="nowrap"
           gap={2}
           alignItems="center"
           pl={isMobile ? "20px" : "145px"}
           pr={isMobile ? "20px" : "145px"}
           py={2}
         >
-          <Text fontWeight={600}>Filtros</Text>
+          <Text display="inline" fontWeight={600}>
+            Filtros
+          </Text>
           {activeOrder && (
             <Tag
+              ml={2}
               bg="white"
               textColor="black"
               size="md"
@@ -140,6 +145,7 @@ const CollectionPage = () => {
           )}
           {queryTagsArray?.map((tag) => (
             <Tag
+              ml={2}
               bg="white"
               textColor="black"
               size="md"
@@ -151,7 +157,7 @@ const CollectionPage = () => {
               <TagCloseButton onClick={() => handleRemoveTag(tag)} />
             </Tag>
           ))}
-        </Flex>
+        </Box>
       </Box>
 
       <Box

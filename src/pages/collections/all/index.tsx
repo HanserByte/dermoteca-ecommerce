@@ -122,6 +122,7 @@ const AllCollectionsPage = () => {
           </Text>
           {activeOrder && (
             <Tag
+              ml={2}
               bg="white"
               textColor="black"
               size="md"
