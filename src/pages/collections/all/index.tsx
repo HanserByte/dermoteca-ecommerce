@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import {
@@ -12,8 +12,6 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import { useNavbar, useStore } from "@/store";
-import { Select } from "@chakra-ui/react";
-import { GoChevronDown } from "react-icons/go";
 import { client } from "@/lib/sanity.client";
 import ProductCard from "@/components/ProductCard";
 import { IProduct } from "@/typesSanity/shopify";

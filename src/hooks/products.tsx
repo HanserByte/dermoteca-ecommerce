@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { client } from "@/lib/sanity.client";
 
@@ -55,4 +55,28 @@ export const useAllTags = () => {
   )?.data;
 
   return allTagsData;
+};
+
+export const usePrefetch = () => {
+  const queryClient = useQueryClient();
+
+  const prefetchProductPage = (handle: string) => {
+    const query = `*[_type == "product" && store.slug.current == "${handle}"][0]{
+      ...,
+      store {
+        ...,
+        variants[]->
+      }
+    }
+    `;
+
+    queryClient.prefetchQuery(["sanityProduct", handle], () =>
+      client.fetch(query)
+    );
+    queryClient.prefetchQuery(["shopifyProduct", handle], () =>
+      fetch(`/api/products/${handle}`).then((res) => res.json())
+    );
+  };
+
+  return { prefetchProductPage };
 };

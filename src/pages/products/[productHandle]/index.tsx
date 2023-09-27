@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
@@ -52,6 +52,10 @@ const ProductPage = () => {
     setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
     setOpen(true);
   };
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [router.query.productHandle]);
 
   return (
     <Box maxW="2560px" m="0 auto">

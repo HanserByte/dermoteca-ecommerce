@@ -2,8 +2,7 @@ import React from "react";
 import { AspectRatio, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Link from "next/link";
 import { useStore } from "@/store";
-import { useQueryClient } from "@tanstack/react-query";
-import { client } from "@/lib/sanity.client";
+import { usePrefetch } from "@/hooks/products";
 
 interface ProductCardProps {
   imageSrc: string;
@@ -15,32 +14,14 @@ interface ProductCardProps {
 const ProductCard = (props: ProductCardProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const queryClient = useQueryClient();
-
-  const preFetchProductPage = (handle: string) => {
-    const query = `*[_type == "product" && store.slug.current == "${handle}"][0]{
-      ...,
-      store {
-        ...,
-        variants[]->
-      }
-    }
-    `;
-
-    queryClient.prefetchQuery(["sanityProduct", handle], () =>
-      client.fetch(query)
-    );
-    queryClient.prefetchQuery(["shopifyProduct", handle], () =>
-      fetch(`/api/products/${handle}`).then((res) => res.json())
-    );
-  };
+  const { prefetchProductPage } = usePrefetch();
 
   return (
     <Link href={`/products/${props.handle}`} style={{ width: "100%" }}>
       <Flex direction="column">
         <AspectRatio
           ratio={1 / 1}
-          onMouseEnter={() => preFetchProductPage(props.handle)}
+          onMouseEnter={() => prefetchProductPage(props.handle)}
         >
           {/* TODO: change img to next Image component when rendering final product image */}
           <img src={props.imageSrc} alt={props.title} />
