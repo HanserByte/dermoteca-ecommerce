@@ -107,13 +107,13 @@ const ProductPage = () => {
 
             {/* Variant options */}
 
-            <div>
+            <Box w="full">
               {hasOptions && (
                 <ProductVariantSelector
                   variants={shopifyProductData?.data?.product?.variants?.nodes}
                 />
               )}
-            </div>
+            </Box>
 
             <Flex gap={isMobile ? 1 : 8} alignItems="center">
               <Flex alignItems="center" gap={3}>

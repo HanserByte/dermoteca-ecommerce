@@ -4,7 +4,6 @@ import {
   Popover,
   PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
   StackDivider,
@@ -42,7 +41,7 @@ const ProductVariantSelector = ({ variants }: IProductVariantSelectorProps) => {
 
   return (
     <Popover
-      placement="bottom-start"
+      placement={isMobile ? "bottom" : "bottom-start"}
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={onClose}
@@ -60,9 +59,9 @@ const ProductVariantSelector = ({ variants }: IProductVariantSelectorProps) => {
           <ChevronDownIcon ml={2} boxSize={6} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent w="min-content">
+      <PopoverContent w={isMobile ? "full" : "auto"}>
         <PopoverArrow />
-        <PopoverBody w="min-content">
+        <PopoverBody w={isMobile ? "100%" : "auto"}>
           <VStack divider={<StackDivider borderColor="gray.200" />} spacing={2}>
             {variants.map((variant) => (
               <Button

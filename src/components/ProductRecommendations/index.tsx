@@ -24,6 +24,7 @@ interface ProductRecommendationsProps {
 const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+
   return (
     <VStack my={12} w="full">
       <Flex w="full" justifyContent="space-between" alignItems="center">
