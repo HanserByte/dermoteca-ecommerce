@@ -24,6 +24,7 @@ import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
 import SortSelector from "@/components/SortSelector";
 import { getOrderTag } from "@/utils";
+import FilterDrawer from "@/components/FilterDrawer";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -44,6 +45,8 @@ const AllCollectionsPage = () => {
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
   const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const hasActiveFilters =
+    (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
 
   const collectionQuery = `*[_type == "collectionPage"]  {
     collectionContent,
@@ -91,64 +94,67 @@ const AllCollectionsPage = () => {
         )}
       </Box>
 
-      <Box w="full">
-        <Flex
-          pl={isMobile ? "20px" : "145px"}
-          justifyContent="space-between"
-          pr={isMobile ? "20px" : "145px"}
-          py={2}
-        >
-          <SortSelector />
+      <Flex my="6" pl={"20px"} pr={"20px"}>
+        {isMobile && <FilterDrawer />}
+      </Flex>
 
-          <Flex>
-            <TagSelector />
-            <CollectionsSelector />
+      {!isMobile && (
+        <Box w="full">
+          <Flex pl={"145px"} justifyContent="space-between" pr={"145px"} py={2}>
+            <SortSelector />
+
+            <Flex>
+              <TagSelector />
+              <CollectionsSelector />
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
-
-      <Box w="full" bg="#E7D4C7">
-        <Box
-          overflowX="auto"
-          whiteSpace="nowrap"
-          gap={2}
-          alignItems="center"
-          pl={isMobile ? "20px" : "145px"}
-          pr={isMobile ? "20px" : "145px"}
-          py={2}
-        >
-          <Text display="inline" fontWeight={600}>
-            Filtros
-          </Text>
-          {activeOrder && (
-            <Tag
-              ml={2}
-              bg="white"
-              textColor="black"
-              size="md"
-              borderRadius="full"
-              variant="solid"
-            >
-              <TagLabel>{activeOrder?.name}</TagLabel>
-              <TagCloseButton onClick={() => removeQueryParam("sort")} />
-            </Tag>
-          )}
-          {queryTagsArray?.map((tag) => (
-            <Tag
-              ml={2}
-              bg="white"
-              textColor="black"
-              size="md"
-              key={tag}
-              borderRadius="full"
-              variant="solid"
-            >
-              <TagLabel>{tag}</TagLabel>
-              <TagCloseButton onClick={() => handleRemoveTag(tag)} />
-            </Tag>
-          ))}
         </Box>
-      </Box>
+      )}
+
+      {(hasActiveFilters || !isMobile) && (
+        <Box w="full" bg="#E7D4C7">
+          <Box
+            overflowX="auto"
+            whiteSpace="nowrap"
+            gap={2}
+            alignItems="center"
+            pl={isMobile ? "20px" : "145px"}
+            pr={isMobile ? "20px" : "145px"}
+            py={2}
+          >
+            <Text display="inline" fontWeight={600}>
+              Filtros
+            </Text>
+            {activeOrder && (
+              <Tag
+                ml={2}
+                bg="white"
+                textColor="black"
+                size="md"
+                borderRadius="full"
+                variant="solid"
+              >
+                <TagLabel>{activeOrder?.name}</TagLabel>
+                <TagCloseButton onClick={() => removeQueryParam("sort")} />
+              </Tag>
+            )}
+            {queryTagsArray?.map((tag) => (
+              <Tag
+                ml={2}
+                bg="white"
+                textColor="black"
+                size="md"
+                key={tag}
+                borderRadius="full"
+                variant="solid"
+              >
+                <TagLabel>{tag}</TagLabel>
+                <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+              </Tag>
+            ))}
+          </Box>
+        </Box>
+      )}
 
       <Box
         my="6"
