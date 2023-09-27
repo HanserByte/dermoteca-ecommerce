@@ -13,6 +13,13 @@ const theme = extendTheme({
             borderColor: COLORS.GREEN, // You can also change the border color if desired
           },
         },
+        icon: {
+          _checked: {
+            // Change the background color when checked
+            bg: COLORS.GREEN,
+            borderColor: COLORS.GREEN, // You can also change the border color if desired
+          },
+        },
       },
     },
   },

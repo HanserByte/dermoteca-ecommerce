@@ -45,6 +45,7 @@ const AllCollectionsPage = () => {
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
   const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
   const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+
   const hasActiveFilters =
     (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
 

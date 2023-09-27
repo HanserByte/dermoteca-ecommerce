@@ -63,7 +63,7 @@ const TagSelector = () => {
             {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
               return (
                 <Checkbox
-                  theme={customTheme}
+                  colorScheme="green"
                   size="md"
                   value={tag.node}
                   onChange={handleCheckboxSelect}

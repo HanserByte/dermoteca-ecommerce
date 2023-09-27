@@ -36,7 +36,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
   const activeOrder = getOrderTag(
     router?.query?.sort,
     router?.query?.order,
-    true
+    useCollectionSort
   );
 
   const activeCollection = router?.query?.collectionHandle;
@@ -135,7 +135,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
                 {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
                   return (
                     <Checkbox
-                      theme={customTheme}
+                      colorScheme="green"
                       size="lg"
                       value={tag.node}
                       onChange={handleCheckboxSelect}
