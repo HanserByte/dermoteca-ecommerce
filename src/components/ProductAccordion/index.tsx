@@ -19,7 +19,7 @@ interface IProductAccordionProps {
 
 const ProductAccordion = ({ accordions }: IProductAccordionProps) => {
   return (
-    <Accordion>
+    <Accordion allowToggle>
       {accordions.map((accordionItem) => (
         <AccordionItem key={accordionItem._key}>
           <AccordionButton
