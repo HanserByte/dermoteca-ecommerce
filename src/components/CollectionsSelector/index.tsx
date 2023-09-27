@@ -17,6 +17,7 @@ const CollectionsSelector = () => {
   const router = useRouter();
   const allCollectionsData = useAllCollections();
   const activeCollection = router?.query?.collectionHandle;
+
   return (
     <Popover placement="bottom-end">
       <PopoverTrigger>
@@ -33,6 +34,19 @@ const CollectionsSelector = () => {
         <PopoverArrow />
         <PopoverBody>
           <VStack w="min-content" align="start">
+            <Button
+              bg={router?.pathname.includes("all") ? "#E7D4C7" : "transparent"}
+              _hover={{
+                bg: "#E7D4C7",
+              }}
+              fontSize="16px"
+              variant="ghost"
+              size="sm"
+              as={Link}
+              href={`/collections/all`}
+            >
+              Todas las colecciones
+            </Button>
             {allCollectionsData?.data?.collections?.nodes?.map(
               (collection: any) => {
                 return (

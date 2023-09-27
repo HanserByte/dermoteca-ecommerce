@@ -109,7 +109,7 @@ const AllCollectionsPage = () => {
 
       <Box w="full" bg="#E7D4C7">
         <Box
-          overflowX="scroll"
+          overflowX="auto"
           whiteSpace="nowrap"
           gap={2}
           alignItems="center"
