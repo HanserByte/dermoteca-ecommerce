@@ -26,6 +26,10 @@ import React from "react";
 import { useRouter } from "next/router";
 import CartDrawer from "../CartDrawer";
 import CartBadge from "../CartBadge";
+import { Swiper, SwiperSlide } from "swiper/react";
+import PortableText from "../PortableText";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
 
 interface IContainerProps {
   dataN: any;
@@ -41,6 +45,7 @@ const iconArray: any = {
 const NavBar = (props: IContainerProps) => {
   const query = `
     *[_type == "settings"]{
+      ...,
       'logo': navbar.logo,
       'links_izquierda': navbar.links_izquierda[]{ ... ,
       'dataUrl': *[_id == ^.link.url._ref]{
@@ -90,7 +95,7 @@ const NavBar = (props: IContainerProps) => {
   useEffect(() => {
     // @ts-ignore
     setHeight(navbarRef?.current?.clientHeight);
-  }, [navbarRef.current]);
+  }, [navbarRef?.current?.clientHeight]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -129,176 +134,210 @@ const NavBar = (props: IContainerProps) => {
   return (
     <Flex
       ref={navbarRef}
-      px={4}
-      h="86px"
-      bg={isMobile || dataN.isBlackNavBar ? "#fff" : ""}
-      alignItems="center"
-      justifyContent="space-between"
-      pt="20px"
-      pb="20px"
+      flexDirection="column"
       position="fixed"
       top={0}
       width="100%"
       maxW="2560px"
       zIndex={1000}
     >
-      {/* Lado izquierdo */}
-      <Flex flex={1} pl={isMobile ? "" : "10px"}>
-        {isMobile ? (
-          <IconButton
-            aria-label="Open Menu"
-            icon={<LogoHamburguerCI />}
-            onClick={() => setShowDrawer(true)}
-            colorScheme="black"
-          />
-        ) : (
-          <Box>
-            <HStack>
-              {linksLeft.length > 0 &&
-                linksLeft.map(
-                  (link: {
-                    title: string;
-                    url?: string;
-                    dataUrl?: { url: string };
-                  }) => (
-                    <Box key={link.title} mr={4}>
-                      <Text
-                        fontSize="14px"
-                        fontWeight={400}
-                        lineHeight="normal"
-                        color={
-                          isScrolled || dataN?.isBlackNavBar ? "black" : "white"
-                        }
-                        cursor="pointer"
-                        onClick={() => goToLink(link)}
-                      >
-                        {link.title}
-                      </Text>
-                    </Box>
-                  )
-                )}
-            </HStack>
-          </Box>
-        )}
-      </Flex>
-
-      {/* Centro */}
       <Flex
+        w="full"
+        py={2}
         alignItems="center"
         justifyContent="center"
-        flex={2}
-        mr={isPhone ? "15px" : ""}
-        onClick={goHome}
-        cursor="pointer"
+        bg="black"
       >
-        <LogoCI
-          color={
-            isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"
-          }
-          width={isMobile ? "190px" : "250px"}
-          height={isMobile ? "27px" : "33px"}
-        />
+        <Swiper
+          modules={[Autoplay]}
+          loop={true}
+          autoplay={{
+            delay: 3500,
+            disableOnInteraction: false,
+          }}
+        >
+          {data?.navbar?.banner?.map((bannerItem) => (
+            <SwiperSlide key={bannerItem._key}>
+              <Box color="white" textAlign="center">
+                <PortableText blocks={bannerItem.content} />
+              </Box>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Flex>
-
-      {/* Lado derecho */}
-      {!isMobile && (
-        <Flex alignItems="center" flex={1} gap={4} justifyContent="flex-end">
-          {data?.links_derecha &&
-            data.links_derecha.length > 0 &&
-            data.links_derecha.map((item, index) => {
-              const BtnComponent = (
-                <button key={index} style={{ position: "relative" }}>
-                  {item.title === "Carrito de compras" && <CartBadge />}
-                  {iconArray[item.icono]({
-                    style: {
-                      width: item.icono === "TfiSearch" ? "25px" : "30px",
-                      height: item.icono === "TfiSearch" ? "25px" : "30px",
-                      cursor: "pointer",
-                      color:
-                        isScrolled || dataN?.isBlackNavBar ? "black" : "white",
-                    },
-                  })}
-                  {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
-                </button>
-              );
-              if (item.title === "Carrito de compras") {
-                return <CartDrawer key={index} button={BtnComponent} />;
-              }
-
-              return BtnComponent;
-            })}
+      <Flex
+        px={4}
+        h="86px"
+        bg={isMobile || dataN.isBlackNavBar ? "#fff" : ""}
+        alignItems="center"
+        justifyContent="space-between"
+        pt="20px"
+        pb="20px"
+      >
+        {/* Lado izquierdo */}
+        <Flex flex={1} pl={isMobile ? "" : "10px"}>
+          {isMobile ? (
+            <IconButton
+              aria-label="Open Menu"
+              icon={<LogoHamburguerCI />}
+              onClick={() => setShowDrawer(true)}
+              colorScheme="black"
+            />
+          ) : (
+            <Box>
+              <HStack>
+                {linksLeft.length > 0 &&
+                  linksLeft.map(
+                    (link: {
+                      title: string;
+                      url?: string;
+                      dataUrl?: { url: string };
+                    }) => (
+                      <Box key={link.title} mr={4}>
+                        <Text
+                          fontSize="14px"
+                          fontWeight={400}
+                          lineHeight="normal"
+                          color={
+                            isScrolled || dataN?.isBlackNavBar
+                              ? "black"
+                              : "white"
+                          }
+                          cursor="pointer"
+                          onClick={() => goToLink(link)}
+                        >
+                          {link.title}
+                        </Text>
+                      </Box>
+                    )
+                  )}
+              </HStack>
+            </Box>
+          )}
         </Flex>
-      )}
 
-      {/* Lado derecho mobile */}
-      {isMobile && (
+        {/* Centro */}
         <Flex
           alignItems="center"
-          flex={1}
-          justifyContent="flex-end"
-          id="mobile"
+          justifyContent="center"
+          flex={2}
+          mr={isPhone ? "15px" : ""}
+          onClick={goHome}
+          cursor="pointer"
         >
-          {data?.links_derecha_mobile.map((item, index) => (
-            <React.Fragment key={index}>
-              {item.title === "Carrito de compras" && <CartBadge />}
-              {iconArray[item.icono]({
-                style: {
-                  width: item.icono === "TfiSearch" ? "25px" : "30px",
-                  height: item.icono === "TfiSearch" ? "25px" : "30px",
-                  cursor: "pointer",
-                  color: "black",
-                },
-              })}
-              {index !== data.links_derecha_mobile.length - 1 && (
-                <Box mx="3px" />
-              )}
-            </React.Fragment>
-          ))}
+          <LogoCI
+            color={
+              isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"
+            }
+            width={isMobile ? "190px" : "250px"}
+            height={isMobile ? "27px" : "33px"}
+          />
         </Flex>
-      )}
 
-      {/* Drawer para pantallas móviles */}
-      <Drawer
-        isOpen={showDrawer}
-        placement="left"
-        onClose={() => setShowDrawer(false)}
-      >
-        <DrawerOverlay zIndex={9999999999999}>
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>
-              <LogoCI
-                color={isMobile ? "black" : "white"}
-                width={isMobile ? "150px" : "250px"}
-                height={isMobile ? "20px" : "33px"}
-              />
-            </DrawerHeader>
-            <DrawerBody>
-              {linksLeft.length > 0 &&
-                linksLeft.map(
-                  (link: {
-                    title: string;
-                    url?: string;
-                    dataUrl: { url: string };
-                  }) => (
-                    <Box key={link.title} mb={4}>
-                      <Text
-                        fontSize="14px"
-                        fontWeight={400}
-                        lineHeight="normal"
-                        color="black"
-                        onClick={() => goToLink(link)}
-                      >
-                        {link.title}
-                      </Text>
-                    </Box>
-                  )
+        {/* Lado derecho */}
+        {!isMobile && (
+          <Flex alignItems="center" flex={1} gap={4} justifyContent="flex-end">
+            {data?.links_derecha &&
+              data.links_derecha.length > 0 &&
+              data.links_derecha.map((item, index) => {
+                const BtnComponent = (
+                  <button key={index} style={{ position: "relative" }}>
+                    {item.title === "Carrito de compras" && <CartBadge />}
+                    {iconArray[item.icono]({
+                      style: {
+                        width: item.icono === "TfiSearch" ? "25px" : "30px",
+                        height: item.icono === "TfiSearch" ? "25px" : "30px",
+                        cursor: "pointer",
+                        color:
+                          isScrolled || dataN?.isBlackNavBar
+                            ? "black"
+                            : "white",
+                      },
+                    })}
+                    {index !== data.links_derecha.length - 1 && (
+                      <Box mx="8px" />
+                    )}
+                  </button>
+                );
+                if (item.title === "Carrito de compras") {
+                  return <CartDrawer key={index} button={BtnComponent} />;
+                }
+
+                return BtnComponent;
+              })}
+          </Flex>
+        )}
+
+        {/* Lado derecho mobile */}
+        {isMobile && (
+          <Flex
+            alignItems="center"
+            flex={1}
+            justifyContent="flex-end"
+            id="mobile"
+          >
+            {data?.links_derecha_mobile.map((item, index) => (
+              <React.Fragment key={index}>
+                {item.title === "Carrito de compras" && <CartBadge />}
+                {iconArray[item.icono]({
+                  style: {
+                    width: item.icono === "TfiSearch" ? "25px" : "30px",
+                    height: item.icono === "TfiSearch" ? "25px" : "30px",
+                    cursor: "pointer",
+                    color: "black",
+                  },
+                })}
+                {index !== data.links_derecha_mobile.length - 1 && (
+                  <Box mx="3px" />
                 )}
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
-      <CartDrawer cartBtnRef={cartBtnRef} />
+              </React.Fragment>
+            ))}
+          </Flex>
+        )}
+
+        {/* Drawer para pantallas móviles */}
+        <Drawer
+          isOpen={showDrawer}
+          placement="left"
+          onClose={() => setShowDrawer(false)}
+        >
+          <DrawerOverlay zIndex={9999999999999}>
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>
+                <LogoCI
+                  color={isMobile ? "black" : "white"}
+                  width={isMobile ? "150px" : "250px"}
+                  height={isMobile ? "20px" : "33px"}
+                />
+              </DrawerHeader>
+              <DrawerBody>
+                {linksLeft.length > 0 &&
+                  linksLeft.map(
+                    (link: {
+                      title: string;
+                      url?: string;
+                      dataUrl: { url: string };
+                    }) => (
+                      <Box key={link.title} mb={4}>
+                        <Text
+                          fontSize="14px"
+                          fontWeight={400}
+                          lineHeight="normal"
+                          color="black"
+                          onClick={() => goToLink(link)}
+                        >
+                          {link.title}
+                        </Text>
+                      </Box>
+                    )
+                  )}
+              </DrawerBody>
+            </DrawerContent>
+          </DrawerOverlay>
+        </Drawer>
+        <CartDrawer cartBtnRef={cartBtnRef} />
+      </Flex>
     </Flex>
   );
 };

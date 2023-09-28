@@ -18,7 +18,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import ProductVariantSelector from "@/components/ProductVariantSelector";
 import { useMobileView } from "@/hooks/responsive";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { Thumbs } from "swiper/modules";
 
 import "swiper/css";
 const ProductPage = () => {
@@ -93,14 +93,14 @@ const ProductPage = () => {
           <Box w={isMobile ? "100%" : "50%"}>
             {!hasMultipleImages && (
               <img
-                style={{ position: "sticky", top: "86px" }}
+                style={{ position: "sticky", top: `${height}px` }}
                 src={sanityProductData?.data?.store?.previewImageUrl}
                 alt={sanityProductData?.data?.store?.title}
               />
             )}
 
             {hasMultipleImages && (
-              <Box position="sticky" top="86px">
+              <Box position="sticky" top={`${height}px`}>
                 <Swiper
                   className="mySwiper2"
                   modules={[Thumbs]}

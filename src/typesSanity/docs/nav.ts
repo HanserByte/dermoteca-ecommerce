@@ -1,6 +1,12 @@
 import { SanityBody } from "@/typesSanity/docs/default";
 
 export interface IDataNav extends SanityBody {
+  navbar: {
+    banner: {
+      _key: string;
+      content: any;
+    }[];
+  };
   logo: {
     _type: string;
     asset: {

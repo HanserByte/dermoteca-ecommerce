@@ -31,7 +31,7 @@ const PortableText = ({ blocks }) => {
         );
       },
       strong: ({ children }: { children: React.ReactNode }) => (
-        <Text as={"span"} fontWeight={600} fontSize={isMobile ? "xs" : "md"}>
+        <Text as={"span"} fontWeight={600} fontSize="md">
           {children}
         </Text>
       ),
