@@ -9,6 +9,11 @@ export const SingleProductQuery = `#graphql
           title
         }
       }
+      images(first: 10)  {
+        nodes {
+            url 
+        }
+      }
       variants (first: 10) {
         nodes {
           id

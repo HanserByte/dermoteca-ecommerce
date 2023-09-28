@@ -17,9 +17,14 @@ import ProductAccordion from "@/components/ProductAccordion";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import ProductVariantSelector from "@/components/ProductVariantSelector";
 import { useMobileView } from "@/hooks/responsive";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Thumbs } from "swiper/modules";
+
+import "swiper/css";
 
 const ProductPage = () => {
   const router = useRouter();
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
@@ -34,6 +39,8 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const { isMobile } = useMobileView();
 
+  const hasMultipleImages =
+    shopifyProductData?.data?.product?.images?.nodes.length > 1;
   const hasAccordions = sanityProductData?.data?.productAccordions?.length > 0;
   const hasOptions =
     shopifyProductData?.data?.product?.variants?.nodes?.length > 1;
@@ -84,11 +91,51 @@ const ProductPage = () => {
       >
         <Flex gap={6} flexDirection={isMobile ? "column" : "row"}>
           <Box w={isMobile ? "100%" : "50%"}>
-            <img
-              style={{ position: "sticky", top: "86px" }}
-              src={sanityProductData?.data?.store?.previewImageUrl}
-              alt={sanityProductData?.data?.store?.title}
-            />
+            {!hasMultipleImages && (
+              <img
+                style={{ position: "sticky", top: "86px" }}
+                src={sanityProductData?.data?.store?.previewImageUrl}
+                alt={sanityProductData?.data?.store?.title}
+              />
+            )}
+
+            {hasMultipleImages && (
+              <>
+                <Swiper modules={[Thumbs]} thumbs={{ swiper: thumbsSwiper }}>
+                  {shopifyProductData?.data?.product?.images?.nodes.map(
+                    (image) => (
+                      <SwiperSlide>
+                        <img
+                          src={image.url}
+                          alt={sanityProductData?.data?.store?.title}
+                        />
+                      </SwiperSlide>
+                    )
+                  )}
+                </Swiper>
+
+                <Box mt={2}>
+                  <Swiper
+                    spaceBetween={8}
+                    modules={[Thumbs]}
+                    slidesPerView={5}
+                    watchSlidesProgress
+                    onSwiper={setThumbsSwiper}
+                  >
+                    {shopifyProductData?.data?.product?.images?.nodes.map(
+                      (image) => (
+                        <SwiperSlide>
+                          <img
+                            src={image.url}
+                            alt={sanityProductData?.data?.store?.title}
+                          />
+                        </SwiperSlide>
+                      )
+                    )}
+                  </Swiper>
+                </Box>
+              </>
+            )}
           </Box>
           <Flex w={isMobile ? "100%" : "50%"} gap={3} direction="column">
             <Text fontSize={isMobile ? "xl" : "2xl"} fontWeight={700}>
