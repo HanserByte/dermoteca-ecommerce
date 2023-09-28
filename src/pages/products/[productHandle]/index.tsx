@@ -100,7 +100,7 @@ const ProductPage = () => {
             )}
 
             {hasMultipleImages && (
-              <>
+              <Box position="sticky" top="86px">
                 <Swiper modules={[Thumbs]} thumbs={{ swiper: thumbsSwiper }}>
                   {shopifyProductData?.data?.product?.images?.nodes.map(
                     (image) => (
@@ -134,7 +134,7 @@ const ProductPage = () => {
                     )}
                   </Swiper>
                 </Box>
-              </>
+              </Box>
             )}
           </Box>
           <Flex w={isMobile ? "100%" : "50%"} gap={3} direction="column">
