@@ -18,10 +18,9 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import ProductVariantSelector from "@/components/ProductVariantSelector";
 import { useMobileView } from "@/hooks/responsive";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Thumbs } from "swiper/modules";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 import "swiper/css";
-
 const ProductPage = () => {
   const router = useRouter();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -62,6 +61,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     setQuantity(1);
+    setThumbsSwiper(null);
   }, [router.query.productHandle]);
 
   return (
@@ -101,7 +101,11 @@ const ProductPage = () => {
 
             {hasMultipleImages && (
               <Box position="sticky" top="86px">
-                <Swiper modules={[Thumbs]} thumbs={{ swiper: thumbsSwiper }}>
+                <Swiper
+                  className="mySwiper2"
+                  modules={[Thumbs]}
+                  thumbs={{ swiper: thumbsSwiper }}
+                >
                   {shopifyProductData?.data?.product?.images?.nodes.map(
                     (image) => (
                       <SwiperSlide>
@@ -120,6 +124,8 @@ const ProductPage = () => {
                     modules={[Thumbs]}
                     slidesPerView={5}
                     watchSlidesProgress
+                    freeMode={true}
+                    className="mySwiper"
                     onSwiper={setThumbsSwiper}
                   >
                     {shopifyProductData?.data?.product?.images?.nodes.map(
