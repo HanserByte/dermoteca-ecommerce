@@ -7,7 +7,7 @@ import Loading from "@/components/Loading";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import ContainerNav from "@/components/ContainerNav";
-import { useStore } from "@/store";
+import { useNavbar, useStore } from "@/store";
 import ComponentRenderer from "@/components/ComponentRenderer";
 
 const Page = () => {
@@ -15,7 +15,7 @@ const Page = () => {
   const { slug } = router.query;
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
-
+  const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
@@ -60,7 +60,7 @@ const Page = () => {
                 'tips': tips[]-> {
                   ...
                 }
-              }
+              },
             }[0]
           `;
         const dataHome = await client.fetch(query);
@@ -76,25 +76,29 @@ const Page = () => {
     return <Loading />;
   }
 
+  console.log(data?.componentes);
+
   return (
-    <Box
-      maxW="2560px"
-      m="0 auto"
-      id="main-container"
-      bg={data.colorFondoPagina}
-    >
-      {data && <NavBar dataN={data} />}
-      {data && (!data.isNavBarWhite || isMobile) && <ContainerNav />}
-      {data &&
-        data.componentes.map((componente: any) => (
-          <ComponentRenderer
-            key={componente._id}
-            component={componente._type}
-            data={componente}
-          />
-        ))}
-      {data && <Footer />}
-    </Box>
+    <>
+      <Box
+        maxW="2560px"
+        m="0 auto"
+        id="main-container"
+        bg={data.colorFondoPagina}
+      >
+        {data && <NavBar dataN={data} />}
+        {data && (!data.isNavBarWhite || isMobile) && <ContainerNav />}
+        {data &&
+          data.componentes.map((componente: any) => (
+            <ComponentRenderer
+              key={componente._id}
+              component={componente._type}
+              data={componente}
+            />
+          ))}
+        {data && <Footer />}
+      </Box>
+    </>
   );
 };
 

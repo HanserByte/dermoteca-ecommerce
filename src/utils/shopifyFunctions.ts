@@ -1,9 +1,16 @@
+import type {
+  ProductSortKeys,
+  CartLineUpdateInput,
+  CartLineInput,
+  CustomerCreateInput,
+  CustomerAccessTokenCreateInput,
+} from "@shopify/hydrogen-react/storefront-api-types";
 import {
-  ICartLineInput,
-  IUpdateCartLineInput,
-  SortKey as ProductSortKey,
-} from "@/typesSanity/shopify";
-import { SingleProductQuery } from "./shopifyGraphql";
+  CreateCustomerMutation,
+  CustomerLoginMutation,
+  CustomerQuery,
+  SingleProductQuery,
+} from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
 const HEADERS = {
@@ -114,12 +121,12 @@ export const getCart = async (cartId: string): Promise<object> => {
 /**
  * Adds a product to the cart by making a POST request to the API_ENDPOINT.
  * @param {string | null} cartId - The ID of the cart to which the product will be added.
- * @param {ICartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
+ * @param {CartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
  * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
  */
 export const addProductToCart = async (
   cartId: string | null,
-  lines: ICartLineInput[]
+  lines: CartLineInput[]
 ): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
@@ -245,7 +252,7 @@ export const removeProductFromCart = async (
 /**
  * Updates the product lines in a user's shopping cart.
  * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
- * @param {IUpdateCartLineInput[]} lines - An array of objects representing the updated product lines to be applied to the cart.
+ * @param {CartLineUpdateInput[]} lines - An array of objects representing the updated product lines to be applied to the cart.
  * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
  * The object typically includes information about the updated cart, such as checkout URL and cart lines.
  *
@@ -253,7 +260,7 @@ export const removeProductFromCart = async (
  */
 export const updateProduct = async (
   cartId: string | null,
-  lines: IUpdateCartLineInput[]
+  lines: CartLineUpdateInput[]
 ): Promise<object> => {
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
@@ -317,7 +324,7 @@ export const updateProduct = async (
  */
 export const getCollection = async (
   collectionHandle: string | null,
-  sortKey: ProductSortKey = "BEST_SELLING",
+  sortKey: ProductSortKeys = "BEST_SELLING",
   reverse: boolean = false,
   tags: string | null
 ) => {
@@ -391,49 +398,6 @@ export const getRecommendedProducts = async (productId: string | null) => {
       `,
       variables: {
         productId,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Creates a new customer using the specified user information.
- * @param {string} email - The email address of the customer.
- * @param {string} firstName - The first name of the customer.
- * @param {string} lastName - The last name of the customer.
- * @param {string} password - The password for the customer's account.
- * @returns {Promise<object>} A promise that resolves to the response data from the server.
- * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
- */
-export const createCustomer = async (
-  email: string,
-  firstName: string,
-  lastName: string,
-  password: string
-) => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-        mutation CustomerCreate($input: CustomerCreateInput!) {
-          customerCreate(input: $input) {
-            customer {
-              firstName
-            }
-          }
-        }
-      `,
-      variables: {
-        input: {
-          email,
-          firstName,
-          lastName,
-          password,
-        },
       },
     }),
   });
@@ -602,7 +566,7 @@ export const customerRecover = async (email: string) => {
  */
 
 export const getAllProducts = async (
-  sortKey: ProductSortKey = "BEST_SELLING",
+  sortKey: ProductSortKeys = "BEST_SELLING",
   reverse: boolean = false,
   tags: string | null
 ) => {
@@ -730,6 +694,22 @@ export const makeShopifyRequest = async (
 
 export async function getShopifyProduct(handle: string) {
   const data = await makeShopifyRequest(SingleProductQuery, { handle });
+  return data;
+}
 
+export async function createCustomer(input: CustomerCreateInput) {
+  const data = await makeShopifyRequest(CreateCustomerMutation, { input });
+  return data;
+}
+
+export async function customerLogin(input: CustomerAccessTokenCreateInput) {
+  const data = await makeShopifyRequest(CustomerLoginMutation, { input });
+  return data;
+}
+
+export async function getCustomer(customerAccessToken: string) {
+  const data = await makeShopifyRequest(CustomerQuery, {
+    customerAccessToken,
+  });
   return data;
 }
