@@ -6,7 +6,7 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useCartDrawer, useCartProducts, useNavbar } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart } from "react-icons/ai";
-import { useCart } from "@/hooks/cart";
+import { useCartActions, useCartLegacy } from "@/hooks/cart";
 import {
   useProductRecommendations,
   useSanityProduct,
@@ -28,7 +28,8 @@ const ProductPage = () => {
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
   const sanityProductData = useSanityProduct(router.query.productHandle);
-  const { addToCart, cartId } = useCart();
+  const { addToCart, cartId } = useCartLegacy();
+  const { addToCartMutation } = useCartActions();
   const { productRecommendations } = useProductRecommendations(
     sanityProductData?.data?.store?.gid
   );
@@ -53,9 +54,13 @@ const ProductPage = () => {
 
     const productId =
       variantId?.id || sanityProductData?.data?.store?.variants[0]?.store?.gid;
-    const response = await addToCart(cartId, productId, quantity);
-    setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes);
-    setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
+    // @ts-ignore
+    addToCartMutation.mutate({
+      cartId,
+      lines: [{ merchandiseId: productId, quantity }],
+    });
+    // setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes);
+    // setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
     setOpen(true);
   };
 

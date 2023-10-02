@@ -1,19 +1,22 @@
-import { useCart } from "@/hooks/cart";
+import { useCartLegacy } from "@/hooks/cart";
 import { useCartProducts, useStore } from "@/store";
-import { ICartProductLine } from "@/typesSanity/shopify";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import {
+  BaseCartLine,
+  Product,
+} from "@shopify/hydrogen-react/storefront-api-types";
 import Link from "next/link";
 import React from "react";
 import { TbTrash } from "react-icons/tb";
 
 interface ICartProductCardProps {
-  product: ICartProductLine;
+  product: BaseCartLine;
 }
 
 const CartProductCard = ({ product }: ICartProductCardProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const { cartId, removeFromCart, updateProduct } = useCart();
+  const { cartId, removeFromCart, updateProduct } = useCartLegacy();
   const { setProducts, setPrice } = useCartProducts();
 
   const handleRemoveFromCart = async () => {
@@ -40,7 +43,7 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
         w={`${isMobile ? "25%" : "35%"}`}
       >
         <img
-          src={product?.merchandise?.product?.featuredImage?.url}
+          src={product?.merchandise?.image.url}
           alt={product?.merchandise?.product?.title}
         />
       </Box>

@@ -56,12 +56,6 @@ export interface ISelectedOptions {
   value: string;
 }
 
-export interface ICartProductLine {
-  id: string;
-  merchandise: IMerchandise;
-  quantity: number;
-}
-
 export enum ProductSortKey {
   BEST_SELLING = "BEST SELLING",
   CREATED_AT = "CREATED_AT",

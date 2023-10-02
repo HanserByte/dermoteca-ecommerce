@@ -21,6 +21,12 @@ const CART_FRAGMENT = `#graphql
           ...on ProductVariant {
             id
             title
+            selectedOptions { 
+              value
+            }
+            price {
+              amount
+            }
             image {
               url
               altText

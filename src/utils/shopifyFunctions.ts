@@ -6,6 +6,8 @@ import type {
   CustomerAccessTokenCreateInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import {
+  CartLinesAddMutation,
+  CartQuery,
   CreateCustomerMutation,
   CustomerLoginMutation,
   CustomerLogoutMutation,
@@ -60,127 +62,6 @@ export const createCart = async (): Promise<object> => {
     // @ts-ignore
     return { error: error.message };
   }
-};
-
-/**
- * Retrieves cart information by making a POST request to the API_ENDPOINT.
- * @param {string} cartId - The ID of the cart to retrieve.
- * @returns {Promise<object>} A Promise that resolves to the cart data returned by the API.
- */
-export const getCart = async (cartId: string): Promise<object> => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-        query Cart {
-          cart(id:  "${cartId}") {
-            totalQuantity
-            id
-            cost {
-              subtotalAmount {
-                amount
-              }
-            } 
-            checkoutUrl
-            lines(first: 30) {
-              nodes{
-                id
-                merchandise {
-                  ... on ProductVariant {
-                      id
-                      selectedOptions {
-                        value
-                      }
-                      product {
-                        title
-                        handle
-                        featuredImage {
-                          url
-                        }
-                      }
-                      price {
-                        amount
-                      }
-                    }
-                  }
-                  quantity
-                }
-              }
-            }
-          }
-        
-      `,
-    }),
-  });
-
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Adds a product to the cart by making a POST request to the API_ENDPOINT.
- * @param {string | null} cartId - The ID of the cart to which the product will be added.
- * @param {CartLineInput[]} lines - An array of cart line inputs representing the product(s) to add.
- * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
- */
-export const addProductToCart = async (
-  cartId: string | null,
-  lines: CartLineInput[]
-): Promise<object> => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CartLinesAdd($cartId: ID!, $lines:[CartLineInput!]!) {
-        cartLinesAdd(cartId: $cartId, lines: $lines){
-          cart {
-            totalQuantity
-            cost {
-              subtotalAmount {
-                amount
-              }
-            } 
-            checkoutUrl
-            lines (first: 30) {
-              nodes{
-                id
-                merchandise {
-                  ... on ProductVariant {
-                      id
-                      selectedOptions {
-                        value
-                      }
-                      product {
-                        title
-                        handle
-                        featuredImage {
-                          url
-                        }
-                      }
-                      price {
-                        amount
-                      }
-                    }
-                  }
-                  quantity
-                }
-              }
-            }
-        }
-    }
-      `,
-      variables: {
-        cartId,
-        lines,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
 };
 
 /**
@@ -692,6 +573,20 @@ export const makeShopifyRequest = async (
 
   return json.data;
 };
+
+export async function getCart(cartId: string) {
+  const { cart } = await makeShopifyRequest(CartQuery, { cartId });
+  return cart;
+}
+
+export async function addProductToCart(cartId: string, lines: CartLineInput[]) {
+  const { cartLinesAdd } = await makeShopifyRequest(CartLinesAddMutation, {
+    cartId,
+    lines,
+  });
+
+  return cartLinesAdd;
+}
 
 export async function getShopifyProduct(handle: string) {
   const data = await makeShopifyRequest(SingleProductQuery, { handle });

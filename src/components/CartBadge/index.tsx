@@ -1,14 +1,14 @@
-import { useCartProducts } from "@/store";
+import { useCart } from "@/hooks/cart";
 import { COLORS } from "@/utils/constants";
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
 const CartBadge = () => {
-  const { products } = useCartProducts();
+  const cartData = useCart();
 
   return (
     <>
-      {products?.length > 0 && (
+      {cartData?.data?.totalQuantity > 0 && (
         <Box
           position="absolute"
           right="0"
@@ -19,7 +19,7 @@ const CartBadge = () => {
           color="white"
           fontWeight={600}
         >
-          {products?.length}
+          {cartData?.data?.totalQuantity}
         </Box>
       )}
     </>

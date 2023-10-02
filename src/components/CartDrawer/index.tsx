@@ -1,5 +1,5 @@
-import { useCart } from "@/hooks/cart";
-import { useCartDrawer, useCartProducts } from "@/store";
+import { useCart, useCartLegacy } from "@/hooks/cart";
+import { useCartDrawer, useCartProducts, useSessionVariables } from "@/store";
 import {
   Drawer,
   DrawerBody,
@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import CartProductCard from "../CartProductCard";
+import { BaseCartLine } from "@shopify/hydrogen-react/storefront-api-types";
 
 interface ICartDrawerProps {
   button?: React.ReactElement;
@@ -23,23 +24,15 @@ interface ICartDrawerProps {
 export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter();
   const { open, setOpen } = useCartDrawer();
-  const { checkoutUrl, cartId, getCart } = useCart();
+  const cartData = useCart();
+  const { checkoutUrl, cartId } = useCartLegacy();
   const { products, setProducts, setPrice, price } = useCartProducts();
   const btnRef = React.useRef();
+  const { userToken } = useSessionVariables();
 
   const handleCheckout = () => {
     checkoutUrl && router.push(checkoutUrl);
   };
-
-  useEffect(() => {
-    (async function () {
-      if (cartId && products?.length === 0) {
-        const response = await getCart(cartId);
-        setProducts(response?.data?.cart?.lines?.nodes);
-        setPrice(response?.data?.cart?.cost?.totalAmount?.amount);
-      }
-    })();
-  }, [cartId]);
 
   return (
     <>
@@ -62,7 +55,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
 
           <DrawerBody>
             <Flex direction="column" gap={4}>
-              {products?.map((product) => (
+              {cartData?.data?.lines?.nodes?.map((product: BaseCartLine) => (
                 <CartProductCard
                   key={product?.merchandise?.id}
                   product={product}

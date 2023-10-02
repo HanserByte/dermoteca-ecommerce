@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../styles/globals.css";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import { useCustomer } from "@/hooks/account";
+import { useSessionVariables } from "@/store";
 
 const theme = extendTheme({
   fonts: {
@@ -28,9 +28,9 @@ function MyApp({ Component, pageProps }: any) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ChakraProvider theme={theme}>
-            <UserSession>
+            <Session>
               <Component {...pageProps} />
-            </UserSession>
+            </Session>
           </ChakraProvider>
         </Hydrate>
         <ReactQueryDevtools />
@@ -39,13 +39,15 @@ function MyApp({ Component, pageProps }: any) {
   );
 }
 
-function UserSession({ children }) {
-  const [accessToken, setAccessToken] = useState("");
-  useCustomer(accessToken);
+function Session({ children }: { children: React.ReactNode }) {
+  const { userToken, setUserToken, setCartId } = useSessionVariables();
 
   useEffect(() => {
     const userToken = localStorage.getItem("userAccessToken");
-    userToken && setAccessToken(userToken);
+    const cartId = localStorage.getItem("cartId");
+
+    userToken && setUserToken(userToken);
+    cartId && setCartId(cartId);
   }, []);
 
   return <>{children}</>;

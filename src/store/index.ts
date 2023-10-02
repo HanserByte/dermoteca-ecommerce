@@ -54,12 +54,16 @@ export const useCartProducts = create<CartProductsState>((set: any) => ({
   setPrice: (price: number) => set({ price }),
 }));
 
-type CustomerAccountState = {
-  user: Customer;
-  setUser: (user: any) => void;
+type SessionVariables = {
+  userToken: string;
+  setUserToken: (userToken: string) => void;
+  cartId: string;
+  setCartId: (cartId: string) => void;
 };
 
-export const useUserAccount = create<CustomerAccountState>((set: any) => ({
-  user: {},
-  setUser: (user: any) => set({ user }),
+export const useSessionVariables = create<SessionVariables>((set: any) => ({
+  userToken: "",
+  setUserToken: (userToken: string) => set({ userToken }),
+  cartId: "",
+  setCartId: (cartId: string) => set({ cartId }),
 }));
