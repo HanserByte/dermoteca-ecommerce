@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useCartDrawer, useCartProducts, useNavbar } from "@/store";
+import { useCartDrawer, useNavbar, useSessionVariables } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart } from "react-icons/ai";
 import { useCartActions, useCartLegacy } from "@/hooks/cart";
@@ -21,23 +21,26 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 
 import "swiper/css";
+import { useQueryClient } from "@tanstack/react-query";
+
 const ProductPage = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
   const sanityProductData = useSanityProduct(router.query.productHandle);
-  const { addToCart, cartId } = useCartLegacy();
+  const { addToCart } = useCartLegacy();
   const { addToCartMutation } = useCartActions();
   const { productRecommendations } = useProductRecommendations(
     sanityProductData?.data?.store?.gid
   );
   const { setOpen } = useCartDrawer();
   const { height } = useNavbar();
-  const { setProducts, setPrice } = useCartProducts();
   const [quantity, setQuantity] = useState(1);
   const { isMobile } = useMobileView();
+  const { cartId } = useSessionVariables();
 
   const hasMultipleImages =
     shopifyProductData?.data?.product?.images?.nodes.length > 1;
@@ -59,8 +62,7 @@ const ProductPage = () => {
       cartId,
       lines: [{ merchandiseId: productId, quantity }],
     });
-    // setProducts(response?.data?.cartLinesAdd?.cart?.lines?.nodes);
-    // setPrice(response?.data?.cartLinesAdd?.cart?.cost?.subtotalAmount?.amount);
+    queryClient.refetchQueries(["cart", cartId]);
     setOpen(true);
   };
 

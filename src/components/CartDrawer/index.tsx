@@ -1,5 +1,5 @@
 import { useCart, useCartLegacy } from "@/hooks/cart";
-import { useCartDrawer, useCartProducts, useSessionVariables } from "@/store";
+import { useCartDrawer, useSessionVariables } from "@/store";
 import {
   Drawer,
   DrawerBody,
@@ -26,7 +26,6 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const { open, setOpen } = useCartDrawer();
   const cartData = useCart();
   const { checkoutUrl, cartId } = useCartLegacy();
-  const { products, setProducts, setPrice, price } = useCartProducts();
   const btnRef = React.useRef();
   const { userToken } = useSessionVariables();
 
@@ -70,7 +69,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
                 Total:
               </Text>
               <Text fontSize="lg" fontWeight="600" w="100%" align="end">
-                ${price}
+                ${cartData?.data?.cost?.subtotalAmount?.amount}
               </Text>
             </Flex>
             <Button

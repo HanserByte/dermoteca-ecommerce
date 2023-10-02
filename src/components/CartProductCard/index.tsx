@@ -1,5 +1,5 @@
 import { useCartLegacy } from "@/hooks/cart";
-import { useCartProducts, useStore } from "@/store";
+import { useStore } from "@/store";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import {
   BaseCartLine,
@@ -17,22 +17,13 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const { cartId, removeFromCart, updateProduct } = useCartLegacy();
-  const { setProducts, setPrice } = useCartProducts();
 
   const handleRemoveFromCart = async () => {
     const response = await removeFromCart(cartId, product.id);
-    setProducts(response?.data?.cartLinesRemove?.cart?.lines?.nodes);
-    setPrice(
-      response?.data?.cartLinesRemove?.cart?.cost?.subtotalAmount?.amount
-    );
   };
 
   const handleQuantityChange = async (quantity: number) => {
     const response = await updateProduct(cartId, product.id, quantity);
-    setProducts(response?.data?.cartLinesUpdate?.cart?.lines?.nodes);
-    setPrice(
-      response?.data?.cartLinesUpdate?.cart?.cost?.subtotalAmount?.amount
-    );
   };
 
   return (

@@ -30,30 +30,6 @@ export const useCartDrawer = create<CartDrawerState>((set: any) => ({
   setOpen: (open: boolean) => set({ open }),
 }));
 
-type CartProductsState = {
-  products: {
-    merchandise: {
-      id: string;
-      price: { amount: string };
-      product: {
-        title: string;
-        handle: "string";
-        featuredImage: { url: string };
-      };
-    };
-    quantity: number;
-  }[];
-  setProducts: (products: any[]) => void;
-  price: number;
-  setPrice: (price: number) => void;
-};
-export const useCartProducts = create<CartProductsState>((set: any) => ({
-  products: [],
-  setProducts: (products: any[]) => set({ products }),
-  price: 0,
-  setPrice: (price: number) => set({ price }),
-}));
-
 type SessionVariables = {
   userToken: string;
   setUserToken: (userToken: string) => void;
