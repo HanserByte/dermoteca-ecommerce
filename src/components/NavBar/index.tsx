@@ -30,6 +30,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import PortableText from "../PortableText";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
+import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
 
 interface IContainerProps {
   dataN: any;
@@ -66,7 +67,10 @@ const NavBar = (props: IContainerProps) => {
   `;
 
   const { dataN } = props;
-  const { user } = useUserAccount();
+  const customerAccessTokenMutation = useCustomerAccessTokenCreate();
+  const accessToken =
+    customerAccessTokenMutation?.data?.customerAccessToken?.accessToken;
+  const customerData = useCustomer(accessToken);
   const [data, setData] = useState<IDataNav>();
   const { value } = useStore();
   const router = useRouter();
@@ -265,7 +269,11 @@ const NavBar = (props: IContainerProps) => {
                 if (item.title === "Perfil") {
                   return React.cloneElement(BtnComponent, {
                     onClick: () =>
-                      router.push(user?.id ? "/cuenta" : "/iniciar-sesion"),
+                      router.push(
+                        customerData?.data
+                          ? "/cuenta"
+                          : "/cuenta/iniciar-sesion"
+                      ),
                   });
                 }
 

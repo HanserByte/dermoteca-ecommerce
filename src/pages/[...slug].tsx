@@ -23,7 +23,9 @@ const Page = () => {
     async function fetchData() {
       if (slug != undefined && slug != "") {
         const query = `
-            *[_type == "pages" && slug.current == "${slug}"] {
+            *[_type == "pages" && slug.current == "${slug
+              ?.join(",")
+              ?.replace(",", "/")}"] {
               _id,
               title,
               isBlackNavBar,

@@ -7,7 +7,8 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../styles/globals.css";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useCustomer } from "@/hooks/account";
 
 const theme = extendTheme({
   fonts: {
@@ -27,13 +28,27 @@ function MyApp({ Component, pageProps }: any) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ChakraProvider theme={theme}>
-            <Component {...pageProps} />
+            <UserSession>
+              <Component {...pageProps} />
+            </UserSession>
           </ChakraProvider>
         </Hydrate>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );
+}
+
+function UserSession({ children }) {
+  const [accessToken, setAccessToken] = useState("");
+  useCustomer(accessToken);
+
+  useEffect(() => {
+    const userToken = localStorage.getItem("userAccessToken");
+    userToken && setAccessToken(userToken);
+  }, []);
+
+  return <>{children}</>;
 }
 
 export default MyApp;

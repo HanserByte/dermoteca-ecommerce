@@ -1,4 +1,5 @@
 import {
+  CustomerAccessTokenCreateInput,
   CustomerCreateInput,
   CustomerResetInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
@@ -52,4 +53,17 @@ export const useCustomer = (customerAccessToken: string) => {
   );
 
   return customerData;
+};
+
+export const useCustomerAccessTokenCreate = () => {
+  const customerAccessTokenMutation = useMutation(
+    (input: CustomerAccessTokenCreateInput) => {
+      const queryParamsStr = new URLSearchParams(input).toString();
+      return fetch(`/api/account/customer-access-token?${queryParamsStr}`, {
+        method: "POST",
+      }).then((res) => res.json());
+    }
+  );
+
+  return customerAccessTokenMutation;
 };

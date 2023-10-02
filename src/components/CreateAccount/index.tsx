@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { ICreateAccount } from "@/typesSanity/docs/createAccount";
 import ContainerDermo from "../Common/ContainerDermo";
 import { useCreateAccount } from "@/hooks/account";
+import Link from "next/link";
 
 interface IProps {
   data: ICreateAccount;
@@ -101,14 +102,12 @@ const CreateAccount = (props: IProps) => {
     }
   }, [createAccountMutation?.data?.accessToken]);
 
-  console.log(createAccountMutation?.data);
-
   return (
     <ContainerDermo
       pt={data.isPaddingTop ? "80px" : "0px"}
       pb={data.isPaddingBottom ? "37px" : "0px"}
     >
-      <Box maxW="400px" mx="auto">
+      <Box maxW="400px" mx="auto" py={20}>
         <Flex flex={100}>
           <Text
             textTransform="uppercase"
@@ -178,6 +177,7 @@ const CreateAccount = (props: IProps) => {
             </FormControl>
             <Stack direction="row" justifyContent="center">
               <Button
+                _hover={{ opacity: 0.7 }}
                 bg="#000"
                 borderRadius="35px"
                 border="1px solid black"
@@ -196,6 +196,9 @@ const CreateAccount = (props: IProps) => {
                 </Text>
               </Button>
               <Button
+                as={Link}
+                href="/cuenta/iniciar-sesion"
+                _hover={{ opacity: 0.7 }}
                 variant="outline"
                 borderRadius="35px"
                 border="1px solid black"
@@ -208,7 +211,7 @@ const CreateAccount = (props: IProps) => {
                   ml="25px"
                   mr="25px"
                 >
-                  Regresar
+                  Ya tengo una cuenta
                 </Text>
               </Button>
             </Stack>
