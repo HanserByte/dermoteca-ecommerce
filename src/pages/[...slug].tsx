@@ -87,7 +87,7 @@ const Page = () => {
         {data && <NavBar dataN={data} />}
         {data && (!data.isNavBarWhite || isMobile) && <ContainerNav />}
         {data &&
-          data.componentes.map((componente: any) => (
+          data?.componentes?.map((componente: any) => (
             <ComponentRenderer
               key={componente._id}
               component={componente._type}

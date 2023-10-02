@@ -19,7 +19,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CiHeart, CiUser } from "react-icons/ci";
 import { TfiSearch } from "react-icons/tfi";
 import { LogoCI, LogoHamburguerCI } from "../Icons";
-import { useNavbar, useStore } from "@/store";
+import { useNavbar, useStore, useUserAccount } from "@/store";
 import { IDataNav } from "@/typesSanity/docs/nav";
 import { client } from "@/lib/sanity.client";
 import React from "react";
@@ -66,6 +66,7 @@ const NavBar = (props: IContainerProps) => {
   `;
 
   const { dataN } = props;
+  const { user } = useUserAccount();
   const [data, setData] = useState<IDataNav>();
   const { value } = useStore();
   const router = useRouter();
@@ -243,6 +244,7 @@ const NavBar = (props: IContainerProps) => {
                 const BtnComponent = (
                   <button key={index} style={{ position: "relative" }}>
                     {item.title === "Carrito de compras" && <CartBadge />}
+
                     {iconArray[item.icono]({
                       style: {
                         width: item.icono === "TfiSearch" ? "25px" : "30px",
@@ -259,6 +261,14 @@ const NavBar = (props: IContainerProps) => {
                     )}
                   </button>
                 );
+
+                if (item.title === "Perfil") {
+                  return React.cloneElement(BtnComponent, {
+                    onClick: () =>
+                      router.push(user?.id ? "/cuenta" : "/iniciar-sesion"),
+                  });
+                }
+
                 if (item.title === "Carrito de compras") {
                   return <CartDrawer key={index} button={BtnComponent} />;
                 }
