@@ -76,8 +76,6 @@ const Page = () => {
     return <Loading />;
   }
 
-  console.log(data?.componentes);
-
   return (
     <>
       <Box

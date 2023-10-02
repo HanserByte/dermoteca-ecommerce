@@ -13,15 +13,17 @@ import {
 } from "@chakra-ui/react";
 
 import { useStore } from "@/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ICreateAccount } from "@/typesSanity/docs/createAccount";
 import ContainerDermo from "../Common/ContainerDermo";
+import { useCreateAccount } from "@/hooks/account";
 
 interface IProps {
   data: ICreateAccount;
 }
 
 const CreateAccount = (props: IProps) => {
+  const createAccountMutation = useCreateAccount();
   const { data } = props;
   const toast = useToast();
   const { value } = useStore();
@@ -72,7 +74,8 @@ const CreateAccount = (props: IProps) => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (formData.firstName.length === 0) {
       showAlert("El campo nombre es requerido.");
     } else if (formData.lastName.length === 0) {
@@ -84,9 +87,21 @@ const CreateAccount = (props: IProps) => {
     } else if (!formData.agreeToTerms) {
       showAlert("Debes aceptar los terminos y condiciones.");
     } else {
-      showSuccess("Gracias! Te contactaremos lo antes posible.");
+      createAccountMutation.mutate(formData);
+      showSuccess("Tu cuenta fue creada con exito!");
     }
   };
+
+  useEffect(() => {
+    if (createAccountMutation?.data?.accessToken) {
+      localStorage.setItem(
+        "accessToken",
+        createAccountMutation?.data?.accessToken
+      );
+    }
+  }, [createAccountMutation?.data?.accessToken]);
+
+  console.log(createAccountMutation?.data);
 
   return (
     <ContainerDermo

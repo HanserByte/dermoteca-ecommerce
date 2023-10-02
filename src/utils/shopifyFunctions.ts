@@ -8,6 +8,7 @@ import type {
 import {
   CreateCustomerMutation,
   CustomerLoginMutation,
+  CustomerLogoutMutation,
   CustomerQuery,
   SingleProductQuery,
 } from "./shopifyGraphql";
@@ -703,8 +704,20 @@ export async function createCustomer(input: CustomerCreateInput) {
 }
 
 export async function customerLogin(input: CustomerAccessTokenCreateInput) {
-  const data = await makeShopifyRequest(CustomerLoginMutation, { input });
-  return data;
+  const { customerAccessTokenCreate } = await makeShopifyRequest(
+    CustomerLoginMutation,
+    { input }
+  );
+
+  return customerAccessTokenCreate;
+}
+
+export async function customerLogout(customerAccessToken: string) {
+  const { customerAccessTokenDelete } = await makeShopifyRequest(
+    CustomerLogoutMutation,
+    { customerAccessToken }
+  );
+  return customerAccessTokenDelete;
 }
 
 export async function getCustomer(customerAccessToken: string) {
