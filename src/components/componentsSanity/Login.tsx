@@ -88,7 +88,6 @@ const Login = ({ data }: IProps) => {
             {data.title}
           </Text>
         </Flex>
-
         <Stack spacing={4}>
           <FormControl id="email">
             <FormLabel>Email</FormLabel>
@@ -113,14 +112,12 @@ const Login = ({ data }: IProps) => {
               onChange={handleInputChange}
             />
           </FormControl>
-
           <Stack direction="row" justifyContent="center">
             <Button
               _hover={{ opacity: 0.7 }}
               bg="#000"
               borderRadius="35px"
               border="1px solid black"
-              mb="5px"
               onClick={handleSubmit}
             >
               <Text
@@ -141,7 +138,6 @@ const Login = ({ data }: IProps) => {
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
-              mb="5px"
             >
               <Text
                 textTransform="uppercase"
@@ -154,6 +150,10 @@ const Login = ({ data }: IProps) => {
               </Text>
             </Button>
           </Stack>
+
+          <Button as={Link} href="/cuenta/recuperar" m="auto" variant="link">
+            Recuperar contraseña
+          </Button>
         </Stack>
       </Box>
     </ContainerDermo>

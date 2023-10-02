@@ -62,13 +62,12 @@ const ProductPage = () => {
       cartId,
       lines: [{ merchandiseId: productId, quantity }],
     });
+    setOpen(true);
   };
 
   useEffect(() => {
     if (addToCartMutation?.isLoading) return;
-
     queryClient.refetchQueries(["cart", cartId]);
-    setOpen(true);
   }, [addToCartMutation?.isLoading]);
 
   useEffect(() => {
