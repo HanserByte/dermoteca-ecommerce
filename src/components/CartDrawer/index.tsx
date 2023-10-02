@@ -68,7 +68,10 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
                 Total:
               </Text>
               <Text fontSize="lg" fontWeight="600" w="100%" align="end">
-                ${cartData?.data?.cost?.subtotalAmount?.amount}
+                $
+                {Number(cartData?.data?.cost?.subtotalAmount?.amount)?.toFixed(
+                  2
+                )}
               </Text>
             </Flex>
             <Button
