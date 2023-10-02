@@ -27,7 +27,6 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const cartData = useCart();
   const { checkoutUrl, cartId } = useCartLegacy();
   const btnRef = React.useRef();
-  const { userToken } = useSessionVariables();
 
   const handleCheckout = () => {
     checkoutUrl && router.push(checkoutUrl);

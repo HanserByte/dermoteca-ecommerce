@@ -1,5 +1,4 @@
 import { useSessionVariables } from "@/store";
-import { CartLineInput } from "@shopify/hydrogen-react/storefront-api-types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -89,7 +88,29 @@ export const useCartActions = () => {
     }
   );
 
-  return { addToCartMutation };
+  const removeFromCartMutation = useMutation(
+    // @ts-ignore
+    ({ cartId, productId }) => {
+      return fetch(
+        `/api/cart?action=remove-from-cart&cartId=${cartId}&productId=${productId}`
+      ).then((res) => res.json());
+    }
+  );
+
+  const updateCartProductMutation = useMutation(
+    // @ts-ignore
+    ({ cartId, productId, quantity }) => {
+      return fetch(
+        `/api/cart?action=update-product&cartId=${cartId}&productId=${productId}&quantity=${quantity}`
+      ).then((res) => res.json());
+    }
+  );
+
+  return {
+    addToCartMutation,
+    removeFromCartMutation,
+    updateCartProductMutation,
+  };
 };
 
 export const useCart = (cartId?: string) => {

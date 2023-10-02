@@ -31,7 +31,6 @@ const ProductPage = () => {
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
   const sanityProductData = useSanityProduct(router.query.productHandle);
-  const { addToCart } = useCartLegacy();
   const { addToCartMutation } = useCartActions();
   const { productRecommendations } = useProductRecommendations(
     sanityProductData?.data?.store?.gid
@@ -57,14 +56,20 @@ const ProductPage = () => {
 
     const productId =
       variantId?.id || sanityProductData?.data?.store?.variants[0]?.store?.gid;
+
     // @ts-ignore
     addToCartMutation.mutate({
       cartId,
       lines: [{ merchandiseId: productId, quantity }],
     });
+  };
+
+  useEffect(() => {
+    if (addToCartMutation?.isLoading) return;
+
     queryClient.refetchQueries(["cart", cartId]);
     setOpen(true);
-  };
+  }, [addToCartMutation?.isLoading]);
 
   useEffect(() => {
     setQuantity(1);

@@ -12,7 +12,9 @@ import {
   CustomerLoginMutation,
   CustomerLogoutMutation,
   CustomerQuery,
+  RemoveCartLinesMutation,
   SingleProductQuery,
+  UpdateCartLinesMutation,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -62,140 +64,6 @@ export const createCart = async (): Promise<object> => {
     // @ts-ignore
     return { error: error.message };
   }
-};
-
-/**
- * Removes one or more product lines from a user's shopping cart.
- * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
- * @param {string[]} lineIds - An array of line IDs representing the product lines to be removed from the cart.
- * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
- * The object typically includes information about the updated cart, such as checkout URL and cart lines.
- *
- * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
- *
- */
-export const removeProductFromCart = async (
-  cartId: string | null,
-  lineIds: string[]
-): Promise<object> => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CartLinesRemove($cartId: ID!, $lineIds:[ID!]!) {
-        cartLinesRemove(cartId: $cartId, lineIds: $lineIds){
-          cart {
-            totalQuantity
-            cost {
-              subtotalAmount {
-                amount
-              }
-            } 
-            checkoutUrl
-            lines (first: 30) {
-              nodes{
-                merchandise {
-                  ... on ProductVariant {
-                      id
-                      selectedOptions {
-                        value
-                      }
-                      product {
-                        title
-                        handle
-                        featuredImage {
-                          url
-                        }
-                      }
-                      price {
-                        amount
-                      }
-                    }
-                  }
-                  quantity
-                }
-              }
-            }
-        }
-    }
-      `,
-      variables: {
-        cartId,
-        lineIds,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Updates the product lines in a user's shopping cart.
- * @param {string | null} cartId - The ID of the user's shopping cart, or null if no cart is available.
- * @param {CartLineUpdateInput[]} lines - An array of objects representing the updated product lines to be applied to the cart.
- * @returns {Promise<object>} A Promise that resolves to an object containing the result of the cart update operation.
- * The object typically includes information about the updated cart, such as checkout URL and cart lines.
- *
- * @throws {Error} Throws an error if there is a network issue or if the response from the API is not in JSON format.
- */
-export const updateProduct = async (
-  cartId: string | null,
-  lines: CartLineUpdateInput[]
-): Promise<object> => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CartLinesUpdate($cartId: ID!, $lines:[CartLineUpdateInput!]!) {
-        cartLinesUpdate(cartId: $cartId, lines: $lines) {
-          cart {
-            totalQuantity
-            cost {
-              subtotalAmount {
-                amount
-              }
-            } 
-            checkoutUrl
-            lines (first: 30) {
-              nodes{
-                id
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    selectedOptions {
-                      value
-                    }
-                    product {
-                      title
-                      handle
-                      featuredImage {
-                        url
-                      }
-                    }
-                    price {
-                      amount
-                    }
-                  }
-                }
-                quantity
-              }
-            }
-          }
-        }
-      }
-      `,
-      variables: {
-        cartId,
-        lines,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
 };
 
 /**
@@ -280,160 +148,6 @@ export const getRecommendedProducts = async (productId: string | null) => {
       `,
       variables: {
         productId,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Creates a customer access token using the provided email and password for authentication.
- * @param {string} email - The email address of the customer.
- * @param {string} password - The password for the customer's account.
- * @returns {Promise<object>} A promise that resolves to the response data from the server, including the access token and expiration information.
- * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
- */
-export const customerAccesTokenCreate = async (
-  email: string,
-  password: string
-) => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CustomerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
-        customerAccessTokenCreate(input: $input) {
-          customerAccessToken {
-              accessToken
-              expiresAt
-          }
-          customerUserErrors {
-              message
-          }
-        }
-      }
-      `,
-      variables: {
-        input: {
-          email,
-          password,
-        },
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Retrieves customer information using a customer access token.
- * @param {string} customerAccessToken - The customer access token used for authentication and identification.
- * @returns {Promise<object>} A promise that resolves to the customer's information fetched from the server.
- * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
- */
-export const getCustomerByAccessToken = async (customerAccesToken: string) => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      query GetCustomer() {
-        customer(customerAccessToken: ${customerAccesToken}) {
-          id
-          firstName
-          lastName
-          acceptsMarketing
-          email
-          phone
-          defaultAddress {
-              address1
-              address1
-              city
-              country
-              province
-              zip
-          }
-          metafield(namespace: "wishlist", key: "wishlist_ids") {
-              id
-              value
-          }
-        }
-      }
-      `,
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Reset a customer's password using a reset URL.
- * @param {string} password - The new password to set for the customer.
- * @param {string} resetUrl - The URL containing the reset token for the customer.
- * @returns {Promise<Object>} A promise that resolves to the response data from the API.
- * @throws {Error} If there is an issue with the fetch request or the response.
- */
-export const resetCustomerPasswordByUrl = async (
-  password: string,
-  resetUrl: any
-) => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CustomerResetByUrl($password: String!, $resetUrl: URL!) {
-        customerResetByUrl(password: $password, resetUrl: $resetUrl) {
-            customerAccessToken {
-                accessToken
-                expiresAt
-            }
-            customerUserErrors {
-                code
-                field
-                message
-            }
-        }
-    }
-      `,
-      variables: {
-        password,
-        resetUrl,
-      },
-    }),
-  });
-  const data = await response.json();
-  return data;
-};
-
-/**
- * Initiates the account recovery process for a customer using their email address.
- * @param {string} email - The email address of the customer requesting account recovery.
- * @returns {Promise<object>} A promise that resolves to the response data from the server, including potential error messages.
- * @throws {Error} Throws an error if the network request fails or if the response is not in JSON format.
- */
-export const customerRecover = async (email: string) => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      mutation CustomerRecover($email: String!) {
-        customerRecover(email: $email) {
-          customerUserErrors {
-            message
-          }
-        }
-      }
-      `,
-      variables: {
-        email,
       },
     }),
   });
@@ -586,6 +300,27 @@ export async function addProductToCart(cartId: string, lines: CartLineInput[]) {
   });
 
   return cartLinesAdd;
+}
+
+export async function removeProductFromCart(cartId: string, lineIds: string[]) {
+  const { cartLinesRemove } = await makeShopifyRequest(
+    RemoveCartLinesMutation,
+    { cartId, lineIds }
+  );
+
+  return cartLinesRemove;
+}
+
+export async function updateCartProducts(
+  cartId: string,
+  lines: CartLineUpdateInput[]
+) {
+  const { cartLinesUpdate } = await makeShopifyRequest(
+    UpdateCartLinesMutation,
+    { cartId, lines }
+  );
+
+  return cartLinesUpdate;
 }
 
 export async function getShopifyProduct(handle: string) {

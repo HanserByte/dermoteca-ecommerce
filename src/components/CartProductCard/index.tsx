@@ -1,12 +1,13 @@
-import { useCartLegacy } from "@/hooks/cart";
+import { useCartActions, useCartLegacy } from "@/hooks/cart";
 import { useStore } from "@/store";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import {
   BaseCartLine,
   Product,
 } from "@shopify/hydrogen-react/storefront-api-types";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { TbTrash } from "react-icons/tb";
 
 interface ICartProductCardProps {
@@ -14,17 +15,35 @@ interface ICartProductCardProps {
 }
 
 const CartProductCard = ({ product }: ICartProductCardProps) => {
+  const queryClient = useQueryClient();
   const { value } = useStore();
+  const { removeFromCartMutation, updateCartProductMutation } =
+    useCartActions();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const { cartId, removeFromCart, updateProduct } = useCartLegacy();
+  const { cartId, updateProduct } = useCartLegacy();
 
   const handleRemoveFromCart = async () => {
-    const response = await removeFromCart(cartId, product.id);
+    // @ts-ignore
+    removeFromCartMutation.mutate({ cartId, productId: product.id });
   };
 
   const handleQuantityChange = async (quantity: number) => {
-    const response = await updateProduct(cartId, product.id, quantity);
+    // @ts-ignore
+    updateCartProductMutation.mutate({
+      cartId,
+      productId: product.id,
+      quantity,
+    });
   };
+
+  useEffect(() => {
+    if (
+      removeFromCartMutation?.isLoading ||
+      updateCartProductMutation?.isLoading
+    )
+      return;
+    queryClient.refetchQueries(["cart", cartId]);
+  }, [removeFromCartMutation?.isLoading, updateCartProductMutation?.isLoading]);
 
   return (
     <Flex gap={2} alignItems="center">

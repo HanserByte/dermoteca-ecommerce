@@ -3,7 +3,7 @@ import {
   createCart,
   getCart,
   removeProductFromCart,
-  updateProduct,
+  updateCartProducts,
 } from "@/utils/shopifyFunctions";
 import { NextRequest } from "next/server";
 
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     case "update-product":
       lines = [{ id: merchandiseId, quantity: Number(quantity) }];
       // @ts-ignore
-      response = await updateProduct(cartId, lines);
+      response = await updateCartProducts(cartId, lines);
       break;
     default:
       break;
