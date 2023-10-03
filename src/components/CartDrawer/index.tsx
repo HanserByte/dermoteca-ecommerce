@@ -13,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import CartProductCard from "../CartProductCard";
 import { BaseCartLine } from "@shopify/hydrogen-react/storefront-api-types";
 
