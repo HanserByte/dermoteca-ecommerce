@@ -30,7 +30,7 @@ const BreadCrumbs = ({
       </BreadcrumbItem>
 
       <BreadcrumbItem>
-        <BreadcrumbLink as={Link} href="/collections/all">
+        <BreadcrumbLink as={Link} href="/colecciones/todas">
           Colecciones
         </BreadcrumbLink>
       </BreadcrumbItem>
@@ -38,7 +38,7 @@ const BreadCrumbs = ({
       <BreadcrumbItem>
         <BreadcrumbLink
           as={Link}
-          href={`/collections/${productCollection?.handle}`}
+          href={`/colecciones/${productCollection?.handle}`}
         >
           {productCollection?.title}
         </BreadcrumbLink>

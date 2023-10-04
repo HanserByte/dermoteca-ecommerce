@@ -17,7 +17,7 @@ const ProductCard = (props: ProductCardProps) => {
   const { prefetchProductPage } = usePrefetch();
 
   return (
-    <Link href={`/products/${props.handle}`} style={{ width: "100%" }}>
+    <Link href={`/productos/${props.handle}`} style={{ width: "100%" }}>
       <Flex direction="column">
         <AspectRatio
           ratio={1 / 1}

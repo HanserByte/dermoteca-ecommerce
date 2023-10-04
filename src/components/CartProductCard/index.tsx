@@ -49,7 +49,7 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
     <Flex gap={2} alignItems="center">
       <Box
         as={Link}
-        href={`/products/${product?.merchandise?.product?.handle}`}
+        href={`/productos/${product?.merchandise?.product?.handle}`}
         w={`${isMobile ? "25%" : "35%"}`}
       >
         <img

@@ -43,7 +43,7 @@ const CollectionsSelector = () => {
               variant="ghost"
               size="sm"
               as={Link}
-              href={`/collections/all`}
+              href={`/colecciones/todas`}
             >
               Todas las colecciones
             </Button>
@@ -64,7 +64,7 @@ const CollectionsSelector = () => {
                     variant="ghost"
                     size="sm"
                     as={Link}
-                    href={`/collections/${collection.handle}`}
+                    href={`/colecciones/${collection.handle}`}
                   >
                     {collection.title}
                   </Button>
