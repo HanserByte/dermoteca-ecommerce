@@ -13,10 +13,9 @@ export async function POST(request: Request) {
 
   const updatedCustomerInput = {
     id: data?.id,
-    firstName: "Joaquin",
     metafields: [
       {
-        id: data?.metafieldId,
+        ...(data?.metafieldId && { id: data?.metafieldId }),
         key: "wishlist_ids",
         namespace: "wishlist",
         value: data?.updatedWishlist,

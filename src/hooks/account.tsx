@@ -126,7 +126,7 @@ export const useUpdateProductWishlistMutation = () => {
           queryClient.setQueryData(["wishlist"], (products: any) => {
             const productsArrayCopy = { ...products };
 
-            productsArrayCopy.nodes.push(node);
+            productsArrayCopy?.nodes?.push(node);
             return productsArrayCopy;
           });
         }
