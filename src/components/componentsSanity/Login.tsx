@@ -88,73 +88,75 @@ const Login = ({ data }: IProps) => {
             {data.title}
           </Text>
         </Flex>
-        <Stack spacing={4}>
-          <FormControl id="email">
-            <FormLabel>Email</FormLabel>
-            <Input
-              placeholder="Email"
-              border="1px solid #000"
-              borderRadius="35px"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <FormControl id="password">
-            <FormLabel>Contraseña</FormLabel>
-            <Input
-              type="password"
-              placeholder="Contraseña"
-              border="1px solid #000"
-              borderRadius="35px"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <Stack direction="row" justifyContent="center">
-            <Button
-              _hover={{ opacity: 0.7 }}
-              bg="#000"
-              borderRadius="35px"
-              border="1px solid black"
-              onClick={handleSubmit}
-            >
-              <Text
-                textTransform="uppercase"
-                color="white"
-                fontWeight={400}
-                fontSize="13px"
-                ml="25px"
-                mr="25px"
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={4}>
+            <FormControl id="email">
+              <FormLabel>Email</FormLabel>
+              <Input
+                placeholder="Email"
+                border="1px solid #000"
+                borderRadius="35px"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+            </FormControl>
+            <FormControl id="password">
+              <FormLabel>Contraseña</FormLabel>
+              <Input
+                type="password"
+                placeholder="Contraseña"
+                border="1px solid #000"
+                borderRadius="35px"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+            </FormControl>
+            <Stack direction="row" justifyContent="center">
+              <Button
+                _hover={{ opacity: 0.7 }}
+                bg="#000"
+                borderRadius="35px"
+                border="1px solid black"
+                type="submit"
               >
-                Iniciar sesion
-              </Text>
-            </Button>
-            <Button
-              as={Link}
-              href="/cuenta/creacion-de-cuenta"
-              _hover={{ opacity: 0.7 }}
-              variant="outline"
-              borderRadius="35px"
-              border="1px solid black"
-            >
-              <Text
-                textTransform="uppercase"
-                fontWeight={400}
-                fontSize="13px"
-                ml="25px"
-                mr="25px"
+                <Text
+                  textTransform="uppercase"
+                  color="white"
+                  fontWeight={400}
+                  fontSize="13px"
+                  ml="25px"
+                  mr="25px"
+                >
+                  Iniciar sesion
+                </Text>
+              </Button>
+              <Button
+                as={Link}
+                href="/cuenta/creacion-de-cuenta"
+                _hover={{ opacity: 0.7 }}
+                variant="outline"
+                borderRadius="35px"
+                border="1px solid black"
               >
-                Crear una cuenta
-              </Text>
+                <Text
+                  textTransform="uppercase"
+                  fontWeight={400}
+                  fontSize="13px"
+                  ml="25px"
+                  mr="25px"
+                >
+                  Crear una cuenta
+                </Text>
+              </Button>
+            </Stack>
+
+            <Button as={Link} href="/cuenta/recuperar" m="auto" variant="link">
+              Recuperar contraseña
             </Button>
           </Stack>
-
-          <Button as={Link} href="/cuenta/recuperar" m="auto" variant="link">
-            Recuperar contraseña
-          </Button>
-        </Stack>
+        </form>
       </Box>
     </ContainerDermo>
   );

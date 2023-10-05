@@ -4,7 +4,7 @@ import {
   useUserWishlist,
 } from "@/hooks/account";
 import { useMobileView } from "@/hooks/responsive";
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Grid, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ProductCard from "../ProductCard";
 import { Product } from "@shopify/hydrogen-react/storefront-api-types";

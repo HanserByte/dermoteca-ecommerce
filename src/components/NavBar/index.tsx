@@ -343,23 +343,49 @@ const NavBar = (props: IContainerProps) => {
             flex={1}
             justifyContent="flex-end"
             id="mobile"
+            position="relative"
           >
-            {data?.links_derecha_mobile.map((item, index) => (
-              <React.Fragment key={index}>
-                {item.title === "Carrito de compras" && <CartBadge />}
-                {iconArray[item.icono]({
-                  style: {
-                    width: item.icono === "TfiSearch" ? "25px" : "30px",
-                    height: item.icono === "TfiSearch" ? "25px" : "30px",
-                    cursor: "pointer",
-                    color: "black",
-                  },
-                })}
-                {index !== data.links_derecha_mobile.length - 1 && (
-                  <Box mx="3px" />
-                )}
-              </React.Fragment>
-            ))}
+            {data?.links_derecha_mobile.map((item, index) => {
+              const BtnComponent = (
+                <button key={index} style={{ position: "relative" }}>
+                  <CartBadge />
+
+                  {iconArray[item.icono]({
+                    style: {
+                      width: item.icono === "TfiSearch" ? "25px" : "30px",
+                      height: item.icono === "TfiSearch" ? "25px" : "30px",
+                      cursor: "pointer",
+                      color: "black",
+                    },
+                  })}
+                  {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
+                </button>
+              );
+
+              if (item.title === "Compras") {
+                return (
+                  <>
+                    <CartDrawer key={index} button={BtnComponent} />
+                    {item.title === "Compras" && <CartBadge />}
+                  </>
+                );
+              }
+              return (
+                <React.Fragment key={index}>
+                  {iconArray[item.icono]({
+                    style: {
+                      width: item.icono === "TfiSearch" ? "25px" : "30px",
+                      height: item.icono === "TfiSearch" ? "25px" : "30px",
+                      cursor: "pointer",
+                      color: "black",
+                    },
+                  })}
+                  {index !== data.links_derecha_mobile.length - 1 && (
+                    <Box mx="3px" />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </Flex>
         )}
 

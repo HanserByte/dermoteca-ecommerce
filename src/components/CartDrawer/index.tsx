@@ -25,7 +25,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter();
   const { open, setOpen } = useCartDrawer();
   const cartData = useCart();
-  const { checkoutUrl, cartId } = useCartLegacy();
+  const { checkoutUrl } = useCartLegacy();
   const btnRef = React.useRef();
 
   const handleCheckout = () => {
@@ -38,6 +38,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
         React.cloneElement(button, {
           ref: btnRef,
           onClick: () => setOpen(!open),
+          color: "black",
         })}
       <Drawer
         size="sm"

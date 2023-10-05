@@ -1,10 +1,7 @@
 import { useCartActions, useCartLegacy } from "@/hooks/cart";
-import { useStore } from "@/store";
+import { useCartDrawer, useStore } from "@/store";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
-import {
-  BaseCartLine,
-  Product,
-} from "@shopify/hydrogen-react/storefront-api-types";
+import { BaseCartLine } from "@shopify/hydrogen-react/storefront-api-types";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -15,6 +12,7 @@ interface ICartProductCardProps {
 }
 
 const CartProductCard = ({ product }: ICartProductCardProps) => {
+  const { setOpen } = useCartDrawer();
   const queryClient = useQueryClient();
   const { value } = useStore();
   const { removeFromCartMutation, updateCartProductMutation } =
@@ -48,6 +46,7 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
   return (
     <Flex gap={2} alignItems="center">
       <Box
+        onClick={() => setOpen(false)}
         as={Link}
         href={`/productos/${product?.merchandise?.product?.handle}`}
         w={`${isMobile ? "25%" : "35%"}`}
