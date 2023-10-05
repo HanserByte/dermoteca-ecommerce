@@ -109,6 +109,34 @@ const ProductPage = () => {
     );
   };
 
+  const handleRemoveWishlistItem = () => {
+    const { id, metafield } = customerData?.data?.customer;
+    const wishlistArray = metafield?.value?.split("-,-");
+    const filteredArray = wishlistArray?.filter(
+      (product: any) =>
+        product !== shopifyProductData?.data?.product?.title.toLowerCase()
+    );
+    const wishlistData = filteredArray?.join("-,-");
+
+    updateProductWishlistMutation.mutate(
+      // @ts-ignore
+      {
+        id,
+        metafield: {
+          id: metafield?.id,
+          value: wishlistData,
+        },
+        shopifyProductData: shopifyProductData?.data?.product,
+        action: "remove",
+      },
+      {
+        onSuccess: () => {
+          queryClient.resetQueries(["customer"]);
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     setWishlistProducts(customerData?.data?.customer?.metafield?.value);
   }, [customerData?.data?.customer?.metafield?.value]);
@@ -237,6 +265,7 @@ const ProductPage = () => {
             >
               <Flex alignItems="center" gap={3}>
                 <Button
+                  disabled={productWishlistData?.isLoading}
                   onClick={() =>
                     setQuantity(quantity - 1 > 0 ? quantity - 1 : 1)
                   }
@@ -252,6 +281,7 @@ const ProductPage = () => {
                   {quantity}
                 </Text>
                 <Button
+                  disabled={productWishlistData?.isLoading}
                   onClick={() => setQuantity(quantity + 1)}
                   bg="#00AA4F"
                   size="sm"
@@ -286,6 +316,7 @@ const ProductPage = () => {
               )}
               {isWishlisted && (
                 <Button
+                  onClick={handleRemoveWishlistItem}
                   p={0}
                   bg="transparent"
                   color={COLORS.GREEN}

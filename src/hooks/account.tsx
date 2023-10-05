@@ -95,7 +95,7 @@ export const useUpdateProductWishlistMutation = () => {
   // @ts-ignore
   const updateProductWishlistMutation = useMutation(
     // @ts-ignore
-    ({ id, metafield, shopifyProductData }) => {
+    ({ id, metafield }) => {
       return fetch(`/api/account/customer`, {
         method: "POST",
         body: JSON.stringify({
@@ -111,12 +111,25 @@ export const useUpdateProductWishlistMutation = () => {
         queryClient.cancelQueries(["wishlist"]);
         const node = data?.shopifyProductData;
 
-        queryClient.setQueryData(["wishlist"], (products: any) => {
-          const productsArrayCopy = { ...products };
+        if (data.action === "remove") {
+          queryClient.setQueryData(["wishlist"], (products: any) => {
+            const productsArrayCopy = { ...products };
 
-          productsArrayCopy.nodes.push(node);
-          return productsArrayCopy;
-        });
+            productsArrayCopy.nodes = productsArrayCopy.nodes.filter(
+              (product: any) => product.id !== node.id
+            );
+            return productsArrayCopy;
+          });
+        }
+
+        if (data.action !== "remove") {
+          queryClient.setQueryData(["wishlist"], (products: any) => {
+            const productsArrayCopy = { ...products };
+
+            productsArrayCopy.nodes.push(node);
+            return productsArrayCopy;
+          });
+        }
       },
     }
   );
