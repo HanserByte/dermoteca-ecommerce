@@ -53,7 +53,7 @@ const TypeA = (props: IContainerProps) => {
         p="4"
         pl={isMobile ? "" : "145px"}
         mt={isMobile ? "101px" : "180px"}
-        zIndex={99999}
+        zIndex={100}
       >
         <Flex
           flex={100}

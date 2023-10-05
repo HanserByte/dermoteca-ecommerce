@@ -48,7 +48,8 @@ const BasicImageText = (props: ContainerProps) => {
       />
       <Box
         position="absolute"
-        top="0"
+        top="50%"
+        transform="translateY(-50%)"
         left={isMobile ? "5px" : "0"}
         width={isMobile ? "100%" : "50%"}
         maxHeight={isMobile ? "100%" : "50vh"}

@@ -27,7 +27,8 @@ const TypeC = (props: IContainerProps) => {
   };
 
   const handleOpen = () => {
-    const uri = data.linkDetail === undefined ? " " : data?.linkDetail?.dataUrl?.url;
+    const uri =
+      data.linkDetail === undefined ? " " : data?.linkDetail?.dataUrl?.url;
     const newURL = "/" + uri;
     window.location.href = newURL;
   };
@@ -58,7 +59,7 @@ const TypeC = (props: IContainerProps) => {
           height="100%"
           overflow="hidden"
           p="4"
-          zIndex={99999}
+          zIndex={100}
         >
           {!isMobile && (
             <Flex
@@ -122,7 +123,7 @@ const TypeC = (props: IContainerProps) => {
           height="100%"
           overflow="hidden"
           p="4"
-          zIndex={99999}
+          zIndex={100}
         >
           <Flex
             flexDir="column"

@@ -173,7 +173,7 @@ const NavBar = (props: IContainerProps) => {
       <Flex
         px={4}
         h="86px"
-        bg={isMobile || dataN.isBlackNavBar ? "#fff" : ""}
+        bg={isMobile || dataN.isBlackNavBar || isScrolled ? "#fff" : ""}
         alignItems="center"
         justifyContent="space-between"
         pt="20px"
