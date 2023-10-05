@@ -71,6 +71,11 @@ fragment productFragment on Product {
       altText
     }
   }
+  priceRange {
+    maxVariantPrice{
+      amount
+    }
+  }
   variants(first: 10) {
     nodes {
       id
@@ -184,6 +189,17 @@ export const SingleProductQuery = `#graphql
       }
     }
   }
+`;
+
+export const WishlistProductsQuery = `#graphql
+  query AllProductsQuery($query: String) {
+    products (first: 50, query: $query) {
+      nodes {
+        ...productFragment
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
 `;
 
 export const CreateCustomerMutation = `#graphql

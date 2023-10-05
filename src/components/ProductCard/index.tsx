@@ -5,7 +5,7 @@ import { useStore } from "@/store";
 import { usePrefetch } from "@/hooks/products";
 
 interface ProductCardProps {
-  imageSrc: string;
+  imageSrc: string | undefined;
   title: string;
   price: number;
   handle: string;

@@ -15,6 +15,7 @@ import {
   RemoveCartLinesMutation,
   SingleProductQuery,
   UpdateCartLinesMutation,
+  WishlistProductsQuery,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -355,4 +356,11 @@ export async function getCustomer(customerAccessToken: string) {
     customerAccessToken,
   });
   return data;
+}
+
+export async function getWishlistProducts(query: string) {
+  const { products } = await makeShopifyRequest(WishlistProductsQuery, {
+    query,
+  });
+  return products;
 }

@@ -68,8 +68,9 @@ const NavBar = (props: IContainerProps) => {
 
   const { dataN } = props;
   const customerAccessTokenMutation = useCustomerAccessTokenCreate();
-  const accessToken =
-    customerAccessTokenMutation?.data?.customerAccessToken?.accessToken;
+  const [accessToken, setaccessToken] = useState(
+    customerAccessTokenMutation?.data?.customerAccessToken?.accessToken
+  );
   const customerData = useCustomer(accessToken);
   const [data, setData] = useState<IDataNav>();
   const { value } = useStore();
@@ -115,6 +116,13 @@ const NavBar = (props: IContainerProps) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const userAccessToken = localStorage.getItem("userAccessToken");
+    if (!accessToken && userAccessToken) {
+      setaccessToken(userAccessToken);
+    }
   }, []);
 
   useEffect(() => {
@@ -265,6 +273,12 @@ const NavBar = (props: IContainerProps) => {
                     )}
                   </button>
                 );
+
+                if (item.title === "Favoritos") {
+                  return React.cloneElement(BtnComponent, {
+                    onClick: () => router.push("/cuenta/favoritos"),
+                  });
+                }
 
                 if (item.title === "Perfil") {
                   return React.cloneElement(BtnComponent, {

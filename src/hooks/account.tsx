@@ -67,3 +67,24 @@ export const useCustomerAccessTokenCreate = () => {
 
   return customerAccessTokenMutation;
 };
+
+export const useUserWishlist = (wihslistProducts: string) => {
+  const productWishlistData = useQuery(
+    ["wishlist"],
+    () => {
+      return fetch(
+        `/api/account/wishlist?products=${encodeURIComponent(
+          wihslistProducts
+        )}`,
+        {
+          method: "GET",
+        }
+      ).then((res) => res.json());
+    },
+    {
+      enabled: !!wihslistProducts,
+    }
+  );
+
+  return productWishlistData;
+};
