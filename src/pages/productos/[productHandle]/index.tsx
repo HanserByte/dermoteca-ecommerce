@@ -5,8 +5,8 @@ import NavBar from "@/components/NavBar";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useCartDrawer, useNavbar, useSessionVariables } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
-import { AiOutlineHeart } from "react-icons/ai";
-import { useCartActions, useCartLegacy } from "@/hooks/cart";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useCartActions } from "@/hooks/cart";
 import {
   useProductRecommendations,
   useSanityProduct,
@@ -22,6 +22,12 @@ import { Thumbs } from "swiper/modules";
 
 import "swiper/css";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  useCustomer,
+  useCustomerAccessTokenCreate,
+  useUserWishlist,
+} from "@/hooks/account";
+import { COLORS } from "@/utils/constants";
 
 const ProductPage = () => {
   const queryClient = useQueryClient();
@@ -40,6 +46,18 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const { isMobile } = useMobileView();
   const { cartId } = useSessionVariables();
+
+  const customerAccessTokenMutation = useCustomerAccessTokenCreate();
+  const accessToken =
+    customerAccessTokenMutation?.data?.customerAccessToken?.accessToken;
+  const customerData = useCustomer(accessToken);
+  const productWishlistData = useUserWishlist(
+    customerData?.data?.customer?.metafield?.value
+  );
+
+  const isWishlisted = productWishlistData?.data?.nodes.some(
+    (product) => product.handle === router.query.productHandle
+  );
 
   const hasMultipleImages =
     shopifyProductData?.data?.product?.images?.nodes.length > 1;
@@ -174,7 +192,6 @@ const ProductPage = () => {
             />
 
             {/* Variant options */}
-
             <Box w="full">
               {hasOptions && (
                 <ProductVariantSelector
@@ -226,14 +243,26 @@ const ProductPage = () => {
                 AGREGAR AL CARRITO
               </Button>
 
-              <Button
-                p={0}
-                bg="transparent"
-                color="grey"
-                _hover={{ color: "#00AA4F" }}
-              >
-                <AiOutlineHeart size={40} />
-              </Button>
+              {!isWishlisted && (
+                <Button
+                  p={0}
+                  bg="transparent"
+                  color="grey"
+                  _hover={{ color: COLORS.GREEN }}
+                >
+                  <AiOutlineHeart size={40} />
+                </Button>
+              )}
+              {isWishlisted && (
+                <Button
+                  p={0}
+                  bg="transparent"
+                  color={COLORS.GREEN}
+                  _hover={{ opacity: 0.8 }}
+                >
+                  <AiFillHeart size={40} />
+                </Button>
+              )}
             </Flex>
 
             {hasAccordions && (
