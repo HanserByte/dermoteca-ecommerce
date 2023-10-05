@@ -3,7 +3,7 @@ import {
   CustomerCreateInput,
   CustomerResetInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateAccount = () => {
   const createAccountMutation = useMutation((input: CustomerCreateInput) => {
@@ -68,13 +68,13 @@ export const useCustomerAccessTokenCreate = () => {
   return customerAccessTokenMutation;
 };
 
-export const useUserWishlist = (wihslistProducts: string) => {
+export const useUserWishlist = (wishlistProducts: string) => {
   const productWishlistData = useQuery(
     ["wishlist"],
     () => {
       return fetch(
         `/api/account/wishlist?products=${encodeURIComponent(
-          wihslistProducts
+          wishlistProducts
         )}`,
         {
           method: "GET",
@@ -82,9 +82,44 @@ export const useUserWishlist = (wihslistProducts: string) => {
       ).then((res) => res.json());
     },
     {
-      enabled: !!wihslistProducts,
+      enabled: !!wishlistProducts,
     }
   );
 
   return productWishlistData;
+};
+
+export const useUpdateProductWishlistMutation = () => {
+  const queryClient = useQueryClient();
+
+  // @ts-ignore
+  const updateProductWishlistMutation = useMutation(
+    // @ts-ignore
+    ({ id, metafield, shopifyProductData }) => {
+      return fetch(`/api/account/customer`, {
+        method: "POST",
+        body: JSON.stringify({
+          id,
+          metafieldId: metafield.id,
+          updatedWishlist: metafield.value,
+        }),
+      }).then((res) => res.json());
+    },
+    {
+      // @ts-ignore
+      onMutate: (data: any) => {
+        queryClient.cancelQueries(["wishlist"]);
+        const node = data?.shopifyProductData;
+
+        queryClient.setQueryData(["wishlist"], (products: any) => {
+          const productsArrayCopy = { ...products };
+
+          productsArrayCopy.nodes.push(node);
+          return productsArrayCopy;
+        });
+      },
+    }
+  );
+
+  return updateProductWishlistMutation;
 };

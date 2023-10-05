@@ -23,6 +23,7 @@ import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  useUpdateProductWishlistMutation,
   useCustomer,
   useCustomerAccessTokenCreate,
   useUserWishlist,
@@ -46,16 +47,17 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const { isMobile } = useMobileView();
   const { cartId } = useSessionVariables();
-
   const customerAccessTokenMutation = useCustomerAccessTokenCreate();
   const accessToken =
     customerAccessTokenMutation?.data?.customerAccessToken?.accessToken;
   const customerData = useCustomer(accessToken);
-  const productWishlistData = useUserWishlist(
+  const [wishlistProducts, setWishlistProducts] = useState(
     customerData?.data?.customer?.metafield?.value
   );
+  const productWishlistData = useUserWishlist(wishlistProducts);
+  const updateProductWishlistMutation = useUpdateProductWishlistMutation();
 
-  const isWishlisted = productWishlistData?.data?.nodes.some(
+  const isWishlisted = productWishlistData?.data?.nodes?.some(
     (product) => product.handle === router.query.productHandle
   );
 
@@ -82,6 +84,34 @@ const ProductPage = () => {
     });
     setOpen(true);
   };
+
+  const handleWishlistItem = () => {
+    const { id, metafield } = customerData?.data?.customer;
+    const initialFieldData = metafield?.value ? metafield?.value + "-,-" : "";
+
+    updateProductWishlistMutation.mutate(
+      // @ts-ignore
+      {
+        id,
+        metafield: {
+          id: metafield?.id,
+          value:
+            initialFieldData +
+            shopifyProductData?.data?.product?.title?.toLowerCase(),
+        },
+        shopifyProductData: shopifyProductData?.data?.product,
+      },
+      {
+        onSuccess: () => {
+          queryClient.resetQueries(["customer"]);
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    setWishlistProducts(customerData?.data?.customer?.metafield?.value);
+  }, [customerData?.data?.customer?.metafield?.value]);
 
   useEffect(() => {
     if (addToCartMutation?.isLoading) return;
@@ -245,6 +275,7 @@ const ProductPage = () => {
 
               {!isWishlisted && (
                 <Button
+                  onClick={handleWishlistItem}
                   p={0}
                   bg="transparent"
                   color="grey"

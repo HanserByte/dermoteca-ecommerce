@@ -12,6 +12,7 @@ import {
   CustomerLoginMutation,
   CustomerLogoutMutation,
   CustomerQuery,
+  CustomerUpdateMutation,
   RemoveCartLinesMutation,
   SingleProductQuery,
   UpdateCartLinesMutation,
@@ -289,6 +290,39 @@ export const makeShopifyRequest = async (
   return json.data;
 };
 
+export const makeShopifyAdminRequest = async (
+  query: string,
+  variables: Record<string, unknown> = {}
+) => {
+  const ADMIN_ENDPOINT =
+    "https://6a8516-2.myshopify.com/admin/api/2023-07/graphql.json";
+  const HEADERS = {
+    "Content-Type": "application/json",
+    "X-Shopify-Access-Token": process.env.ADMIN_ACCESS_TOKEN,
+  };
+
+  const options = {
+    method: "POST",
+    headers: HEADERS,
+    body: JSON.stringify({ query, variables }),
+  };
+
+  // @ts-ignore
+  const response = await fetch(ADMIN_ENDPOINT, options);
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`${response.status} ${body}`);
+  }
+
+  const json = await response.json();
+  if (json.errors) {
+    throw new Error(json.errors.map((e: Error) => e.message).join("\n"));
+  }
+
+  return json.data;
+};
+
 export async function getCart(cartId: string) {
   const { cart } = await makeShopifyRequest(CartQuery, { cartId });
   return cart;
@@ -362,5 +396,17 @@ export async function getWishlistProducts(query: string) {
   const { products } = await makeShopifyRequest(WishlistProductsQuery, {
     query,
   });
+
   return products;
+}
+
+export async function updateCustomer(input: any) {
+  const { customerUpdate } = await makeShopifyAdminRequest(
+    CustomerUpdateMutation,
+    {
+      input,
+    }
+  );
+
+  return customerUpdate;
 }
