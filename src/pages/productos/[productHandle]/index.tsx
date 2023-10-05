@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import { useCartDrawer, useNavbar, useSessionVariables } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
@@ -29,8 +29,10 @@ import {
   useUserWishlist,
 } from "@/hooks/account";
 import { COLORS } from "@/utils/constants";
+import Link from "next/link";
 
 const ProductPage = () => {
+  const toast = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -86,6 +88,36 @@ const ProductPage = () => {
   };
 
   const handleWishlistItem = () => {
+    if (!customerData?.data) {
+      toast({
+        duration: 2000,
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            bg={COLORS.GREEN}
+            rounded="2xl"
+            p={3}
+            textAlign="center"
+          >
+            <Text
+              as={Link}
+              fontWeight={500}
+              textDecor="underline"
+              display="inline"
+              href="/cuenta/iniciar-sesion"
+            >
+              Inicia sesion
+            </Text>{" "}
+            <Text display="inline">
+              para agregar este producto a tu lista de favoritos.
+            </Text>
+          </Box>
+        ),
+      });
+
+      return;
+    }
     const { id, metafield } = customerData?.data?.customer;
     const initialFieldData = metafield?.value ? metafield?.value + "-,-" : "";
 

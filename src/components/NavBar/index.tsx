@@ -13,6 +13,7 @@ import {
   DrawerHeader,
   DrawerBody,
   useMediaQuery,
+  useToast,
 } from "@chakra-ui/react";
 
 import { LiaShoppingBagSolid } from "react-icons/lia";
@@ -31,6 +32,8 @@ import PortableText from "../PortableText";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
+import Link from "next/link";
+import { COLORS } from "@/utils/constants";
 
 interface IContainerProps {
   dataN: any;
@@ -67,6 +70,7 @@ const NavBar = (props: IContainerProps) => {
   `;
 
   const { dataN } = props;
+  const toast = useToast();
   const customerAccessTokenMutation = useCustomerAccessTokenCreate();
   const [accessToken, setaccessToken] = useState(
     customerAccessTokenMutation?.data?.customerAccessToken?.accessToken
@@ -276,7 +280,39 @@ const NavBar = (props: IContainerProps) => {
 
                 if (item.title === "Favoritos") {
                   return React.cloneElement(BtnComponent, {
-                    onClick: () => router.push("/cuenta/favoritos"),
+                    onClick: () => {
+                      if (!customerData?.data) {
+                        toast({
+                          duration: 2000,
+                          isClosable: true,
+                          render: () => (
+                            <Box
+                              color="white"
+                              bg={COLORS.GREEN}
+                              rounded="2xl"
+                              p={3}
+                              textAlign="center"
+                            >
+                              <Text
+                                as={Link}
+                                fontWeight={500}
+                                textDecor="underline"
+                                display="inline"
+                                href="/cuenta/iniciar-sesion"
+                              >
+                                Inicia sesion
+                              </Text>{" "}
+                              <Text display="inline">
+                                para ver tu lista de favoritos.
+                              </Text>
+                            </Box>
+                          ),
+                        });
+                        return;
+                      }
+
+                      router.push("/cuenta/favoritos");
+                    },
                   });
                 }
 

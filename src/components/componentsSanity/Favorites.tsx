@@ -5,11 +5,13 @@ import {
 } from "@/hooks/account";
 import { useMobileView } from "@/hooks/responsive";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import ProductCard from "../ProductCard";
 import { Product } from "@shopify/hydrogen-react/storefront-api-types";
+import { useRouter } from "next/router";
 
 const Favorites = () => {
+  const router = useRouter();
   const { isMobile } = useMobileView();
   const customerAccessTokenMutation = useCustomerAccessTokenCreate();
   const accessToken =
@@ -18,6 +20,10 @@ const Favorites = () => {
   const productWishlistData = useUserWishlist(
     customerData?.data?.customer?.metafield?.value
   );
+
+  useEffect(() => {
+    if (!customerData?.data) router.push("/cuenta/iniciar-sesion");
+  }, []);
 
   return (
     <Box
