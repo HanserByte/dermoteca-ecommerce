@@ -1,5 +1,5 @@
-import { useCartActions, useCartLegacy } from "@/hooks/cart";
-import { useCartDrawer, useStore } from "@/store";
+import { useCart, useCartActions, useCartLegacy } from "@/hooks/cart";
+import { useCartDrawer, useSessionVariables, useStore } from "@/store";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { BaseCartLine } from "@shopify/hydrogen-react/storefront-api-types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
   const { removeFromCartMutation, updateCartProductMutation } =
     useCartActions();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const { cartId, updateProduct } = useCartLegacy();
+  const { cartId } = useSessionVariables();
 
   const handleRemoveFromCart = async () => {
     // @ts-ignore
@@ -72,7 +72,7 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
           fontWeight={500}
           color="#00AA4F"
         >
-          <span>${product?.merchandise?.price?.amount}</span>
+          <span>${Number(product?.merchandise?.price?.amount).toFixed(2)}</span>
           <Button
             onClick={handleRemoveFromCart}
             bg="#00AA4F"

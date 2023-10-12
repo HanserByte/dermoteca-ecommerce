@@ -75,6 +75,13 @@ export const useCartLegacy = () => {
 };
 
 export const useCartActions = () => {
+  const createCartMutation = useMutation(
+    // @ts-ignore
+    () => {
+      return fetch(`/api/cart?action=create-cart`).then((res) => res.json());
+    }
+  );
+
   const addToCartMutation = useMutation(
     // @ts-ignore
     ({ cartId, lines }) => {
@@ -110,6 +117,7 @@ export const useCartActions = () => {
     addToCartMutation,
     removeFromCartMutation,
     updateCartProductMutation,
+    createCartMutation,
   };
 };
 

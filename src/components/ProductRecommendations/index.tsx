@@ -33,7 +33,7 @@ const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
         </Text>
         <Button
           as={Link}
-          href="/collections"
+          href="/colecciones/todas"
           border="1px"
           borderColor="black"
           rounded="full"

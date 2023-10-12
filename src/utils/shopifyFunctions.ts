@@ -6,6 +6,7 @@ import type {
   CustomerAccessTokenCreateInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import {
+  CartCreateMutation,
   CartLinesAddMutation,
   CartQuery,
   CreateCustomerMutation,
@@ -29,7 +30,7 @@ const HEADERS = {
  * Creates a cart by making a POST request to the API_ENDPOINT.
  * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
  */
-export const createCart = async (): Promise<object> => {
+export const createCartLegacy = async (): Promise<object> => {
   try {
     const response = await fetch(API_ENDPOINT, {
       method: "POST",
@@ -322,6 +323,11 @@ export const makeShopifyAdminRequest = async (
 
   return json.data;
 };
+
+export async function createCart() {
+  const { cartCreate } = await makeShopifyRequest(CartCreateMutation);
+  return cartCreate;
+}
 
 export async function getCart(cartId: string) {
   const { cart } = await makeShopifyRequest(CartQuery, { cartId });
