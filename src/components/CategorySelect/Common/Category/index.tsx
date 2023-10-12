@@ -1,12 +1,14 @@
 import { Box, Card, Text, Image } from "@chakra-ui/react";
 import { ICategory } from "../../Interface";
 import { sanityImage } from "@/lib/sanity.image";
+import Link from "next/link";
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, type } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, type, link } =
+    props;
 
   return (
-    <Card w="100%" cursor="pointer">
+    <Card as={Link} href={link?.alternateUrl || ""} w="100%" cursor="pointer">
       <Box
         position="absolute"
         bottom="0"

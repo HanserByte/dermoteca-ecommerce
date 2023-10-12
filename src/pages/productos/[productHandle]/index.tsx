@@ -87,6 +87,8 @@ const ProductPage = () => {
     setOpen(true);
   };
 
+  console.log(shopifyProductData);
+
   const handleWishlistItem = () => {
     if (!customerData?.data) {
       toast({
@@ -226,8 +228,8 @@ const ProductPage = () => {
                   thumbs={{ swiper: thumbsSwiper }}
                 >
                   {shopifyProductData?.data?.product?.images?.nodes.map(
-                    (image) => (
-                      <SwiperSlide>
+                    (image, idx) => (
+                      <SwiperSlide key={idx}>
                         <img
                           src={image.url}
                           alt={sanityProductData?.data?.store?.title}
@@ -248,8 +250,8 @@ const ProductPage = () => {
                     onSwiper={setThumbsSwiper}
                   >
                     {shopifyProductData?.data?.product?.images?.nodes.map(
-                      (image) => (
-                        <SwiperSlide>
+                      (image, idx) => (
+                        <SwiperSlide key={idx}>
                           <img
                             src={image.url}
                             alt={sanityProductData?.data?.store?.title}

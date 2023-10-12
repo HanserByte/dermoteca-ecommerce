@@ -13,4 +13,5 @@ export interface IBasicImageText extends SanityBody {
   color_botton: { value: string };
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
+  alternateUrl?: string;
 }

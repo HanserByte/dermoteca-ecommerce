@@ -16,4 +16,5 @@ export interface ICategorySelect extends SanityBody {
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
   linkDetail?: any;
+  link?: { alternateUrl: string };
 }

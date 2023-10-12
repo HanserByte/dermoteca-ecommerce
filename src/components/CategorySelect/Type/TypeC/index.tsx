@@ -9,7 +9,7 @@ interface ContainerProps {
 }
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, link } = props;
 
   return (
     <Card w="100%" cursor="pointer">
@@ -67,6 +67,7 @@ const TypeC = (props: ContainerProps) => {
           subtitulo_imagen={data.categorias[0].subtitulo_imagen}
           img_fondo={data.categorias[0].img_fondo}
           isMobile={isMobile}
+          link={data?.alternateUrl}
         />
       </Box>
       {/* Segunda columna: dos imágenes */}

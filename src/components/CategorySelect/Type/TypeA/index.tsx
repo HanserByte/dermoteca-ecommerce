@@ -34,6 +34,7 @@ const TypeA = (props: ContainerProps) => {
             isMobile={isMobile}
             type={data.formato_categorias}
             key={index}
+            link={item.link}
           />
         );
       })}

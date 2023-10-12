@@ -88,7 +88,12 @@ fragment productFragment on Product {
       }
     }
   }
-
+  collections(first:1) {
+    nodes {
+      handle
+      title
+    }
+  }
   featuredImage {
     url
     width

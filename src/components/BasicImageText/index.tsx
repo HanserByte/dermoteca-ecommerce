@@ -9,6 +9,7 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface ContainerProps {
@@ -20,13 +21,6 @@ const BasicImageText = (props: ContainerProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const router = useRouter();
-
-  const goLink = () => {
-    if (data.linkDetail) {
-      const url = data.linkDetail.dataUrl.url;
-      router.push(`/${url}`);
-    }
-  };
 
   return (
     <Box
@@ -76,11 +70,13 @@ const BasicImageText = (props: ContainerProps) => {
         </Text>
         <Box flex={100} pt="30px">
           <Button
+            _hover={{ opacity: 0.7 }}
+            as={Link}
             bg={data?.color_botton.value}
             border="1px solid #00AA4F"
             borderRadius="35px"
             width="200px"
-            onClick={goLink}
+            href={data?.linkDetail?.dataUrl?.url || data.link.alternateUrl}
           >
             <Text textTransform="uppercase" color="white" fontSize="14px">
               {data?.text_button}

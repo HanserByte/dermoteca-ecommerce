@@ -1,6 +1,7 @@
 import { LogoArrowRightCI } from "@/components/Icons";
 import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
 import { Box, Button, Grid, HStack, Spacer, Text } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -12,12 +13,14 @@ interface ContainerProps {
 interface ContainerPropsHead {
   data: any;
   isMobile: boolean;
-  goToLink: () => void;
+  url: string;
+  alternateUrl: string;
   loading: boolean;
 }
 
 const TitleWithDescription = (props: ContainerPropsHead) => {
-  const { data, isMobile, goToLink, loading } = props;
+  const { data, isMobile, url, alternateUrl, loading } = props;
+
   return (
     <Box mb="25px">
       <HStack justifyContent="space-between">
@@ -33,12 +36,13 @@ const TitleWithDescription = (props: ContainerPropsHead) => {
           <>
             <Spacer />
             <Button
+              as={Link}
+              href={url || alternateUrl}
               variant="outline"
               borderRadius="35px"
               border="1px solid black"
               minW={data?.text_button.length > 9 ? "170px" : "120px"}
               mb="5px"
-              onClick={goToLink}
               isLoading={loading}
             >
               <Text textTransform="uppercase" color="black" noOfLines={1}>
@@ -59,7 +63,8 @@ const TitleWithDescription = (props: ContainerPropsHead) => {
                 borderRadius="35px"
                 border="1px solid black"
                 width="150px"
-                onClick={goToLink}
+                as={Link}
+                href={url || alternateUrl}
                 isLoading={loading}
               >
                 <Text textTransform="uppercase" color="black" noOfLines={1}>
@@ -75,7 +80,7 @@ const TitleWithDescription = (props: ContainerPropsHead) => {
 };
 
 const TitleNoDescription = (props: ContainerPropsHead) => {
-  const { data, isMobile, goToLink, loading } = props;
+  const { data, isMobile, url, alternateUrl, loading } = props;
   return (
     <Box mb="25px">
       <HStack justifyContent="space-between">
@@ -96,7 +101,8 @@ const TitleNoDescription = (props: ContainerPropsHead) => {
               border="1px solid black"
               minW={data?.text_button.length > 9 ? "170px" : "110px"}
               mb="5px"
-              onClick={goToLink}
+              as={Link}
+              href={url || alternateUrl}
               isLoading={loading}
             >
               <Text textTransform="uppercase" color="black" noOfLines={1}>
@@ -111,7 +117,8 @@ const TitleNoDescription = (props: ContainerPropsHead) => {
               borderRadius="35px"
               border="1px solid black"
               minW="110px"
-              onClick={goToLink}
+              as={Link}
+              href={url || alternateUrl}
               isLoading={loading}
             >
               <Text textTransform="uppercase" color="black">
@@ -130,22 +137,14 @@ const HeadTitle = (props: ContainerProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const goToLink = () => {
-    setLoading(true);
-    if (data.linkDetail) {
-      const apiLink = data.linkDetail.dataUrl.url;
-      router.push(apiLink);
-    }
-    setLoading(false);
-  };
-
   return (
     <>
       {data.descripcion && data.descripcion.length > 0 && (
         <TitleWithDescription
           data={data}
           isMobile={isMobile}
-          goToLink={goToLink}
+          url={data?.linkDetail?.dataUrl?.url}
+          alternateUrl={data?.link?.alternateUrl}
           loading={loading}
         />
       )}
@@ -153,7 +152,8 @@ const HeadTitle = (props: ContainerProps) => {
         <TitleNoDescription
           data={data}
           isMobile={isMobile}
-          goToLink={goToLink}
+          url={data?.link?.alternateUrl}
+          alternateUrl={""}
           loading={loading}
         />
       )}
