@@ -327,6 +327,12 @@ const NavBar = (props: IContainerProps) => {
                   });
                 }
 
+                if (item.title === "Busqueda") {
+                  return React.cloneElement(BtnComponent, {
+                    onClick: () => router.push("/buscar"),
+                  });
+                }
+
                 if (item.title === "Carrito de compras") {
                   return <CartDrawer key={index} button={BtnComponent} />;
                 }
@@ -348,8 +354,6 @@ const NavBar = (props: IContainerProps) => {
             {data?.links_derecha_mobile.map((item, index) => {
               const BtnComponent = (
                 <button key={index} style={{ position: "relative" }}>
-                  <CartBadge />
-
                   {iconArray[item.icono]({
                     style: {
                       width: item.icono === "TfiSearch" ? "25px" : "30px",
@@ -361,6 +365,12 @@ const NavBar = (props: IContainerProps) => {
                   {index !== data.links_derecha.length - 1 && <Box mx="8px" />}
                 </button>
               );
+
+              if (item.title === "Busqueda") {
+                return React.cloneElement(BtnComponent, {
+                  onClick: () => router.push("/buscar"),
+                });
+              }
 
               if (item.title === "Compras") {
                 return (

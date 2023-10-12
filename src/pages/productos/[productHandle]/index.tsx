@@ -191,7 +191,8 @@ const ProductPage = () => {
         alignItems="center"
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
-        h="50px"
+        py="2"
+        h="max-content"
         bg="#E7D4C7"
         w="100%"
       >

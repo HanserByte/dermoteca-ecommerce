@@ -19,6 +19,7 @@ const BreadCrumbs = ({
 
   return (
     <Breadcrumb
+      textAlign="center"
       listProps={{ flexWrap: "wrap", justifyContent: "center" }}
       fontSize={isMobile ? "sm" : "base"}
       fontWeight={600}

@@ -28,7 +28,13 @@ const Search = () => {
       pl={isMobile ? "20px" : "145px"}
       pr={isMobile ? "20px" : "145px"}
     >
-      <Text textTransform="uppercase" fontSize="22px" fontWeight="700" mb="5px">
+      <Text
+        textTransform="uppercase"
+        textAlign="center"
+        fontSize="22px"
+        fontWeight="700"
+        mb="5px"
+      >
         Encuentra todo para tu piel
       </Text>
 
