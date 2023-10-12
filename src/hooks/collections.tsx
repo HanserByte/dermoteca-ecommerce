@@ -23,7 +23,7 @@ export const useCollection = (
         )}`
       ).then((res) => res.json()),
     { enabled: !!collectionHandle, keepPreviousData: true }
-  )?.data;
+  );
 
   return collectionData;
 };
@@ -41,7 +41,7 @@ export const useAllProducts = (
         `/api/products?sortKey=${sortKey}&reverse=${reverse}&tags=${tags}`
       ).then((res) => res.json()),
     { keepPreviousData: true }
-  )?.data;
+  );
 
   return allProductsData;
 };

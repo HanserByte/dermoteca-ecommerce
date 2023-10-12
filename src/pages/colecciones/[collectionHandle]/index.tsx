@@ -25,6 +25,7 @@ import CollectionsSelector from "@/components/CollectionsSelector";
 import { getOrderTag } from "@/utils";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import FilterDrawer from "@/components/FilterDrawer";
+import Loading from "@/components/Loading";
 
 const CollectionPage = () => {
   const router = useRouter();
@@ -167,6 +168,8 @@ const CollectionPage = () => {
         </Box>
       </Box>
 
+      {collectionData?.isLoading && <Loading />}
+
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
@@ -177,7 +180,7 @@ const CollectionPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {collectionData?.data?.collection?.products?.nodes?.map(
+          {collectionData?.data?.data?.collection?.products?.nodes?.map(
             (product: IProduct) => (
               <ProductCard
                 handle={product.handle}

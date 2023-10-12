@@ -25,6 +25,7 @@ import CollectionsSelector from "@/components/CollectionsSelector";
 import SortSelector from "@/components/SortSelector";
 import { getOrderTag } from "@/utils";
 import FilterDrawer from "@/components/FilterDrawer";
+import Loading from "@/components/Loading";
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -157,6 +158,8 @@ const AllCollectionsPage = () => {
         </Box>
       )}
 
+      {allProductsData?.isLoading && <Loading />}
+
       <Box
         my="6"
         pl={isMobile ? "20px" : "145px"}
@@ -167,16 +170,18 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {allProductsData?.data?.products?.nodes?.map((product: IProduct) => (
-            <ProductCard
-              handle={product.handle}
-              imageSrc={product.featuredImage.url}
-              title={product.title}
-              // @ts-ignore
-              price={product?.priceRange?.maxVariantPrice?.amount}
-              key={product?.id}
-            />
-          ))}
+          {allProductsData?.data?.data?.products?.nodes?.map(
+            (product: IProduct) => (
+              <ProductCard
+                handle={product.handle}
+                imageSrc={product.featuredImage.url}
+                title={product.title}
+                // @ts-ignore
+                price={product?.priceRange?.maxVariantPrice?.amount}
+                key={product?.id}
+              />
+            )
+          )}
         </Grid>
       </Box>
 

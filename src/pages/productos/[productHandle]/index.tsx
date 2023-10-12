@@ -30,6 +30,7 @@ import {
 } from "@/hooks/account";
 import { COLORS } from "@/utils/constants";
 import Link from "next/link";
+import Loading from "@/components/Loading";
 
 const ProductPage = () => {
   const toast = useToast();
@@ -189,6 +190,10 @@ const ProductPage = () => {
     <Box maxW="2560px" m="0 auto">
       <NavBar dataN={{ isBlackNavBar: true }} />
       <Box h={`${height}px`} bg="white" w="100%" />
+      {shopifyProductData?.isLoading && sanityProductData.isLoading && (
+        <Loading />
+      )}
+
       <Flex
         alignItems="center"
         pl={isMobile ? "20px" : "145px"}
