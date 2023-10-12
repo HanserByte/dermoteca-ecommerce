@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
+import { useCustomer } from "@/hooks/account";
 import { useRouter } from "next/router";
 
 interface IProps {
@@ -23,7 +23,7 @@ const AccountDetails = ({ data }: IProps) => {
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem("userAccessToken")
   );
-  const customerData = useCustomer(accessToken);
+  const customerData = useCustomer(accessToken as string);
 
   const handleLogout = () => {
     localStorage.removeItem("userAccessToken");
@@ -36,7 +36,7 @@ const AccountDetails = ({ data }: IProps) => {
 
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
-      <Box maxW="400px" mx="auto" py={190}>
+      <Box maxW="400px" mx="auto" py={220}>
         <Flex flex={100}>
           <Text
             textTransform="uppercase"
