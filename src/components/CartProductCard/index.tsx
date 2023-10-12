@@ -1,4 +1,4 @@
-import { useCart, useCartActions, useCartLegacy } from "@/hooks/cart";
+import { useCartActions } from "@/hooks/cart";
 import { useCartDrawer, useSessionVariables, useStore } from "@/store";
 import { Box, Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { BaseCartLine } from "@shopify/hydrogen-react/storefront-api-types";
@@ -60,10 +60,13 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
       <Flex flexDirection="column" gap={isMobile ? 0 : 4} w="65%">
         <Text noOfLines={isMobile ? 1 : 2} fontSize="sm">
           {product?.merchandise?.product?.title}
-          <Text fontWeight={600}>
-            {" "}
-            {product?.merchandise?.selectedOptions?.[0].value}
-          </Text>
+          {product?.merchandise?.selectedOptions?.[0].value !==
+            "Default Title" && (
+            <Text as="span" display="block" fontWeight={600}>
+              {" "}
+              {product?.merchandise?.selectedOptions?.[0].value}
+            </Text>
+          )}
         </Text>
         <Flex
           justifyContent="space-between"

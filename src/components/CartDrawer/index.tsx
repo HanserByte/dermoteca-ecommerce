@@ -1,5 +1,5 @@
-import { useCart, useCartLegacy } from "@/hooks/cart";
-import { useCartDrawer, useSessionVariables } from "@/store";
+import { useCart } from "@/hooks/cart";
+import { useCartDrawer } from "@/store";
 import {
   Drawer,
   DrawerBody,
@@ -25,11 +25,10 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter();
   const { open, setOpen } = useCartDrawer();
   const cartData = useCart();
-  const { checkoutUrl } = useCartLegacy();
   const btnRef = React.useRef();
 
   const handleCheckout = () => {
-    checkoutUrl && router.push(checkoutUrl);
+    cartData?.data?.checkoutUrl && router.push(cartData?.data?.checkoutUrl);
   };
 
   return (

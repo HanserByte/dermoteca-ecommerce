@@ -61,7 +61,7 @@ function Session({ children }: { children: React.ReactNode }) {
 
   // Set the cartId in local storage if it doesn't exists
   useEffect(() => {
-    if (createCartMutation?.data?.cart?.id) {
+    if (!cartId && createCartMutation?.data?.cart?.id) {
       localStorage.setItem(
         "cartId",
         createCartMutation?.data?.cart?.id as string
