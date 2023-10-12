@@ -1,7 +1,6 @@
 import {
   addProductToCart,
   createCart,
-  createCartLegacy,
   getCart,
   removeProductFromCart,
   updateCartProducts,
@@ -19,7 +18,6 @@ export async function GET(request: Request) {
 
   switch (action) {
     case "create-cart":
-      // response = await createCartLegacy();
       response = await createCart();
       break;
     case "get-cart":

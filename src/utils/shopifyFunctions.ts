@@ -28,49 +28,6 @@ const HEADERS = {
 };
 
 /**
- * Creates a cart by making a POST request to the API_ENDPOINT.
- * @returns {Promise<Object>} A Promise that resolves to the cart data returned by the API.
- */
-export const createCartLegacy = async (): Promise<object> => {
-  try {
-    const response = await fetch(API_ENDPOINT, {
-      method: "POST",
-      // @ts-ignore
-      headers: HEADERS,
-      body: JSON.stringify({
-        query: `
-          mutation cartCreate {
-            cartCreate {
-              cart {
-                totalQuantity
-                id
-                checkoutUrl
-                cost {
-                  subtotalAmount {
-                    amount
-                  }
-                } 
-              }
-            }
-          }
-        `,
-      }),
-    });
-
-    if (!response.ok) {
-      // Handle non-successful HTTP responses (e.g., 4xx or 5xx errors)
-      throw new Error("Failed to create a cart.");
-    }
-
-    const data = await response.json();
-    return data.data.cartCreate.cart;
-  } catch (error) {
-    // @ts-ignore
-    return { error: error.message };
-  }
-};
-
-/**
  * Fetches a collection of products from a GraphQL API.
  * @param {string} collectionHandle - The handle of the collection to retrieve.
  * @returns {Promise<Object>} A Promise that resolves to the collection data fetched from the API.

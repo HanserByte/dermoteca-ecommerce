@@ -9,94 +9,37 @@ import NavBar from "@/components/NavBar";
 import ContainerNav from "@/components/ContainerNav";
 import { useNavbar, useStore } from "@/store";
 import ComponentRenderer from "@/components/ComponentRenderer";
+import { usePage } from "@/hooks/page";
 
 const Page = () => {
   const router = useRouter();
   const { slug } = router.query;
-  const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const { height } = useNavbar();
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (slug != undefined && slug != "") {
-        const query = `
-            *[_type == "pages" && slug.current == "${slug
-              ?.join(",")
-              ?.replace(",", "/")}"] {
-              _id,
-              title,
-              isBlackNavBar,
-              isNavBarWhite,
-              colorFondoPagina,
-              "slug": slug.current,
-              componentes[]-> {
-                ...,
-                'linkDetail': link{ ... ,
-                  'dataUrl': *[_id == ^.url._ref]{
-                    'url': slug.current
-                  }[0]
-                },
-                'link_uno': link_uno{ ... ,
-                  'dataUrl': *[_id == ^.url._ref]{
-                    'url': slug.current
-                  }[0]
-                },
-                'link_dos': link_dos{ ... ,
-                  'dataUrl': *[_id == ^.url._ref]{
-                    'url': slug.current
-                  }[0]
-                },
-                'link_url_uno': link_url_uno{ ... ,
-                  'dataUrl': *[_id == ^.url._ref]{
-                    'url': slug.current
-                  }[0]
-                },
-                'link_url_dos': link_url_dos{ ... ,
-                  'dataUrl': *[_id == ^.url._ref]{
-                    'url': slug.current
-                  }[0]
-                },
-                'tips': tips[]-> {
-                  ...
-                }
-              },
-            }[0]
-          `;
-        const dataHome = await client.fetch(query);
-        setData(dataHome);
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [slug]);
-
-  if (loading) {
-    return <Loading />;
-  }
+  const pageData = usePage(slug as string[]);
 
   return (
     <>
+      {pageData?.isLoading && <Loading />}
       <Box
         maxW="2560px"
         m="0 auto"
         id="main-container"
-        bg={data.colorFondoPagina}
+        bg={pageData?.data?.colorFondoPagina}
       >
-        {data && <NavBar dataN={data} />}
-        {data && (!data.isNavBarWhite || isMobile) && <ContainerNav />}
-        {data &&
-          data?.componentes?.map((componente: any) => (
+        {pageData?.data && <NavBar dataN={pageData?.data} />}
+        {pageData?.data && (!pageData?.data?.isNavBarWhite || isMobile) && (
+          <ContainerNav />
+        )}
+        {pageData?.data &&
+          pageData?.data?.componentes?.map((componente: any) => (
             <ComponentRenderer
               key={componente._id}
               component={componente._type}
               data={componente}
             />
           ))}
-        {data && <Footer />}
+        {pageData?.data && <Footer />}
       </Box>
     </>
   );

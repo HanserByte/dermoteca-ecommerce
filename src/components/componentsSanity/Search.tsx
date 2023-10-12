@@ -64,7 +64,7 @@ const Search = () => {
 
         {!searchData?.data && (
           <>
-            {allProductsData?.data?.products?.nodes?.map(
+            {allProductsData?.data?.data?.products?.nodes?.map(
               (product: IProduct) => (
                 <ProductCard
                   handle={product.handle}
