@@ -62,6 +62,7 @@ const PRODUCT_FRAGMENT = `#graphql
 fragment productFragment on Product {
   id
   title
+  totalInventory
   handle
   images (first: 10) {
     nodes {

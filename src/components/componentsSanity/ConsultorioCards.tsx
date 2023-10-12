@@ -1,6 +1,6 @@
 import React from "react";
 import ContainerDermo from "../Common/ContainerDermo";
-import { Box, Grid, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import {  Grid,  Stack, Text, VStack } from "@chakra-ui/react";
 import PortableText from "../PortableText";
 import { COLORS } from "@/utils/constants";
 import Link from "next/link";

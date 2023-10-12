@@ -87,6 +87,8 @@ const ProductPage = () => {
     setOpen(true);
   };
 
+  const isOutOfStock = shopifyProductData?.data?.product?.totalInventory === 0;
+
   const handleWishlistItem = () => {
     if (!customerData?.data) {
       toast({
@@ -296,45 +298,64 @@ const ProductPage = () => {
               justifyContent={isMobile ? "space-between" : "flex-start"}
               alignItems="center"
             >
-              <Flex alignItems="center" gap={3}>
-                <Button
-                  disabled={productWishlistData?.isLoading}
-                  onClick={() =>
-                    setQuantity(quantity - 1 > 0 ? quantity - 1 : 1)
-                  }
-                  bg="#00AA4F"
-                  size="sm"
-                  color="white"
-                  rounded="full"
-                  _hover={{ opacity: 0.8 }}
-                >
-                  -
-                </Button>
-                <Text fontSize="xl" fontWeight="500">
-                  {quantity}
-                </Text>
-                <Button
-                  disabled={productWishlistData?.isLoading}
-                  onClick={() => setQuantity(quantity + 1)}
-                  bg="#00AA4F"
-                  size="sm"
-                  color="white"
-                  rounded="full"
-                  _hover={{ opacity: 0.8 }}
-                >
-                  +
-                </Button>
-              </Flex>
+              {!isOutOfStock && (
+                <Flex alignItems="center" gap={3}>
+                  <Button
+                    disabled={productWishlistData?.isLoading}
+                    onClick={() =>
+                      setQuantity(quantity - 1 > 0 ? quantity - 1 : 1)
+                    }
+                    bg="#00AA4F"
+                    size="sm"
+                    color="white"
+                    rounded="full"
+                    _hover={{ opacity: 0.8 }}
+                  >
+                    -
+                  </Button>
+                  <Text fontSize="xl" fontWeight="500">
+                    {quantity}
+                  </Text>
+                  <Button
+                    disabled={productWishlistData?.isLoading}
+                    onClick={() => setQuantity(quantity + 1)}
+                    bg="#00AA4F"
+                    size="sm"
+                    color="white"
+                    rounded="full"
+                    _hover={{ opacity: 0.8 }}
+                  >
+                    +
+                  </Button>
+                </Flex>
+              )}
 
-              <Button
-                onClick={handleAddToCart}
-                bg="#00AA4F"
-                color="white"
-                rounded="full"
-                _hover={{ opacity: 0.8 }}
-              >
-                AGREGAR AL CARRITO
-              </Button>
+              {!isOutOfStock && (
+                <Button
+                  onClick={handleAddToCart}
+                  bg="#00AA4F"
+                  color="white"
+                  rounded="full"
+                  _hover={{ opacity: 0.8 }}
+                >
+                  AGREGAR AL CARRITO
+                </Button>
+              )}
+
+              {isOutOfStock && (
+                <Box
+                  py={3}
+                  px={5}
+                  bg="transparent"
+                  color={COLORS.GREEN}
+                  border="2px"
+                  borderColor={COLORS.GREEN}
+                  rounded="full"
+                  fontWeight={600}
+                >
+                  Out of stock
+                </Box>
+              )}
 
               {!isWishlisted && (
                 <Button

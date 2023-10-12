@@ -15,11 +15,11 @@ interface IContainerProps {
   isMobile: boolean;
 }
 
-const SampleLinks2 = [
-  { title: "bitácora", dataUrl: { url: "" } },
-  { title: "agendar cita", dataUrl: { url: "" } },
-  { title: "pedidos", dataUrl: { url: "" } },
-];
+// const SampleLinks2 = [
+//   { title: "bitácora", dataUrl: { url: "" } },
+//   { title: "agendar cita", dataUrl: { url: "" } },
+//   { title: "pedidos", dataUrl: { url: "" } },
+// ];
 
 const TypeA = (props: IContainerProps) => {
   const { data, isMobile } = props;
@@ -92,7 +92,7 @@ const TypeA = (props: IContainerProps) => {
             <HStack>
               <Box ml="10px" />
               <LogoShortCI />
-              <Box pb="13px">
+              {/* <Box pb="13px">
                 <Text
                   fontSize="14px"
                   fontWeight={500}
@@ -119,9 +119,9 @@ const TypeA = (props: IContainerProps) => {
                     })}
                   </HStack>
                 </Box>
-              </Box>
+              </Box> */}
               {/* CONTENT RIGHT */}
-              <Box right={0} position="absolute" pr="30px">
+              {/* <Box right={0} position="absolute" pr="30px">
                 <HStack>
                   <LogoTreatmentCI />
                   <Box pb="13px">
@@ -138,24 +138,10 @@ const TypeA = (props: IContainerProps) => {
                     >
                       nuestros tratamientos
                     </Text>
-                    <Box flex={100} pl="10px">
-                      <HStack>
-                        {SampleLinks2.map(
-                          (item: ITitleRedirect, index: number) => {
-                            return (
-                              <RenderOptions
-                                title={item.title}
-                                key={index}
-                                dataUrl={{}}
-                              />
-                            );
-                          }
-                        )}
-                      </HStack>
-                    </Box>
+                    <Box flex={100} pl="10px"></Box>
                   </Box>
                 </HStack>
-              </Box>
+              </Box> */}
             </HStack>
           </Box>
         )}
