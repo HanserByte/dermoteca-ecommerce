@@ -7,7 +7,5 @@ export interface ICategory {
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
   type?: string;
-  link?: {
-    alternateUrl: string;
-  };
+  link?: string | undefined;
 }

@@ -5,6 +5,7 @@ interface ICategorias {
   subtitulo_imagen: string;
   titulo_imagen: string;
   _key: string;
+  link?: { alternateUrl: string | undefined };
 }
 
 export interface ICategorySelect extends SanityBody {
@@ -16,5 +17,4 @@ export interface ICategorySelect extends SanityBody {
   isPaddingTop?: boolean;
   isPaddingBottom?: boolean;
   linkDetail?: any;
-  link?: { alternateUrl: string };
 }

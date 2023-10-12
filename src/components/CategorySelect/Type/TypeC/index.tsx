@@ -2,6 +2,7 @@ import { sanityImage } from "@/lib/sanity.image";
 import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
 import { Box, Card, Image, Stack, VStack, Text } from "@chakra-ui/react";
 import { ICategory } from "../../Interface";
+import Link from "next/link";
 
 interface ContainerProps {
   data: ICategorySelect;
@@ -12,7 +13,7 @@ const Category = (props: ICategory) => {
   const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, link } = props;
 
   return (
-    <Card w="100%" cursor="pointer">
+    <Card w="100%" cursor="pointer" as={Link} href={link}>
       <Box position="absolute" bottom="0" left="0" width="100%" p="4" mb="20px">
         <Box flex={100}>
           <Text
@@ -67,7 +68,7 @@ const TypeC = (props: ContainerProps) => {
           subtitulo_imagen={data.categorias[0].subtitulo_imagen}
           img_fondo={data.categorias[0].img_fondo}
           isMobile={isMobile}
-          link={data?.alternateUrl}
+          link={data.categorias[0].link?.alternateUrl}
         />
       </Box>
       {/* Segunda columna: dos imágenes */}
@@ -81,6 +82,7 @@ const TypeC = (props: ContainerProps) => {
             subtitulo_imagen={data.categorias[1].subtitulo_imagen}
             img_fondo={data.categorias[1].img_fondo}
             isMobile={isMobile}
+            link={data.categorias[1]?.link?.alternateUrl}
           />
         </Box>
         {/* Imagen inferior */}
@@ -90,6 +92,7 @@ const TypeC = (props: ContainerProps) => {
             subtitulo_imagen={data.categorias[2].subtitulo_imagen}
             img_fondo={data.categorias[2].img_fondo}
             isMobile={isMobile}
+            link={data.categorias[2]?.link?.alternateUrl}
           />
         </Box>
       </VStack>

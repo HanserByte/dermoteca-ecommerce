@@ -3,6 +3,7 @@ import { Box, Card, Grid, GridItem, Text, Image } from "@chakra-ui/react";
 import { ICategory } from "../../Interface";
 import { sanityImage } from "@/lib/sanity.image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface ContainerProps {
   data: ICategorySelect;
@@ -10,10 +11,10 @@ interface ContainerProps {
 }
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, link } = props;
 
   return (
-    <Card w="100%" cursor="pointer">
+    <Card w="100%" cursor="pointer" as={Link} href={link || ""}>
       <Box position="absolute" bottom="0" left="0" width="100%" p="4" mb="20px">
         <Box flex={100}>
           <Text
@@ -87,6 +88,7 @@ const TypeB = (props: ContainerProps) => {
                   subtitulo_imagen={item.subtitulo_imagen}
                   img_fondo={item.img_fondo}
                   key={index}
+                  link={item.link.alternateUrl}
                 />
               </GridItem>
             );
@@ -105,6 +107,7 @@ const TypeB = (props: ContainerProps) => {
                   subtitulo_imagen={item.subtitulo_imagen}
                   img_fondo={item.img_fondo}
                   key={index}
+                  link={item.link.alternateUrl}
                 />
               </GridItem>
             );
