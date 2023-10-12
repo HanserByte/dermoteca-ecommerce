@@ -323,11 +323,12 @@ export const SearchQuery = `#graphql
     search(first: 30, query: $query) {
       nodes {
         ... on Product {
-          title
+          ...productFragment
         }
       }
     }
   }
+  ${PRODUCT_FRAGMENT}
 `;
 
 // Admin graphql
