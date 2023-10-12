@@ -87,8 +87,6 @@ const ProductPage = () => {
     setOpen(true);
   };
 
-  console.log(shopifyProductData);
-
   const handleWishlistItem = () => {
     if (!customerData?.data) {
       toast({
