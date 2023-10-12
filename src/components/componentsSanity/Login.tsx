@@ -66,6 +66,12 @@ const Login = ({ data }: IProps) => {
   };
 
   useEffect(() => {
+    if (customerAccessTokenMutation?.data?.customerUserErrors?.length > 0) {
+      showAlert("Usuario o contraseña incorrectos");
+    }
+  }, [customerAccessTokenMutation?.data]);
+
+  useEffect(() => {
     if (accessToken) {
       localStorage.setItem("userAccessToken", accessToken);
     }
