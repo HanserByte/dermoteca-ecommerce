@@ -42,7 +42,7 @@ const ProductPage = () => {
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
   const sanityProductData = useSanityProduct(router.query.productHandle);
   const { addToCartMutation } = useCartActions();
-  const { productRecommendations } = useProductRecommendations(
+  const productRecommendationsData = useProductRecommendations(
     sanityProductData?.data?.store?.gid
   );
   const { setOpen } = useCartDrawer();
@@ -393,7 +393,11 @@ const ProductPage = () => {
             )}
           </Flex>
         </Flex>
-        <ProductRecommendations products={productRecommendations} />
+        <ProductRecommendations
+          products={
+            productRecommendationsData?.data?.data?.productRecommendations
+          }
+        />
       </Box>
 
       <Footer />

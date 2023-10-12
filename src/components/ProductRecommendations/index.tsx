@@ -24,7 +24,7 @@ interface ProductRecommendationsProps {
 const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-
+  console.log(products);
   return (
     <VStack my={12} w="full">
       <Flex w="full" justifyContent="space-between" alignItems="center">
@@ -58,7 +58,7 @@ const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
           }}
           aria-label="My Favorite Images"
         >
-          {products.map((product) => (
+          {products?.map((product) => (
             <SplideSlide key={product.id}>
               <ProductCard
                 imageSrc={product.featuredImage.url}

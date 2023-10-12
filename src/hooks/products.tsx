@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { client } from "@/lib/sanity.client";
 
 export const useSanityProduct = (handle: string) => {
@@ -31,22 +30,16 @@ export const useShopifyProduct = (handle: string) => {
 };
 
 export const useProductRecommendations = (productId: string) => {
-  const [productRecommendations, setProductRecommendations] = useState([]);
+  const productRecommendationsData = useQuery(
+    ["productRecommendations", productId],
+    () =>
+      fetch(`/api/product-recommendations?productId=${productId}`).then((res) =>
+        res.json()
+      ),
+    { enabled: !!productId }
+  );
 
-  useEffect(() => {
-    getProductRecommendations(productId);
-  }, [productId]);
-
-  async function getProductRecommendations(productId: string) {
-    const res = await fetch(
-      `/api/product-recommendations?productId=${productId}`
-    );
-
-    const data = await res.json();
-    setProductRecommendations(data?.data.productRecommendations);
-  }
-
-  return { productRecommendations };
+  return productRecommendationsData;
 };
 
 export const useAllTags = () => {
