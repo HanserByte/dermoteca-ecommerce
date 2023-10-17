@@ -1,14 +1,9 @@
-import { useMobileView } from "@/hooks/responsive";
-import { useNavbar } from "@/store";
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 import ContainerDermo from "../Common/ContainerDermo";
 import ProductAccordion from "../ProductAccordion";
 
 const Accordion = ({ data }) => {
-  const { height } = useNavbar();
-  const { isMobile } = useMobileView();
-
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
       <Box mx="auto" py={190}>
