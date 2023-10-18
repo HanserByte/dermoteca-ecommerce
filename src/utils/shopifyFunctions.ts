@@ -19,6 +19,7 @@ import {
   UpdateCartLinesMutation,
   WishlistProductsQuery,
   SearchQuery,
+  CustomerRecoverMutation,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -352,6 +353,13 @@ export async function customerLogout(customerAccessToken: string) {
 export async function getCustomer(customerAccessToken: string) {
   const data = await makeShopifyRequest(CustomerQuery, {
     customerAccessToken,
+  });
+  return data;
+}
+
+export async function recoverPassword(email: string) {
+  const data = await makeShopifyRequest(CustomerRecoverMutation, {
+    email,
   });
   return data;
 }
