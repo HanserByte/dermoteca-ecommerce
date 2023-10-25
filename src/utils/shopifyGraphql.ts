@@ -350,3 +350,38 @@ export const CustomerUpdateMutation = `#graphql
     }
   }
 `;
+
+export const AdminCustomerQuery = `#graphql
+  query GetAdminCustomer($id: ID!) {
+    customer (id: $id) {
+      firstName
+      lastName
+      displayName
+      email
+      addresses (first: 10) {
+          address1
+          address2
+          city
+          company
+          country
+          firstName
+          lastName
+          id
+      }
+      orders(first: 20) {
+        nodes {
+          id
+          name
+          processedAt
+          paymentGatewayNames
+          displayFulfillmentStatus
+          totalPriceSet {
+            shopMoney {
+              amount
+            }
+          }
+        }
+      }
+    }
+  }
+`;

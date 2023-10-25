@@ -9,8 +9,10 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useCustomer } from "@/hooks/account";
+import { useAdminCustomer, useCustomer } from "@/hooks/account";
 import { useRouter } from "next/router";
+import OrdersTable from "../OrdersTable";
+import { useMobileView } from "@/hooks/responsive";
 
 interface IProps {
   data: {
@@ -19,11 +21,15 @@ interface IProps {
 }
 
 const AccountDetails = ({ data }: IProps) => {
+  const { isMobile } = useMobileView();
   const router = useRouter();
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem("userAccessToken")
   );
   const customerData = useCustomer(accessToken as string);
+  const adminCustomerData = useAdminCustomer(
+    customerData?.data?.customer?.id as string
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("userAccessToken");
@@ -36,7 +42,7 @@ const AccountDetails = ({ data }: IProps) => {
 
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
-      <Box maxW="400px" mx="auto" py={220}>
+      <Box maxW="800px" mx="auto" h="calc(80vh)" py={40} my="auto">
         <Flex flex={100}>
           <Text
             textTransform="uppercase"
@@ -49,6 +55,7 @@ const AccountDetails = ({ data }: IProps) => {
         </Flex>
 
         <VStack
+          w="max-content"
           divider={<StackDivider borderColor="gray.200" />}
           alignItems="start"
           fontSize="16px"
@@ -95,6 +102,18 @@ const AccountDetails = ({ data }: IProps) => {
             Cerrar sesion
           </Text>
         </Button>
+
+        <Box mt="8">
+          <Text
+            textTransform="uppercase"
+            fontSize="20px"
+            fontWeight="700"
+            mb="5px"
+          >
+            Historial de ordenes
+          </Text>
+          <OrdersTable orders={adminCustomerData?.data?.orders} />
+        </Box>
       </Box>
     </ContainerDermo>
   );

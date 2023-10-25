@@ -55,6 +55,20 @@ export const useCustomer = (customerAccessToken: string) => {
   return customerData;
 };
 
+export const useAdminCustomer = (id: string) => {
+  const adminCustomerData = useQuery(
+    ["adminCustomer"],
+    () => {
+      return fetch(`/api/account/admin-customer?id=${id}`, {
+        method: "GET",
+      }).then((res) => res.json());
+    },
+    { enabled: !!id }
+  );
+
+  return adminCustomerData;
+};
+
 export const useCustomerAccessTokenCreate = () => {
   const customerAccessTokenMutation = useMutation(
     (input: CustomerAccessTokenCreateInput) => {

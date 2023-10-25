@@ -20,6 +20,7 @@ import {
   WishlistProductsQuery,
   SearchQuery,
   CustomerRecoverMutation,
+  AdminCustomerQuery,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -381,6 +382,14 @@ export async function updateCustomer(input: any) {
   );
 
   return customerUpdate;
+}
+
+export async function getAdminCustomer(id: string) {
+  const { customer } = await makeShopifyAdminRequest(AdminCustomerQuery, {
+    id,
+  });
+
+  return customer;
 }
 
 export async function search(query: string) {
