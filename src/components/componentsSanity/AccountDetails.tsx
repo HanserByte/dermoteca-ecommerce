@@ -18,6 +18,7 @@ import Link from "next/link";
 import { COLORS } from "@/utils/constants";
 import AddressTable from "../AddressTable";
 import { AiFillEdit } from "react-icons/ai";
+import UserEditModal from "../UserEditModal";
 
 interface IProps {
   data: {
@@ -73,13 +74,7 @@ const AccountDetails = ({ data }: IProps) => {
             <Text fontWeight={400}>
               {customerData?.data?.customer?.displayName}
             </Text>
-            <IconButton
-              variant="link"
-              aria-label="editar"
-              _hover={{ opacity: 0.7 }}
-            >
-              <AiFillEdit size={20} color={COLORS.GREEN} />
-            </IconButton>
+            <UserEditModal />
           </HStack>
 
           <HStack>
