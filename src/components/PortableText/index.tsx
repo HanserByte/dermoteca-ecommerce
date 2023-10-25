@@ -20,6 +20,20 @@ const PortableText = ({ blocks }) => {
     },
 
     marks: {
+      AlignCenter: ({ children }: { children: React.ReactNode }) => (
+        <Text align="center" display="inherit">
+          {children}
+        </Text>
+      ),
+      AlignJustify: ({ children }: { children: React.ReactNode }) => (
+        <Text align="justify">{children}</Text>
+      ),
+      AlignLeft: ({ children }: { children: React.ReactNode }) => (
+        <Text align="left">{children}</Text>
+      ),
+      AlignRight: ({ children }: { children: React.ReactNode }) => (
+        <Text align="right">{children}</Text>
+      ),
       link: ({ children, value }) => {
         const rel = !value.href.startsWith("/")
           ? "noreferrer noopener"
@@ -43,6 +57,9 @@ const PortableText = ({ blocks }) => {
             {children[0].props.text}
           </Text>
         );
+      },
+      normal: ({ children }: { children: React.ReactNode }) => {
+        return <Text mb={2}>{children}</Text>;
       },
     },
   };
