@@ -231,6 +231,7 @@ export const CustomerQuery = `#graphql
   query CustomerQuery($customerAccessToken: String!) {
     customer(customerAccessToken: $customerAccessToken) {
       id
+      displayName
       firstName
       lastName
       acceptsMarketing
@@ -359,14 +360,16 @@ export const AdminCustomerQuery = `#graphql
       displayName
       email
       addresses (first: 10) {
-          address1
-          address2
-          city
-          company
-          country
-          firstName
-          lastName
-          id
+        formatted
+        formattedArea
+        address1
+        address2
+        city
+        company
+        country
+        firstName
+        lastName
+        id
       }
       orders(first: 20) {
         nodes {

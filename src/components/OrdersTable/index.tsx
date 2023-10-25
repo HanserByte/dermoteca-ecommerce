@@ -36,10 +36,10 @@ const OrdersTable = ({ orders }: IOrdersTableProps) => {
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th pl={0}># Order</Th>
-            <Th>Date</Th>
-            <Th>Delivered</Th>
-            <Th>Payment</Th>
+            <Th pl={0}># Orden</Th>
+            <Th>Fecha</Th>
+            <Th>Estado</Th>
+            <Th>Pago</Th>
             <Th>Total</Th>
           </Tr>
         </Thead>

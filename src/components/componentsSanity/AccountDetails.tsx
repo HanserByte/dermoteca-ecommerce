@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
   StackDivider,
   Text,
   VStack,
@@ -13,6 +14,10 @@ import { useAdminCustomer, useCustomer } from "@/hooks/account";
 import { useRouter } from "next/router";
 import OrdersTable from "../OrdersTable";
 import { useMobileView } from "@/hooks/responsive";
+import Link from "next/link";
+import { COLORS } from "@/utils/constants";
+import AddressTable from "../AddressTable";
+import { AiFillEdit } from "react-icons/ai";
 
 interface IProps {
   data: {
@@ -42,7 +47,7 @@ const AccountDetails = ({ data }: IProps) => {
 
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
-      <Box maxW="800px" mx="auto" h="calc(80vh)" py={40} my="auto">
+      <Box maxW="800px" mx="auto" h="calc(80vh)" py={20} my="auto">
         <Flex flex={100}>
           <Text
             textTransform="uppercase"
@@ -66,15 +71,17 @@ const AccountDetails = ({ data }: IProps) => {
           <HStack>
             <Text>Nombre: </Text>
             <Text fontWeight={400}>
-              {customerData?.data?.customer?.firstName}
+              {customerData?.data?.customer?.displayName}
             </Text>
+            <IconButton
+              variant="link"
+              aria-label="editar"
+              _hover={{ opacity: 0.7 }}
+            >
+              <AiFillEdit size={20} color={COLORS.GREEN} />
+            </IconButton>
           </HStack>
-          <HStack>
-            <Text>Apellido: </Text>
-            <Text fontWeight={400}>
-              {customerData?.data?.customer?.lastName}
-            </Text>
-          </HStack>
+
           <HStack>
             <Text>Email: </Text>
             <Text fontWeight={400}>{customerData?.data?.customer?.email}</Text>
@@ -104,15 +111,67 @@ const AccountDetails = ({ data }: IProps) => {
         </Button>
 
         <Box mt="8">
-          <Text
-            textTransform="uppercase"
-            fontSize="20px"
-            fontWeight="700"
-            mb="5px"
-          >
-            Historial de ordenes
-          </Text>
-          <OrdersTable orders={adminCustomerData?.data?.orders} />
+          {adminCustomerData?.data?.addresses?.length === 0 && (
+            <Text
+              textTransform="uppercase"
+              fontSize="20px"
+              fontWeight="700"
+              mb="5px"
+            >
+              Aun no tienes ninguna domicilios agregados
+            </Text>
+          )}
+          {adminCustomerData?.data?.addresses?.length > 0 && (
+            <>
+              <Text
+                textTransform="uppercase"
+                fontSize="20px"
+                fontWeight="700"
+                mb="5px"
+              >
+                Domicilios
+              </Text>
+              <AddressTable addresses={adminCustomerData?.data?.addresses} />
+            </>
+          )}
+        </Box>
+
+        <Box mt="8">
+          {adminCustomerData?.data?.orders?.nodes.length === 0 && (
+            <Text
+              textTransform="uppercase"
+              fontSize="20px"
+              fontWeight="700"
+              mb="5px"
+            >
+              Aun no tienes ninguna orden visita{" "}
+              <Button
+                textTransform="uppercase"
+                fontSize="20px"
+                fontWeight="700"
+                mb="5px"
+                variant="link"
+                as={Link}
+                color={COLORS.GREEN}
+                href="/colecciones/todas"
+              >
+                Nuestra tienda &rarr;
+              </Button>
+            </Text>
+          )}
+          {adminCustomerData?.data?.orders?.nodes.length > 0 && (
+            <>
+              <Text
+                textTransform="uppercase"
+                fontSize="20px"
+                fontWeight="700"
+                mb="5px"
+              >
+                Historial de ordenes
+              </Text>
+              <OrdersTable orders={adminCustomerData?.data?.orders} />
+            </>
+          )}
         </Box>
       </Box>
     </ContainerDermo>
