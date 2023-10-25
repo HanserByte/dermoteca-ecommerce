@@ -10,6 +10,7 @@ import Head from "next/head";
 import React, { useEffect } from "react";
 import { useSessionVariables } from "@/store";
 import { useCart, useCartActions } from "@/hooks/cart";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const theme = extendTheme({
   fonts: {
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps }: any) {
           <ChakraProvider theme={theme}>
             <Session>
               <Component {...pageProps} />
+              <WhatsAppButton />
             </Session>
           </ChakraProvider>
         </Hydrate>
