@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   HStack,
-  IconButton,
   StackDivider,
   Text,
   VStack,
@@ -17,7 +16,6 @@ import { useMobileView } from "@/hooks/responsive";
 import Link from "next/link";
 import { COLORS } from "@/utils/constants";
 import AddressTable from "../AddressTable";
-import { AiFillEdit } from "react-icons/ai";
 import UserEditModal from "../UserEditModal";
 
 interface IProps {
@@ -27,7 +25,6 @@ interface IProps {
 }
 
 const AccountDetails = ({ data }: IProps) => {
-  const { isMobile } = useMobileView();
   const router = useRouter();
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem("userAccessToken")

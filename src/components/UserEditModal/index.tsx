@@ -82,7 +82,10 @@ const UserEditModal = () => {
         duration: 2000,
         isClosable: true,
       });
-    } else if (!updateCustomerMutation?.isLoading) {
+    } else if (
+      !updateCustomerMutation?.isLoading &&
+      !updateCustomerMutation?.isIdle
+    ) {
       queryClient.refetchQueries(["adminCustomer"]);
       queryClient.refetchQueries(["customer"]);
       onClose();
