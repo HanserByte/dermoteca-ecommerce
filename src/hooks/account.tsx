@@ -2,6 +2,7 @@ import {
   CustomerAccessTokenCreateInput,
   CustomerCreateInput,
   CustomerResetInput,
+  CustomerUpdateInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -149,4 +150,18 @@ export const useUpdateProductWishlistMutation = () => {
   );
 
   return updateProductWishlistMutation;
+};
+
+export const useUpdateCustomerMutation = () => {
+  const updateCustomerMutation = useMutation(
+    // @ts-ignore
+    ({ customer, customerAccessToken }) => {
+      return fetch(`/api/account/customer?token=${customerAccessToken}`, {
+        method: "PATCH",
+        body: JSON.stringify(customer),
+      }).then((res) => res.json());
+    }
+  );
+
+  return updateCustomerMutation;
 };

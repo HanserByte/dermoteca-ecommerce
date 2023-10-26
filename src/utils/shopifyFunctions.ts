@@ -4,6 +4,7 @@ import type {
   CartLineInput,
   CustomerCreateInput,
   CustomerAccessTokenCreateInput,
+  CustomerUpdateInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import {
   CartCreateMutation,
@@ -21,6 +22,7 @@ import {
   SearchQuery,
   CustomerRecoverMutation,
   AdminCustomerQuery,
+  CustomerUpdateStorefrontMutation,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -371,6 +373,20 @@ export async function getWishlistProducts(query: string) {
   });
 
   return products;
+}
+
+export async function updateStorefrontCustomer(
+  customerInput: CustomerUpdateInput,
+  customerAccessToken: string
+) {
+  const { customerUpdate } = await makeShopifyRequest(
+    CustomerUpdateStorefrontMutation,
+    {
+      customer: customerInput,
+      customerAccessToken,
+    }
+  );
+  return customerUpdate;
 }
 
 export async function updateCustomer(input: any) {

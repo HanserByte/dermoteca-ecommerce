@@ -333,6 +333,24 @@ export const SearchQuery = `#graphql
   ${PRODUCT_FRAGMENT}
 `;
 
+export const CustomerUpdateStorefrontMutation = `#graphql
+  mutation customerUpdate($customer: CustomerUpdateInput!, $customerAccessToken: String!) {
+  customerUpdate(customer: $customer, customerAccessToken: $customerAccessToken) {
+    customer {
+      id
+      firstName
+      lastName
+      email
+      phone
+    }
+    customerUserErrors {
+      field
+      message
+    }
+  }
+}
+`;
+
 // Admin graphql
 
 export const CustomerUpdateMutation = `#graphql

@@ -1,4 +1,8 @@
-import { useAdminCustomer, useCustomer } from "@/hooks/account";
+import {
+  useAdminCustomer,
+  useCustomer,
+  useUpdateCustomerMutation,
+} from "@/hooks/account";
 import { useMobileView } from "@/hooks/responsive";
 import { COLORS } from "@/utils/constants";
 import {
@@ -17,7 +21,9 @@ import {
   ModalOverlay,
   Stack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
 
@@ -25,7 +31,8 @@ const UserEditModal = () => {
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem("userAccessToken")
   );
-
+  const updateCustomerMutation = useUpdateCustomerMutation();
+  const queryClient = useQueryClient();
   const customerData = useCustomer(accessToken as string);
   const adminCustomerData = useAdminCustomer(
     customerData?.data?.customer?.id as string
@@ -36,11 +43,11 @@ const UserEditModal = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: "",
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isMobile } = useMobileView();
+  const toast = useToast();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,18 +56,45 @@ const UserEditModal = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // @ts-ignore
+    updateCustomerMutation.mutate({
+      customer: formData,
+      customerAccessToken: accessToken,
+    });
   };
-
   useEffect(() => {
     if (adminCustomerData?.data) {
       setFormData({
-        firstName: adminCustomerData.data.firstName,
-        lastName: adminCustomerData.data.lastName,
-        email: adminCustomerData.data.email,
-        phoneNumber: adminCustomerData.data.phoneNumber,
+        firstName: adminCustomerData.data.firstName || "",
+        lastName: adminCustomerData.data.lastName || "",
+        email: adminCustomerData.data.email || "",
       });
     }
   }, [adminCustomerData?.data]);
+
+  useEffect(() => {
+    if (updateCustomerMutation?.data?.customerUserErrors?.length > 0) {
+      toast({
+        title: "Hubo un error.",
+        description:
+          updateCustomerMutation?.data?.customerUserErrors[0].message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else if (!updateCustomerMutation?.isLoading) {
+      queryClient.refetchQueries(["adminCustomer"]);
+      queryClient.refetchQueries(["customer"]);
+      onClose();
+      toast({
+        title: "Actualizacion exitosa",
+        description: "Tu informacion ha sido actualizado con exito",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  }, [updateCustomerMutation?.data]);
 
   return (
     <>
@@ -109,21 +143,13 @@ const UserEditModal = () => {
                     onChange={handleInputChange}
                   />
                 </FormControl>
-                <FormControl>
-                  <FormLabel>Numero de telefono</FormLabel>
-                  <Input
-                    type="tel"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
               </Stack>
             </ModalBody>
 
             <ModalFooter>
               <Box>
                 <Button
+                  isLoading={updateCustomerMutation?.isLoading}
                   _hover={{ opacity: 0.7 }}
                   type="submit"
                   bg={COLORS.GREEN}
