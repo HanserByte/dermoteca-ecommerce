@@ -23,7 +23,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { BsFilter } from "react-icons/bs";
-import { getOrderTag } from "@/utils";
+import { getCollectionOrderTag } from "@/utils";
 import { useAllTags } from "@/hooks/products";
 import customTheme from "../TagSelector/theme";
 
@@ -33,7 +33,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
   const router = useRouter();
   const allTagsData = useAllTags();
   const allCollectionsData = useAllCollections();
-  const activeOrder = getOrderTag(
+  const activeOrder = getCollectionOrderTag(
     router?.query?.sort,
     router?.query?.order,
     useCollectionSort

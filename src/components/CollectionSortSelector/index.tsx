@@ -1,4 +1,4 @@
-import { getOrderTag } from "@/utils";
+import { getCollectionOrderTag } from "@/utils";
 import {
   COLLECTION_PRODUCTS_SORT_OPTIONS,
   ALL_PRODUCTS_SORT_OPTIONS,
@@ -17,10 +17,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { GoChevronDown } from "react-icons/go";
 
-const SortSelector = ({ useCollectionSort = false }) => {
+const CollectionSortSelector = ({ useCollectionSort = false }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const router = useRouter();
-  const activeOrder = getOrderTag(router?.query?.sort, router?.query?.order);
+  const activeOrder = getCollectionOrderTag(
+    router?.query?.sort,
+    router?.query?.order
+  );
   const SORT_OPTIONS = useCollectionSort
     ? COLLECTION_PRODUCTS_SORT_OPTIONS
     : ALL_PRODUCTS_SORT_OPTIONS;
@@ -73,7 +76,7 @@ const SortSelector = ({ useCollectionSort = false }) => {
   );
 };
 
-export default SortSelector;
+export default CollectionSortSelector;
 
 {
   /* <Select

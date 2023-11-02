@@ -19,10 +19,10 @@ import { useCollection } from "@/hooks/collections";
 import { client } from "@/lib/sanity.client";
 import PortableText from "@/components/PortableText";
 import ComponentRenderer from "@/components/ComponentRenderer";
-import SortSelector from "@/components/SortSelector";
+import SortSelector from "@/components/CollectionSortSelector";
 import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
-import { getOrderTag } from "@/utils";
+import { getCollectionOrderTag } from "@/utils";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import FilterDrawer from "@/components/FilterDrawer";
 import Loading from "@/components/Loading";
@@ -45,7 +45,7 @@ const CollectionPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionPage, setCollectionPage] = useState<ICollectionPageData>();
-  const activeOrder = getOrderTag(
+  const activeOrder = getCollectionOrderTag(
     router?.query?.sort,
     router?.query?.order,
     true

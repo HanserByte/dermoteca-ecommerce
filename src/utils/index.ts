@@ -1,9 +1,11 @@
+import { NextRouter } from "next/router";
 import {
   ALL_PRODUCTS_SORT_OPTIONS,
+  BLOGS_SORT_OPTIONS,
   COLLECTION_PRODUCTS_SORT_OPTIONS,
 } from "./constants";
 
-export const getOrderTag = (
+export const getCollectionOrderTag = (
   sortString: string | string[] | undefined,
   sortOrder: string | string[] | undefined,
   useCollectionSortOptions: boolean = false
@@ -11,6 +13,17 @@ export const getOrderTag = (
   const SORT_OPTIONS = !useCollectionSortOptions
     ? ALL_PRODUCTS_SORT_OPTIONS
     : COLLECTION_PRODUCTS_SORT_OPTIONS;
+
+  return SORT_OPTIONS.find(
+    (option) => option.value === `${sortString},${sortOrder}`
+  );
+};
+
+export const getBlogOrderTag = (
+  sortString: string | string[] | undefined,
+  sortOrder: string | string[] | undefined
+) => {
+  const SORT_OPTIONS = BLOGS_SORT_OPTIONS;
 
   return SORT_OPTIONS.find(
     (option) => option.value === `${sortString},${sortOrder}`
@@ -49,4 +62,25 @@ export const getFulfillmentStatus = (status: string) => {
   };
 
   return statusMap[status];
+};
+
+export const handleRemoveTag = (
+  tag: string,
+  queryTagsArray: string[],
+  router: NextRouter
+) => {
+  // Remove tag from query params
+  router.query.tags = encodeURIComponent(
+    queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
+  );
+  router.push(router);
+};
+
+export const removeQueryParam = (param: string, router: NextRouter) => {
+  const { pathname, query } = router;
+  const params = new URLSearchParams(query);
+  params.delete(param);
+  router.replace({ pathname, query: params.toString() }, undefined, {
+    shallow: true,
+  });
 };

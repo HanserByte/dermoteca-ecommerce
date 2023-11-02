@@ -34,7 +34,6 @@ interface IAddressTableProps {
 }
 
 const AddressTable = ({ addresses }: IAddressTableProps) => {
-  console.log(addresses);
   return (
     <TableContainer>
       <Table variant="simple">

@@ -1,7 +1,21 @@
+import { IImg } from "./docs/default";
+
 export interface ICartLineInput {
   quantity: number;
   merchandiseId: string;
 }
+
+export interface ISanityBlogsPage {}
+
+export interface ISanityBlogPost {
+  title: string;
+  slug: ISlug;
+  featuredImage: IImg;
+  componentes: any[];
+  _id: string;
+  _createdAt: string;
+}
+
 export interface IUpdateCartLineInput {
   quantity: number;
   id: string;

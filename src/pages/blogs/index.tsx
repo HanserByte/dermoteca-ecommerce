@@ -1,6 +1,19 @@
-import React, { useEffect, useState } from "react";
+import CollectionsSelector from "@/components/CollectionsSelector";
+import FilterDrawer from "@/components/FilterDrawer";
 import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import PortableText from "@/components/PortableText";
+import SortSelector from "@/components/CollectionSortSelector";
+import TagSelector from "@/components/TagSelector";
+import { useMobileView } from "@/hooks/responsive";
+import { useAllSanityBlogPosts, useSanityBlogPage } from "@/hooks/sanity";
+import { useNavbar } from "@/store";
+import { ISanityBlogPost } from "@/typesSanity/shopify";
+import { getBlogOrderTag, handleRemoveTag, removeQueryParam } from "@/utils";
+import { COLORS } from "@/utils/constants";
+import {
+  getAllSanityBlogPosts,
+  getSanityBlogPage,
+} from "@/utils/sanityFunctions";
 import {
   Box,
   Flex,
@@ -9,67 +22,40 @@ import {
   TagCloseButton,
   TagLabel,
   Text,
-  useMediaQuery,
 } from "@chakra-ui/react";
-import { useNavbar, useStore } from "@/store";
-import { client } from "@/lib/sanity.client";
-import ProductCard from "@/components/ProductCard";
-import { IProduct } from "@/typesSanity/shopify";
-import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
-import PortableText from "@/components/PortableText";
-import ComponentRenderer from "@/components/ComponentRenderer";
-import { useAllProducts } from "@/hooks/collections";
-import { NextRouter, useRouter } from "next/router";
-import TagSelector from "@/components/TagSelector";
-import CollectionsSelector from "@/components/CollectionsSelector";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import CollectionSortSelector from "@/components/CollectionSortSelector";
-import {
-  getCollectionOrderTag,
-  handleRemoveTag,
-  removeQueryParam,
-} from "@/utils";
-import FilterDrawer from "@/components/FilterDrawer";
+import BlogSortSelector from "@/components/BlogSortSelector";
+import ComponentRenderer from "@/components/ComponentRenderer";
+import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
+import BlogCard from "@/components/BlogCard";
+import { NextPageContext } from "next";
 
-const AllCollectionsPage = () => {
+interface IBlogsPage {
+  allSanityBlogPosts: ISanityBlogPost[];
+  sanityBlogPage: any;
+}
+
+const Blogs = ({ allSanityBlogPosts, sanityBlogPage }: IBlogsPage) => {
   const router = useRouter();
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
   const queryTagsArray = queryTags
     ?.split(",")
     .filter((tag: string) => tag != "undefined" && tag != "");
-  const gqlQueryTags = queryTagsArray
-    ?.map((tag: string) => `(tag:${tag})`)
-    .join(" OR ");
-  // @ts-ignore
-  const sortKey = router.query?.sort?.toUpperCase();
-  const order = router.query?.order === "true";
   const { height } = useNavbar();
-  const { value } = useStore();
-  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const [collectionData, setCollectionData] = useState<ICollectionPageData>();
-  const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
-  const activeOrder = getCollectionOrderTag(
+  const { isMobile } = useMobileView();
+
+  const sanityBlogPageData = useSanityBlogPage(sanityBlogPage);
+  const allSanityBlogsData = useAllSanityBlogPosts(allSanityBlogPosts);
+  const activeOrder = getBlogOrderTag(
     router?.query?.sort,
     router?.query?.order
   );
-
   const hasActiveFilters =
     (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
-
-  const collectionQuery = `*[_type == "collectionPage"]  {
-    collectionContent,
-    components[]-> 
-  }[0]
-  `;
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await client.fetch(collectionQuery);
-      setCollectionData(data);
-    }
-    fetchData();
-  }, []);
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -81,30 +67,31 @@ const AllCollectionsPage = () => {
         pl={isMobile ? "20px" : "145px"}
         pr={isMobile ? "20px" : "145px"}
       >
-        {collectionData?.collectionContent && (
-          <PortableText blocks={collectionData?.collectionContent} />
+        {sanityBlogPageData?.data?.blogsContent && (
+          <PortableText blocks={sanityBlogPageData?.data?.blogsContent} />
         )}
       </Box>
 
-      <Flex my="6" pl={"20px"} pr={"20px"}>
+      {/* TODO: Add filter drawer */}
+      <Flex my="6" pl={"20px"} pr={"20px"} display={isMobile}>
         {isMobile && <FilterDrawer />}
       </Flex>
 
+      {/* Filter desktop bar */}
       {!isMobile && (
         <Box w="full">
           <Flex pl={"145px"} justifyContent="space-between" pr={"145px"} py={2}>
-            <CollectionSortSelector />
+            <BlogSortSelector />
 
             <Flex>
               <TagSelector />
-              <CollectionsSelector />
             </Flex>
           </Flex>
         </Box>
       )}
 
       {(hasActiveFilters || !isMobile) && (
-        <Box w="full" bg="#E7D4C7">
+        <Box w="full" bg={COLORS.GREEN}>
           <Box
             overflowX="auto"
             whiteSpace="nowrap"
@@ -152,7 +139,7 @@ const AllCollectionsPage = () => {
         </Box>
       )}
 
-      {allProductsData?.isLoading && <Loading />}
+      {allSanityBlogsData?.isLoading && <Loading />}
 
       <Box
         my="6"
@@ -162,24 +149,21 @@ const AllCollectionsPage = () => {
         <Grid
           gap={5}
           py={5}
-          templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
+          templateColumns={isMobile ? "repeat(1, 1fr)" : "repeat(3, 1fr)"}
         >
-          {allProductsData?.data?.data?.products?.nodes?.map(
-            (product: IProduct) => (
-              <ProductCard
-                handle={product.handle}
-                imageSrc={product.featuredImage.url}
-                title={product.title}
-                // @ts-ignore
-                price={product?.priceRange?.maxVariantPrice?.amount}
-                key={product?.id}
-              />
-            )
-          )}
+          {allSanityBlogsData?.data.map((blog: ISanityBlogPost) => (
+            <BlogCard
+              handle={blog.slug.current}
+              image={blog.featuredImage}
+              title={blog.title}
+              key={blog?._id}
+              createdAt={blog?._createdAt}
+            />
+          ))}
         </Grid>
       </Box>
 
-      {collectionData?.components.map((componente: any) => (
+      {sanityBlogPageData?.data?.components?.map((componente: any) => (
         <ComponentRenderer
           key={componente._id}
           component={componente._type}
@@ -191,4 +175,15 @@ const AllCollectionsPage = () => {
   );
 };
 
-export default AllCollectionsPage;
+export async function getServerSideProps({ res }: NextPageContext) {
+  res?.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
+
+  const allSanityBlogPosts = await getAllSanityBlogPosts();
+  const sanityBlogPage = await getSanityBlogPage();
+  return { props: { allSanityBlogPosts, sanityBlogPage } };
+}
+
+export default Blogs;

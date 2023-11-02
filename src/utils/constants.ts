@@ -16,6 +16,13 @@ export const COLLECTION_PRODUCTS_SORT_OPTIONS = [
   { name: "Precio Mayor - Menor", value: "price,true" },
 ];
 
+export const BLOGS_SORT_OPTIONS = [
+  { name: "Mas reciente", value: "created,false" },
+  { name: "Mas antiguos", value: "created,true" },
+  { name: "Alfabeticamente A - Z", value: "title,false" },
+  { name: "Alfabeticamente Z - A", value: "title,true" },
+];
+
 export const COLORS = {
   GREEN: "#00AA4F",
 };

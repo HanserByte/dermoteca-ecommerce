@@ -54,7 +54,7 @@ const PortableText = ({ blocks }) => {
       h5: ({ children }: { children: React.ReactNode }) => {
         return (
           <Text fontWeight={700} fontSize={"md"}>
-            {children[0].props.text}
+            {children[0]?.props?.text}
           </Text>
         );
       },
