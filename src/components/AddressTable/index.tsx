@@ -20,7 +20,7 @@ import { TbTrash } from "react-icons/tb";
 
 interface IAddressTableProps {
   addresses: {
-    formatted: string;
+    formatted: string[];
     formattedArea: string;
     address1: string;
     address2: string;
@@ -34,6 +34,7 @@ interface IAddressTableProps {
 }
 
 const AddressTable = ({ addresses }: IAddressTableProps) => {
+  console.log(addresses);
   return (
     <TableContainer>
       <Table variant="simple">
@@ -53,24 +54,11 @@ const AddressTable = ({ addresses }: IAddressTableProps) => {
               </Td>
               <Td>
                 <Text maxW="400px" noOfLines={1}>
-                  {address.formatted}
+                  {address.formatted.join(" ")}
                 </Text>
               </Td>
-              <Td>
-                <Button color={COLORS.GREEN} variant="link">
-                  Editar
-                </Button>
-              </Td>
-              <Td>
-                <Button
-                  aria-label="Eliminar"
-                  color="red"
-                  _hover={{ opacity: 0.7 }}
-                  variant="link"
-                >
-                  <TbTrash size={20} />
-                </Button>
-              </Td>
+              <Td></Td>
+              <Td></Td>
             </Tr>
           ))}
         </Tbody>
