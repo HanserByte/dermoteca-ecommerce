@@ -1,9 +1,5 @@
-import CollectionsSelector from "@/components/CollectionsSelector";
-import FilterDrawer from "@/components/FilterDrawer";
 import NavBar from "@/components/NavBar";
 import PortableText from "@/components/PortableText";
-import SortSelector from "@/components/CollectionSortSelector";
-import TagSelector from "@/components/TagSelector";
 import { useMobileView } from "@/hooks/responsive";
 import {
   useAllSanityBlogPosts,
@@ -29,8 +25,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import CollectionSortSelector from "@/components/CollectionSortSelector";
+import React from "react";
 import BlogSortSelector from "@/components/BlogSortSelector";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import Footer from "@/components/Footer";
@@ -38,6 +33,7 @@ import Loading from "@/components/Loading";
 import BlogCard from "@/components/BlogCard";
 import { NextPageContext } from "next";
 import BlogTagsSelector from "@/components/BlogTagsSelector";
+import BlogsFilterDrawer from "@/components/BlogsFilterDrawer";
 
 interface IBlogsPage {
   allSanityBlogPosts: ISanityBlogPost[];
@@ -94,7 +90,7 @@ const Blogs = ({
 
       {/* TODO: Add filter drawer */}
       <Flex my="6" pl={"20px"} pr={"20px"} display={isMobile}>
-        {isMobile && <FilterDrawer />}
+        {isMobile && <BlogsFilterDrawer />}
       </Flex>
 
       {/* Filter desktop bar */}
@@ -121,7 +117,7 @@ const Blogs = ({
             pr={isMobile ? "20px" : "145px"}
             py={2}
           >
-            <Text display="inline" fontWeight={600}>
+            <Text display="inline" color="white" fontWeight={600}>
               Filtros
             </Text>
             {activeOrder && (

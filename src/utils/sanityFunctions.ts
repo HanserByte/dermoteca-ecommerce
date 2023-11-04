@@ -35,8 +35,6 @@ export async function getAllSanityBlogPosts(
     (queryTags?.length > 0 ? allSanityBlogByTagsQuery : allSanityBlogsQuery) +
     `| order(${groqSortString} ${order})`;
 
-  console.log(sortedGroqQuery);
-
   const allBlogPages = await client.fetch(sortedGroqQuery);
   return allBlogPages;
 }

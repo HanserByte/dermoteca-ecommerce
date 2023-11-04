@@ -1,10 +1,5 @@
-import { useAllCollections } from "@/hooks/collections";
-import { COLORS } from "@/utils/constants";
+import { BLOGS_SORT_OPTIONS, COLORS } from "@/utils/constants";
 import { CheckCircleIcon } from "@chakra-ui/icons";
-import {
-  COLLECTION_PRODUCTS_SORT_OPTIONS,
-  ALL_PRODUCTS_SORT_OPTIONS,
-} from "@/utils/constants";
 import {
   Button,
   Checkbox,
@@ -19,30 +14,24 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { BsFilter } from "react-icons/bs";
-import { getCollectionOrderTag } from "@/utils";
-import { useAllTags } from "@/hooks/products";
+import { getBlogOrderTag } from "@/utils";
+import { useAllSanityBlogTags } from "@/hooks/sanity";
 
-const FilterDrawer = ({ useCollectionSort = false }) => {
+const BlogsFilterDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const router = useRouter();
-  const allTagsData = useAllTags();
-  const allCollectionsData = useAllCollections();
-  const activeOrder = getCollectionOrderTag(
+  const allSanityBlogTags = useAllSanityBlogTags();
+  const activeOrder = getBlogOrderTag(
     router?.query?.sort,
-    router?.query?.order,
-    useCollectionSort
+    router?.query?.order
   );
 
-  const activeCollection = router?.query?.collectionHandle;
   const queryTags = decodeURIComponent(router?.query?.tags);
-  const SORT_OPTIONS = useCollectionSort
-    ? COLLECTION_PRODUCTS_SORT_OPTIONS
-    : ALL_PRODUCTS_SORT_OPTIONS;
+  const SORT_OPTIONS = BLOGS_SORT_OPTIONS;
 
   const handleOrderChange = (e: React.ClickEvent<HTMLSelectElement>) => {
     // Add query params and remove them if sort is inactive
@@ -74,7 +63,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
           .join(",")
       );
     }
-    router.push(router);
+    router.push(router, undefined, { shallow: true });
   };
 
   return (
@@ -131,65 +120,22 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
                 Etiquetas
               </Text>
               <Grid templateColumns="repeat(2, 1fr)" columnGap={4}>
-                {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
+                {allSanityBlogTags?.data?.alltags?.map((tag: any) => {
                   return (
                     <Checkbox
                       colorScheme="green"
                       size="lg"
-                      value={tag.node}
+                      value={tag}
                       onChange={handleCheckboxSelect}
-                      key={tag.node}
-                      isChecked={queryTags?.includes(tag.node)}
+                      key={tag}
+                      isChecked={queryTags?.includes(tag)}
                       fontWeight={600}
                     >
-                      {tag.node}
+                      {tag}
                     </Checkbox>
                   );
                 })}
               </Grid>
-            </VStack>
-
-            <VStack mt={8} w="min-content" align="start" gap={1}>
-              <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
-                Colecciones
-              </Text>
-              <Button
-                gap={2}
-                _hover={{ bg: "transparent" }}
-                p={0}
-                fontSize="16px"
-                variant="ghost"
-                size="sm"
-                as={Link}
-                href={`/collections/all`}
-              >
-                Todas las colecciones
-                {router?.pathname.includes("all") && (
-                  <CheckCircleIcon color={COLORS.GREEN} />
-                )}
-              </Button>
-              {allCollectionsData?.data?.collections?.nodes?.map(
-                (collection: any) => {
-                  return (
-                    <Button
-                      gap={2}
-                      _hover={{ bg: "transparent" }}
-                      p={0}
-                      key={collection.handle}
-                      fontSize="16px"
-                      variant="ghost"
-                      size="sm"
-                      as={Link}
-                      href={`/collections/${collection.handle}`}
-                    >
-                      {collection.title}
-                      {activeCollection === collection.handle && (
-                        <CheckCircleIcon color={COLORS.GREEN} />
-                      )}
-                    </Button>
-                  );
-                }
-              )}
             </VStack>
           </DrawerBody>
         </DrawerContent>
@@ -198,4 +144,4 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
   );
 };
 
-export default FilterDrawer;
+export default BlogsFilterDrawer;
