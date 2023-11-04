@@ -30,7 +30,7 @@ const BlogSortSelector = () => {
     if (targetValue.length > 1) {
       router.query.sort = targetValue.split(",")?.[0];
       router.query.order = targetValue.split(",")?.[1];
-      router.push(router);
+      router.push(router, undefined, { shallow: true });
     } else {
       router.replace("/collections", undefined, { shallow: true });
     }

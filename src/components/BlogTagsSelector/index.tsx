@@ -1,4 +1,5 @@
-import { useAllTags } from "@/hooks/products";
+import { useAllSanityBlogTags } from "@/hooks/sanity";
+import { COLORS } from "@/utils/constants";
 import {
   Button,
   Checkbox,
@@ -13,13 +14,15 @@ import { useRouter } from "next/router";
 import React from "react";
 import { GoChevronDown } from "react-icons/go";
 
-const TagSelector = () => {
-  const allTagsData = useAllTags();
+const BlogTagsSelector = () => {
+  const allSanityBlogTags = useAllSanityBlogTags();
   const router = useRouter();
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
 
-  const handleCheckboxSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxSelect = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const tag = encodeURIComponent(e.target.value);
     const queryTagsArray = queryTags
       ?.split(",")
@@ -40,7 +43,7 @@ const TagSelector = () => {
       );
     }
 
-    router.push(router);
+    router.push(router, undefined, { shallow: true });
   };
 
   return (
@@ -49,7 +52,8 @@ const TagSelector = () => {
         <Button
           variant="ghost"
           _hover={{
-            bg: "#E7D4C7",
+            bg: COLORS.GREEN,
+            color: "white",
           }}
         >
           Etiquetas <GoChevronDown />
@@ -59,21 +63,23 @@ const TagSelector = () => {
         <PopoverArrow />
         <PopoverBody>
           <Grid templateColumns="repeat(2, 1fr)">
-            {allTagsData?.data?.productTags?.edges?.map((tag: any) => {
-              return (
-                <Checkbox
-                  colorScheme="green"
-                  size="md"
-                  value={tag.node}
-                  onChange={handleCheckboxSelect}
-                  key={tag.node}
-                  isChecked={queryTags?.includes(tag.node)}
-                  fontWeight={600}
-                >
-                  {tag.node}
-                </Checkbox>
-              );
-            })}
+            {allSanityBlogTags?.data?.alltags?.map(
+              (tag: string, idx: number) => {
+                return (
+                  <Checkbox
+                    colorScheme="green"
+                    size="md"
+                    value={tag}
+                    onChange={handleCheckboxSelect}
+                    key={idx}
+                    isChecked={queryTags?.includes(tag)}
+                    fontWeight={600}
+                  >
+                    {tag}
+                  </Checkbox>
+                );
+              }
+            )}
           </Grid>
         </PopoverBody>
       </PopoverContent>
@@ -81,4 +87,4 @@ const TagSelector = () => {
   );
 };
 
-export default TagSelector;
+export default BlogTagsSelector;

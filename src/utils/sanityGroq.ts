@@ -14,3 +14,9 @@ export const allSanityBlogsQuery = groq`
 export const individualBlogPageQuery = groq`
   *[slug.current == $slug]
 `;
+
+export const allBlogTagsQuery = groq`
+  {
+    "alltags": array::unique(*[count(tags[]) > 0].tags[].label) 
+  }
+`;

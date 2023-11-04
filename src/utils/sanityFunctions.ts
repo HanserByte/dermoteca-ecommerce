@@ -1,5 +1,6 @@
 import { client } from "@/lib/sanity.client";
 import {
+  allBlogTagsQuery,
   allSanityBlogsQuery,
   blogsPageQuery,
   individualBlogPageQuery,
@@ -18,4 +19,9 @@ export async function getSanityBlogPost(slug: string) {
 export async function getAllSanityBlogPosts() {
   const allBlogPages = await client.fetch(allSanityBlogsQuery);
   return allBlogPages;
+}
+
+export async function getAllBlogTags() {
+  const allBlogTags = await client.fetch(allBlogTagsQuery);
+  return allBlogTags;
 }

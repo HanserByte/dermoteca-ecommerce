@@ -1,5 +1,6 @@
 import { ISanityBlogsPage, ISanityBlogPost } from "@/typesSanity/shopify";
 import {
+  getAllBlogTags,
   getAllSanityBlogPosts,
   getSanityBlogPage,
   getSanityBlogPost,
@@ -32,4 +33,13 @@ export const useAllSanityBlogPosts = (initialData: ISanityBlogPost[]) => {
   );
 
   return allSanityBlogsData;
+};
+
+export const useAllSanityBlogTags = (initialData?: string[]) => {
+  const allSanityBlogTags = useQuery(
+    ["allSanityBlogTags"],
+    () => getAllBlogTags(),
+    { initialData, staleTime: Infinity }
+  );
+  return allSanityBlogTags;
 };

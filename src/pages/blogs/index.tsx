@@ -5,12 +5,17 @@ import PortableText from "@/components/PortableText";
 import SortSelector from "@/components/CollectionSortSelector";
 import TagSelector from "@/components/TagSelector";
 import { useMobileView } from "@/hooks/responsive";
-import { useAllSanityBlogPosts, useSanityBlogPage } from "@/hooks/sanity";
+import {
+  useAllSanityBlogPosts,
+  useAllSanityBlogTags,
+  useSanityBlogPage,
+} from "@/hooks/sanity";
 import { useNavbar } from "@/store";
 import { ISanityBlogPost } from "@/typesSanity/shopify";
 import { getBlogOrderTag, handleRemoveTag, removeQueryParam } from "@/utils";
 import { COLORS } from "@/utils/constants";
 import {
+  getAllBlogTags,
   getAllSanityBlogPosts,
   getSanityBlogPage,
 } from "@/utils/sanityFunctions";
@@ -32,13 +37,19 @@ import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
 import BlogCard from "@/components/BlogCard";
 import { NextPageContext } from "next";
+import BlogTagsSelector from "@/components/BlogTagsSelector";
 
 interface IBlogsPage {
   allSanityBlogPosts: ISanityBlogPost[];
   sanityBlogPage: any;
+  allSanityBlogTags: string[];
 }
 
-const Blogs = ({ allSanityBlogPosts, sanityBlogPage }: IBlogsPage) => {
+const Blogs = ({
+  allSanityBlogPosts,
+  sanityBlogPage,
+  allSanityBlogTags,
+}: IBlogsPage) => {
   const router = useRouter();
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
@@ -47,7 +58,7 @@ const Blogs = ({ allSanityBlogPosts, sanityBlogPage }: IBlogsPage) => {
     .filter((tag: string) => tag != "undefined" && tag != "");
   const { height } = useNavbar();
   const { isMobile } = useMobileView();
-
+  useAllSanityBlogTags(allSanityBlogTags);
   const sanityBlogPageData = useSanityBlogPage(sanityBlogPage);
   const allSanityBlogsData = useAllSanityBlogPosts(allSanityBlogPosts);
   const activeOrder = getBlogOrderTag(
@@ -84,7 +95,7 @@ const Blogs = ({ allSanityBlogPosts, sanityBlogPage }: IBlogsPage) => {
             <BlogSortSelector />
 
             <Flex>
-              <TagSelector />
+              <BlogTagsSelector />
             </Flex>
           </Flex>
         </Box>
@@ -183,7 +194,8 @@ export async function getServerSideProps({ res }: NextPageContext) {
 
   const allSanityBlogPosts = await getAllSanityBlogPosts();
   const sanityBlogPage = await getSanityBlogPage();
-  return { props: { allSanityBlogPosts, sanityBlogPage } };
+  const allSanityBlogTags = await getAllBlogTags();
+  return { props: { allSanityBlogPosts, sanityBlogPage, allSanityBlogTags } };
 }
 
 export default Blogs;

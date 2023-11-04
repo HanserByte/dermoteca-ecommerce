@@ -73,7 +73,7 @@ export const handleRemoveTag = (
   router.query.tags = encodeURIComponent(
     queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
   );
-  router.push(router);
+  router.push(router, undefined, { shallow: true });
 };
 
 export const removeQueryParam = (param: string, router: NextRouter) => {
