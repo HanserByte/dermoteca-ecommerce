@@ -16,8 +16,15 @@ export async function getSanityBlogPost(slug: string) {
   return blogPage;
 }
 
-export async function getAllSanityBlogPosts() {
-  const allBlogPages = await client.fetch(allSanityBlogsQuery);
+export async function getAllSanityBlogPosts(
+  sort: string,
+  order: string = "asc"
+) {
+  const groqSortString = sort === "titulo" ? "title" : "_createdAt";
+  const sortedGroqQuery =
+    allSanityBlogsQuery + `| order(${groqSortString} ${order})`;
+
+  const allBlogPages = await client.fetch(sortedGroqQuery);
   return allBlogPages;
 }
 

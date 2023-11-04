@@ -56,11 +56,18 @@ const Blogs = ({
   const queryTagsArray = queryTags
     ?.split(",")
     .filter((tag: string) => tag != "undefined" && tag != "");
+  // @ts-ignore
+  const sortKey = router.query?.sort as string;
+  const order = (router.query?.order as string) || "asc";
   const { height } = useNavbar();
   const { isMobile } = useMobileView();
   useAllSanityBlogTags(allSanityBlogTags);
   const sanityBlogPageData = useSanityBlogPage(sanityBlogPage);
-  const allSanityBlogsData = useAllSanityBlogPosts(allSanityBlogPosts);
+  const allSanityBlogsData = useAllSanityBlogPosts(
+    allSanityBlogPosts,
+    sortKey,
+    order
+  );
   const activeOrder = getBlogOrderTag(
     router?.query?.sort,
     router?.query?.order
@@ -162,7 +169,7 @@ const Blogs = ({
           py={5}
           templateColumns={isMobile ? "repeat(1, 1fr)" : "repeat(3, 1fr)"}
         >
-          {allSanityBlogsData?.data.map((blog: ISanityBlogPost) => (
+          {allSanityBlogsData?.data?.map((blog: ISanityBlogPost) => (
             <BlogCard
               handle={blog.slug.current}
               image={blog.featuredImage}

@@ -1,3 +1,4 @@
+import { client } from "@/lib/sanity.client";
 import { ISanityBlogsPage, ISanityBlogPost } from "@/typesSanity/shopify";
 import {
   getAllBlogTags,
@@ -5,7 +6,8 @@ import {
   getSanityBlogPage,
   getSanityBlogPost,
 } from "@/utils/sanityFunctions";
-import { useQuery } from "@tanstack/react-query";
+import { allSanityBlogsQuery } from "@/utils/sanityGroq";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useSanityBlogPage = (initialData: ISanityBlogsPage) => {
   const sanityBlogPageData = useQuery(
@@ -25,14 +27,30 @@ export const useSanityBlogPost = (slug: string) => {
   return sanityBlogData;
 };
 
-export const useAllSanityBlogPosts = (initialData: ISanityBlogPost[]) => {
+export const useAllSanityBlogPosts = (
+  initialData: ISanityBlogPost[],
+  sort: string,
+  order: string
+) => {
   const allSanityBlogsData = useQuery(
-    ["allSanityBlogs"],
-    () => getAllSanityBlogPosts(),
-    { initialData }
+    ["allSanityBlogs", { sort, order }],
+    () => getAllSanityBlogPosts(sort, order),
+    { initialData, keepPreviousData: true }
   );
 
   return allSanityBlogsData;
+};
+
+export const usePrefetchOrderedBlogs = () => {
+  const queryClient = useQueryClient();
+
+  const prefetchOrderedBlogs = (sort: string, order: string = "asc") => {
+    queryClient.prefetchQuery(["allSanityBlogs", { sort, order }], () =>
+      getAllSanityBlogPosts(sort, order)
+    );
+  };
+
+  return { prefetchOrderedBlogs };
 };
 
 export const useAllSanityBlogTags = (initialData?: string[]) => {

@@ -1,3 +1,4 @@
+import { usePrefetchOrderedBlogs } from "@/hooks/sanity";
 import { getBlogOrderTag } from "@/utils";
 import { BLOGS_SORT_OPTIONS, COLORS } from "@/utils/constants";
 import {
@@ -11,31 +12,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 
 const BlogSortSelector = () => {
-  const { onOpen, onClose, isOpen } = useDisclosure();
   const router = useRouter();
+
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const activeOrder = getBlogOrderTag(
     router?.query?.sort,
     router?.query?.order
   );
   const SORT_OPTIONS = BLOGS_SORT_OPTIONS;
-
-  const handleOrderChange = (e: MouseEvent) => {
-    // Add query params and remove them if sort is inactive
-    // @ts-ignore
-    const targetValue = e.target?.value;
-    if (targetValue.length > 1) {
-      router.query.sort = targetValue.split(",")?.[0];
-      router.query.order = targetValue.split(",")?.[1];
-      router.push(router, undefined, { shallow: true });
-    } else {
-      router.replace("/collections", undefined, { shallow: true });
-    }
-    onClose();
-  };
 
   return (
     <Popover
@@ -54,24 +42,12 @@ const BlogSortSelector = () => {
         <PopoverBody>
           <VStack w="min-content" align="start">
             {SORT_OPTIONS.map((option) => (
-              <Button
-                bg={
-                  activeOrder?.name === option.name
-                    ? COLORS.GREEN
-                    : "transparent"
-                }
-                onClick={handleOrderChange}
-                variant="ghost"
-                color={activeOrder?.name === option.name ? "white" : "black"}
-                _hover={{
-                  bg: COLORS.GREEN,
-                  color: "white",
-                }}
-                value={option.value}
+              <ButtonSort
                 key={option.name}
-              >
-                {option.name}
-              </Button>
+                activeOrder={activeOrder}
+                option={option}
+                onClose={onClose}
+              />
             ))}
           </VStack>
         </PopoverBody>
@@ -81,3 +57,66 @@ const BlogSortSelector = () => {
 };
 
 export default BlogSortSelector;
+
+const ButtonSort = ({ activeOrder, option, onClose }: IButtonSort) => {
+  const [prefetchDone, setPrefetchDone] = useState(false);
+  const router = useRouter();
+  const { prefetchOrderedBlogs } = usePrefetchOrderedBlogs();
+
+  const handleOrderChange = (e: MouseEvent) => {
+    // Add query params and remove them if sort is inactive
+    // @ts-ignore
+    const targetValue = e.target?.value;
+    if (targetValue.length > 1) {
+      router.query.sort = targetValue.split(",")?.[0];
+      router.query.order = targetValue.split(",")?.[1];
+      router.push(router, undefined, { shallow: true });
+    } else {
+      router.replace("/blogs", undefined, { shallow: true });
+    }
+    onClose();
+  };
+
+  const handlePrefetch = (e: MouseEvent) => {
+    if (!prefetchDone) {
+      const targetValue = e.target?.value;
+      prefetchOrderedBlogs(
+        targetValue.split(",")?.[0],
+        targetValue.split(",")?.[1]
+      );
+      setPrefetchDone(true);
+    }
+  };
+
+  return (
+    <Button
+      bg={activeOrder?.name === option.name ? COLORS.GREEN : "transparent"}
+      onClick={handleOrderChange}
+      onMouseEnter={handlePrefetch}
+      variant="ghost"
+      color={activeOrder?.name === option.name ? "white" : "black"}
+      _hover={{
+        bg: COLORS.GREEN,
+        color: "white",
+      }}
+      value={option.value}
+      key={option.name}
+    >
+      {option.name}
+    </Button>
+  );
+};
+
+interface IButtonSort {
+  activeOrder:
+    | {
+        name: string;
+        value: string;
+      }
+    | undefined;
+  option: {
+    name: string;
+    value: string;
+  };
+  onClose: () => void;
+}
