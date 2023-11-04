@@ -5,6 +5,7 @@ import {
   blogsPageQuery,
   individualBlogPageQuery,
 } from "./sanityGroq";
+import { groq } from "next-sanity";
 
 export async function getSanityBlogPage() {
   const blogsPage = await client.fetch(blogsPageQuery);
@@ -18,11 +19,23 @@ export async function getSanityBlogPost(slug: string) {
 
 export async function getAllSanityBlogPosts(
   sort: string,
-  order: string = "asc"
+  order: string = "asc",
+  queryTags: string[]
 ) {
   const groqSortString = sort === "titulo" ? "title" : "_createdAt";
+
+  const desiredTags = queryTags
+    ?.map((tag) => `"${tag}" in tags[].label`)
+    ?.join(" || ");
+  const allSanityBlogByTagsQuery = groq`
+  *[_type == "blog" && ${desiredTags}] 
+`;
+
   const sortedGroqQuery =
-    allSanityBlogsQuery + `| order(${groqSortString} ${order})`;
+    (queryTags?.length > 0 ? allSanityBlogByTagsQuery : allSanityBlogsQuery) +
+    `| order(${groqSortString} ${order})`;
+
+  console.log(sortedGroqQuery);
 
   const allBlogPages = await client.fetch(sortedGroqQuery);
   return allBlogPages;

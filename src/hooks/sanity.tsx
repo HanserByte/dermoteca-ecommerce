@@ -30,11 +30,12 @@ export const useSanityBlogPost = (slug: string) => {
 export const useAllSanityBlogPosts = (
   initialData: ISanityBlogPost[],
   sort: string,
-  order: string
+  order: string,
+  queryTags: string[]
 ) => {
   const allSanityBlogsData = useQuery(
-    ["allSanityBlogs", { sort, order }],
-    () => getAllSanityBlogPosts(sort, order),
+    ["allSanityBlogs", { sort, order, queryTags: queryTags?.join(",") }],
+    () => getAllSanityBlogPosts(sort, order, queryTags),
     { initialData, keepPreviousData: true }
   );
 
@@ -44,9 +45,14 @@ export const useAllSanityBlogPosts = (
 export const usePrefetchOrderedBlogs = () => {
   const queryClient = useQueryClient();
 
-  const prefetchOrderedBlogs = (sort: string, order: string = "asc") => {
-    queryClient.prefetchQuery(["allSanityBlogs", { sort, order }], () =>
-      getAllSanityBlogPosts(sort, order)
+  const prefetchOrderedBlogs = (
+    sort: string,
+    order: string = "asc",
+    queryTags: string[]
+  ) => {
+    queryClient.prefetchQuery(
+      ["allSanityBlogs", { sort, order, queryTags: queryTags?.join(",") }],
+      () => getAllSanityBlogPosts(sort, order, queryTags)
     );
   };
 

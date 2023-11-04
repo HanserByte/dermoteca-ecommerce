@@ -66,8 +66,10 @@ const Blogs = ({
   const allSanityBlogsData = useAllSanityBlogPosts(
     allSanityBlogPosts,
     sortKey,
-    order
+    order,
+    queryTagsArray
   );
+
   const activeOrder = getBlogOrderTag(
     router?.query?.sort,
     router?.query?.order

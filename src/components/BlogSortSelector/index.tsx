@@ -63,6 +63,12 @@ const ButtonSort = ({ activeOrder, option, onClose }: IButtonSort) => {
   const router = useRouter();
   const { prefetchOrderedBlogs } = usePrefetchOrderedBlogs();
 
+  // @ts-ignore
+  const queryTags = decodeURIComponent(router?.query?.tags);
+  const queryTagsArray = queryTags
+    ?.split(",")
+    .filter((tag: string) => tag != "undefined" && tag != "");
+
   const handleOrderChange = (e: MouseEvent) => {
     // Add query params and remove them if sort is inactive
     // @ts-ignore
@@ -82,7 +88,8 @@ const ButtonSort = ({ activeOrder, option, onClose }: IButtonSort) => {
       const targetValue = e.target?.value;
       prefetchOrderedBlogs(
         targetValue.split(",")?.[0],
-        targetValue.split(",")?.[1]
+        targetValue.split(",")?.[1],
+        queryTagsArray
       );
       setPrefetchDone(true);
     }
