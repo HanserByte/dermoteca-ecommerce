@@ -30,11 +30,11 @@ const BlogCard = (props: BlogCardProps) => {
     <Link href={`/blogs/${props.handle}`} style={{ width: "100%" }}>
       <Flex direction="column" position="relative">
         <AspectRatio
-          ratio={1 / 1}
+          ratio={isMobile ? 2 / 1 : 1 / 1}
           onMouseEnter={() => prefetchProductPage(props.handle)}
         >
-          {/* TODO: change img to next Image component when rendering final product image */}
           <Image
+            objectPosition="top"
             src={sanityImage(props.image.asset._ref).url()}
             alt={props.title}
             w="500"
