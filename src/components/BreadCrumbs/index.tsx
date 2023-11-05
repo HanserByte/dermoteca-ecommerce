@@ -19,9 +19,9 @@ const BreadCrumbs = ({
 }: IBreadCrumbsProps) => {
   const { isMobile } = useMobileView();
   const url =
-    mainPage === "products"
+    mainPage === "colecciones"
       ? `/${mainPage}/${pageCategory?.handle}`
-      : `/${mainPage}?tags=${encodeURIComponent(pageCategory.handle)}`;
+      : `/${mainPage}/?tags=${encodeURIComponent(pageCategory.handle)}`;
 
   return (
     <Breadcrumb
@@ -36,7 +36,7 @@ const BreadCrumbs = ({
         </BreadcrumbLink>
       </BreadcrumbItem>
 
-      {mainPage === "products" && (
+      {mainPage === "colecciones" && (
         <BreadcrumbItem>
           <BreadcrumbLink as={Link} href="/colecciones/todas">
             Colecciones

@@ -208,7 +208,7 @@ const ProductPage = () => {
           pageCategory={
             shopifyProductData?.data?.product?.collections?.nodes[0]
           }
-          mainPage="products"
+          mainPage="colecciones"
         />
       </Flex>
 
