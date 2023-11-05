@@ -1,12 +1,13 @@
 import { useMobileView } from "@/hooks/responsive";
 import { sanityImage } from "@/lib/sanity.image";
 import { IImg } from "@/typesSanity/docs/default";
-import { AspectRatio, Box, Flex, Image, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Flex, Text } from "@chakra-ui/react";
 import { PortableTextBlockComponent } from "@portabletext/react";
 import React from "react";
 import PortableText from "../PortableText";
 import { formatDate } from "@/utils";
 import { COLORS } from "@/utils/constants";
+import { default as NextImage } from "next/image";
 
 interface IImageAndContent {
   data: {
@@ -28,19 +29,21 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
   const gap = componentOrientation === "vertical" || isMobile ? 50 : 100;
   const desktopWidth = componentOrientation === "vertical" ? "100%" : "50%";
   const maxWidth = componentOrientation === "horizontal" ? "auto" : 1000;
+  const imageUrl = sanityImage(image.asset._ref).url();
 
   return (
     <>
       {isMobile && (
         <AspectRatio ratio={1 / 1}>
-          <Image
-            objectFit="cover"
-            w="100%"
-            maxH={700}
-            flex={1}
-            src={sanityImage(image.asset._ref).url()}
-            alt=""
-          />
+          <Box width="100%" objectFit="cover" w={desktopWidth}>
+            <NextImage
+              src={imageUrl}
+              alt=""
+              width={670}
+              height={700}
+              style={{ width: "100%" }}
+            />
+          </Box>
         </AspectRatio>
       )}
       <Box
@@ -57,16 +60,16 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
           flexDirection={orientation}
         >
           {!isMobile && (
-            <Image
-              objectFit="cover"
-              w={desktopWidth}
-              maxH={700}
-              flex={1}
-              src={sanityImage(image.asset._ref).url()}
-              alt=""
-              position="sticky"
-              top="140"
-            />
+            <Box top="140" position="sticky" objectFit="cover" w={desktopWidth}>
+              <NextImage
+                style={{ position: "sticky", top: "140px" }}
+                src={imageUrl}
+                alt=""
+                width={670}
+                height={700}
+              />
+            </Box>
+            // <></>
           )}
           <Box w={isMobile ? "100%" : desktopWidth} flex={1}>
             <Text color={COLORS.GREEN} fontWeight={700}>
