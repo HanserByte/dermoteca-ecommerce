@@ -1,4 +1,5 @@
 import BreadCrumbs from "@/components/BreadCrumbs";
+import ComponentRenderer from "@/components/ComponentRenderer";
 import Loading from "@/components/Loading";
 import NavBar from "@/components/NavBar";
 import { useMobileView } from "@/hooks/responsive";
@@ -49,6 +50,14 @@ const BlogPage = ({ blogPost }: IBlogPostPage) => {
           mainPage="blogs"
         />
       </Flex>
+
+      {sanityBlogData?.data?.componentes?.map((component: any) => (
+        <ComponentRenderer
+          key={component._id}
+          component={component._type}
+          data={component}
+        />
+      ))}
     </Box>
   );
 };

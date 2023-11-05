@@ -51,6 +51,32 @@ const PortableText = ({ blocks }) => {
       ),
     },
     block: {
+      h1: ({ children }: { children: React.ReactNode }) => {
+        return (
+          <Text
+            as="h1"
+            marginTop={0}
+            marginBottom={isMobile ? 2 : 5}
+            fontSize={isMobile ? "xl" : "2xl"}
+            fontWeight={700}
+          >
+            {children}
+          </Text>
+        );
+      },
+      h2: ({ children }: { children: React.ReactNode }) => {
+        return (
+          <Text
+            as="h2"
+            marginTop={0}
+            marginBottom={isMobile ? 0 : 1}
+            // fontSize={isMobile ? "xl" : "2xl"}
+            fontWeight={700}
+          >
+            {children}
+          </Text>
+        );
+      },
       h5: ({ children }: { children: React.ReactNode }) => {
         return (
           <Text fontWeight={700} fontSize={"md"}>
@@ -59,7 +85,11 @@ const PortableText = ({ blocks }) => {
         );
       },
       normal: ({ children }: { children: React.ReactNode }) => {
-        return <Text mb={2}>{children}</Text>;
+        return (
+          <Text fontSize="18px" mb={2}>
+            {children}
+          </Text>
+        );
       },
     },
   };

@@ -12,7 +12,10 @@ export const allSanityBlogsQuery = groq`
 `;
 
 export const individualBlogPageQuery = groq`
-  *[slug.current == $slug][0]
+  *[slug.current == $slug][0] {
+   ...,
+  componentes[]->
+}
 `;
 
 export const allBlogTagsQuery = groq`

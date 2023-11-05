@@ -272,7 +272,12 @@ const ProductPage = () => {
             )}
           </Box>
           <Flex w={isMobile ? "100%" : "50%"} gap={3} direction="column">
-            <Text fontSize={isMobile ? "xl" : "2xl"} fontWeight={700}>
+            <Text
+              as="h1"
+              margin={0}
+              fontSize={isMobile ? "xl" : "2xl"}
+              fontWeight={700}
+            >
               {sanityProductData?.data?.store?.title}
             </Text>
             <Text fontSize="xl" fontWeight="500">
