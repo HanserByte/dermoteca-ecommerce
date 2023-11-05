@@ -37,10 +37,11 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
         <AspectRatio ratio={1 / 1}>
           <Box width="100%" objectFit="cover" w={desktopWidth}>
             <NextImage
+              loading="eager"
               src={imageUrl}
               alt=""
-              width={670}
-              height={700}
+              width={430}
+              height={439}
               style={{ width: "100%" }}
             />
           </Box>
@@ -62,10 +63,11 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
           {!isMobile && (
             <Box top="140" position="sticky" objectFit="cover" w={desktopWidth}>
               <NextImage
+                loading="eager"
                 style={{ position: "sticky", top: "140px" }}
                 src={imageUrl}
                 alt=""
-                width={670}
+                width={720}
                 height={700}
               />
             </Box>
