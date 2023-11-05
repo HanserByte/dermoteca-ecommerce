@@ -39,6 +39,7 @@ const BlogPage = ({ blogPost }: IBlogPostPage) => {
         py="2"
         h="max-content"
         bg={COLORS.GREEN}
+        color="white"
         w="100%"
       >
         <BreadCrumbs
