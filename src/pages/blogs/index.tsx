@@ -88,7 +88,7 @@ const Blogs = ({
         )}
       </Box>
 
-      {/* TODO: Add filter drawer */}
+      {/* @ts-ignore */}
       <Flex my="6" pl={"20px"} pr={"20px"} display={isMobile}>
         {isMobile && <BlogsFilterDrawer />}
       </Flex>
@@ -197,7 +197,11 @@ export async function getServerSideProps({ res }: NextPageContext) {
     "public, s-maxage=10, stale-while-revalidate=59"
   );
 
-  const allSanityBlogPosts = await getAllSanityBlogPosts();
+  const allSanityBlogPosts = await getAllSanityBlogPosts(
+    "_createdAt",
+    "asc",
+    []
+  );
   const sanityBlogPage = await getSanityBlogPage();
   const allSanityBlogTags = await getAllBlogTags();
   return { props: { allSanityBlogPosts, sanityBlogPage, allSanityBlogTags } };

@@ -4,18 +4,24 @@ import Link from "next/link";
 import React from "react";
 
 interface IBreadCrumbsProps {
-  productTitle: string;
-  productCollection: {
+  pageTitle: string;
+  pageCategory: {
     handle: string;
     title: string;
   };
+  mainPage: string;
 }
 
 const BreadCrumbs = ({
-  productTitle,
-  productCollection,
+  pageTitle,
+  pageCategory,
+  mainPage,
 }: IBreadCrumbsProps) => {
   const { isMobile } = useMobileView();
+  const url =
+    mainPage === "products"
+      ? `/${mainPage}/${pageCategory?.handle}`
+      : `/${mainPage}?tags=${encodeURIComponent(pageCategory.handle)}`;
 
   return (
     <Breadcrumb
@@ -30,23 +36,30 @@ const BreadCrumbs = ({
         </BreadcrumbLink>
       </BreadcrumbItem>
 
-      <BreadcrumbItem>
-        <BreadcrumbLink as={Link} href="/colecciones/todas">
-          Colecciones
-        </BreadcrumbLink>
-      </BreadcrumbItem>
+      {mainPage === "products" && (
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} href="/colecciones/todas">
+            Colecciones
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      )}
+
+      {mainPage === "blogs" && (
+        <BreadcrumbItem>
+          <BreadcrumbLink as={Link} href="/blogs">
+            Blogs
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      )}
 
       <BreadcrumbItem>
-        <BreadcrumbLink
-          as={Link}
-          href={`/colecciones/${productCollection?.handle}`}
-        >
-          {productCollection?.title}
+        <BreadcrumbLink as={Link} href={`${url}`}>
+          {pageCategory?.title}
         </BreadcrumbLink>
       </BreadcrumbItem>
 
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#">{productTitle}</BreadcrumbLink>
+        <BreadcrumbLink href="#">{pageTitle}</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
   );

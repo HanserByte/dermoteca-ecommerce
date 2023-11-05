@@ -204,10 +204,11 @@ const ProductPage = () => {
         w="100%"
       >
         <BreadCrumbs
-          productTitle={sanityProductData?.data?.store?.title}
-          productCollection={
+          pageTitle={sanityProductData?.data?.store?.title}
+          pageCategory={
             shopifyProductData?.data?.product?.collections?.nodes[0]
           }
+          mainPage="products"
         />
       </Flex>
 

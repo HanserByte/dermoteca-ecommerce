@@ -1,15 +1,13 @@
-import { client } from "@/lib/sanity.client";
-import { ISanityBlogsPage, ISanityBlogPost } from "@/typesSanity/shopify";
+import { ISanityBlogPost } from "@/typesSanity/shopify";
 import {
   getAllBlogTags,
   getAllSanityBlogPosts,
   getSanityBlogPage,
   getSanityBlogPost,
 } from "@/utils/sanityFunctions";
-import { allSanityBlogsQuery } from "@/utils/sanityGroq";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useSanityBlogPage = (initialData: ISanityBlogsPage) => {
+export const useSanityBlogPage = (initialData: ISanityBlogPost[]) => {
   const sanityBlogPageData = useQuery(
     ["sanityBlogPage"],
     () => getSanityBlogPage(),
@@ -19,9 +17,14 @@ export const useSanityBlogPage = (initialData: ISanityBlogsPage) => {
   return sanityBlogPageData;
 };
 
-export const useSanityBlogPost = (slug: string) => {
-  const sanityBlogData = useQuery(["sanityBlog", slug], () =>
-    getSanityBlogPost(slug)
+export const useSanityBlogPost = (
+  initialData: ISanityBlogPost,
+  slug: string
+) => {
+  const sanityBlogData = useQuery(
+    ["sanityBlog", slug],
+    () => getSanityBlogPost(slug),
+    { initialData }
   );
 
   return sanityBlogData;

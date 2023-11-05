@@ -13,12 +13,12 @@ export async function getSanityBlogPage() {
 }
 
 export async function getSanityBlogPost(slug: string) {
-  const blogPage = await client.fetch(individualBlogPageQuery, { slug });
-  return blogPage;
+  const blogPost = await client.fetch(individualBlogPageQuery, { slug });
+  return blogPost;
 }
 
 export async function getAllSanityBlogPosts(
-  sort: string,
+  sort: string = "",
   order: string = "asc",
   queryTags: string[]
 ) {

@@ -5,8 +5,6 @@ export interface ICartLineInput {
   merchandiseId: string;
 }
 
-export interface ISanityBlogsPage {}
-
 export interface ISanityBlogPost {
   title: string;
   slug: ISlug;
