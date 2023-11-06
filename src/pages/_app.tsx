@@ -50,10 +50,14 @@ function Session({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const userToken = localStorage.getItem("userAccessToken");
     const cartId = localStorage.getItem("cartId");
+    const cartIdExpiration = localStorage.getItem("cartIdExpiration");
     userToken && setUserToken(userToken);
 
-    // Create a cart if one doesn't exist
-    if (!cartId) {
+    // Create a cart if one doesn't exist or if the cartId has expired
+    if (
+      !cartId ||
+      (cartId && Number(cartIdExpiration) < new Date().getTime())
+    ) {
       createCartMutation.mutate();
       return;
     }
@@ -63,10 +67,21 @@ function Session({ children }: { children: React.ReactNode }) {
 
   // Set the cartId in local storage if it doesn't exists
   useEffect(() => {
-    if (!cartId && createCartMutation?.data?.cart?.id) {
+    const cartIdExpiration = localStorage.getItem("cartIdExpiration");
+
+    if (
+      (!cartId && createCartMutation?.data?.cart?.id) ||
+      (cartId && Number(cartIdExpiration) > new Date().getTime())
+    ) {
       localStorage.setItem(
         "cartId",
         createCartMutation?.data?.cart?.id as string
+      );
+      localStorage.setItem(
+        "cartIdExpiration",
+        String(
+          new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).getTime()
+        )
       );
       setCartId(createCartMutation?.data?.cart?.id);
     }
