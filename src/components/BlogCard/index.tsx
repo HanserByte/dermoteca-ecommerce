@@ -24,14 +24,13 @@ interface BlogCardProps {
 const BlogCard = (props: BlogCardProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const { prefetchProductPage } = usePrefetch();
 
   return (
     <Link href={`/blogs/${props.handle}`} style={{ width: "100%" }}>
       <Flex direction="column" position="relative">
         <AspectRatio
           ratio={isMobile ? 2 / 1 : 1 / 1}
-          onMouseEnter={() => prefetchProductPage(props.handle)}
+          // onMouseEnter={() => prefetchProductPage(props.handle)}
         >
           <Image
             objectPosition="top"

@@ -55,7 +55,7 @@ const BlogPage = ({ blogPost }: IBlogPostPage) => {
 
       {sanityBlogData?.data?.componentes?.map((component: any) => {
         const componentCopy = { ...component };
-        componentCopy.createdAt = blogPost._createdAt;
+        componentCopy.createdAt = sanityBlogData?.data?._createdAt;
         return (
           <ComponentRenderer
             key={component?._id || component?._key}
