@@ -14,7 +14,9 @@ import {
   DrawerBody,
   useMediaQuery,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
+import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CiHeart, CiUser } from "react-icons/ci";
@@ -416,26 +418,41 @@ const NavBar = (props: IContainerProps) => {
                 />
               </DrawerHeader>
               <DrawerBody>
-                {linksLeft.length > 0 &&
-                  linksLeft.map(
-                    (link: {
-                      title: string;
-                      url?: string;
-                      dataUrl: { url: string };
-                    }) => (
-                      <Box key={link.title} mb={4}>
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          lineHeight="normal"
-                          color="black"
-                          onClick={() => goToLink(link)}
-                        >
-                          {link.title}
-                        </Text>
-                      </Box>
-                    )
-                  )}
+                <VStack alignItems="start" justify="space-between" h="full">
+                  <Box>
+                    {linksLeft.length > 0 &&
+                      linksLeft.map(
+                        (link: {
+                          title: string;
+                          url?: string;
+                          dataUrl: { url: string };
+                        }) => (
+                          <Box key={link.title} mb={4}>
+                            <Text
+                              cursor="pointer"
+                              fontSize="14px"
+                              fontWeight={400}
+                              lineHeight="normal"
+                              color="black"
+                              onClick={() => goToLink(link)}
+                            >
+                              {link.title}
+                            </Text>
+                          </Box>
+                        )
+                      )}
+                  </Box>
+
+                  <VStack alignItems="start">
+                    <HStack as={Link} href="/cuenta">
+                      <Text>CUENTA</Text> <AiOutlineUser color={COLORS.GREEN} />
+                    </HStack>
+                    <HStack as={Link} href="/cuenta/favoritos">
+                      <Text>FAVORITOS</Text>{" "}
+                      <AiOutlineHeart color={COLORS.GREEN} />
+                    </HStack>
+                  </VStack>
+                </VStack>
               </DrawerBody>
             </DrawerContent>
           </DrawerOverlay>
