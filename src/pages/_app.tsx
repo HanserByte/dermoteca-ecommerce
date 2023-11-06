@@ -55,6 +55,7 @@ function Session({ children }: { children: React.ReactNode }) {
 
     // Create a cart if one doesn't exist or if the cartId has expired
     if (
+      cartId === "undefined" ||
       !cartId ||
       (cartId && Number(cartIdExpiration) < new Date().getTime())
     ) {

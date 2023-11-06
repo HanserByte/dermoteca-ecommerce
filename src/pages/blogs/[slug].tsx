@@ -1,5 +1,6 @@
 import BreadCrumbs from "@/components/BreadCrumbs";
 import ComponentRenderer from "@/components/ComponentRenderer";
+import Footer from "@/components/Footer";
 import Loading from "@/components/Loading";
 import NavBar from "@/components/NavBar";
 import { useMobileView } from "@/hooks/responsive";
@@ -52,13 +53,18 @@ const BlogPage = ({ blogPost }: IBlogPostPage) => {
         />
       </Flex>
 
-      {sanityBlogData?.data?.componentes?.map((component: any) => (
-        <ComponentRenderer
-          key={component?._id || component?._key}
-          component={component?._type}
-          data={component}
-        />
-      ))}
+      {sanityBlogData?.data?.componentes?.map((component: any) => {
+        const componentCopy = { ...component };
+        componentCopy.createdAt = blogPost._createdAt;
+        return (
+          <ComponentRenderer
+            key={component?._id || component?._key}
+            component={component?._type}
+            data={componentCopy}
+          />
+        );
+      })}
+      <Footer />
     </Box>
   );
 };

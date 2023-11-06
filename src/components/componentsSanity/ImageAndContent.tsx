@@ -15,12 +15,12 @@ interface IImageAndContent {
     content: PortableTextBlockComponent;
     componentOrientation: string;
     imageSide: string;
-    _createdAt: string;
+    createdAt: string;
   };
 }
 
 const ImageAndContent = ({ data }: IImageAndContent) => {
-  const { image, content, componentOrientation, imageSide, _createdAt } = data;
+  const { image, content, componentOrientation, imageSide, createdAt } = data;
   const { isMobile } = useMobileView();
   const alignment =
     componentOrientation === "vertical" || isMobile ? "center" : "flex-star";
@@ -75,7 +75,7 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
           )}
           <Box w={isMobile ? "100%" : desktopWidth} flex={1}>
             <Text color={COLORS.GREEN} fontWeight={700}>
-              {formatDate(_createdAt)}
+              {formatDate(createdAt)}
             </Text>
             <PortableText blocks={content} />
           </Box>
