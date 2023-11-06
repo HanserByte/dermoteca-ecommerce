@@ -54,8 +54,8 @@ const BlogPage = ({ blogPost }: IBlogPostPage) => {
 
       {sanityBlogData?.data?.componentes?.map((component: any) => (
         <ComponentRenderer
-          key={component._id}
-          component={component._type}
+          key={component?._id}
+          component={component?._type}
           data={component}
         />
       ))}

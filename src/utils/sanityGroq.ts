@@ -13,9 +13,12 @@ export const allSanityBlogsQuery = groq`
 
 export const individualBlogPageQuery = groq`
   *[slug.current == $slug][0] {
-   ...,
-  componentes[]->
-}
+    ...,
+    componentes[]{
+      ...,
+      relatedArticles[]->
+    }
+  }
 `;
 
 export const allBlogTagsQuery = groq`
