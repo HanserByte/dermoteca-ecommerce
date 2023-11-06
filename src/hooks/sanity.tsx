@@ -39,7 +39,7 @@ export const useAllSanityBlogPosts = (
   const allSanityBlogsData = useQuery(
     ["allSanityBlogs", { sort, order, queryTags: queryTags?.join(",") }],
     () => getAllSanityBlogPosts(sort, order, queryTags),
-    { initialData, keepPreviousData: true }
+    { ...(initialData.length > 0 && { initialData }), keepPreviousData: true }
   );
 
   return allSanityBlogsData;

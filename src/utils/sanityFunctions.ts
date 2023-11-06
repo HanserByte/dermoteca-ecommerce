@@ -36,6 +36,7 @@ export async function getAllSanityBlogPosts(
     `| order(${groqSortString} ${order})`;
 
   const allBlogPages = await client.fetch(sortedGroqQuery);
+
   return allBlogPages;
 }
 

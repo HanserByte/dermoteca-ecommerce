@@ -70,6 +70,7 @@ const Blogs = ({
     router?.query?.sort,
     router?.query?.order
   );
+
   const hasActiveFilters =
     (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
 
@@ -191,17 +192,22 @@ const Blogs = ({
   );
 };
 
-export async function getServerSideProps({ res }: NextPageContext) {
+export async function getServerSideProps({ res, query }: NextPageContext) {
   res?.setHeader(
     "Cache-Control",
     "public, s-maxage=10, stale-while-revalidate=59"
   );
 
+  const tags = decodeURIComponent(query?.tags as string);
+  const order = query?.order as string;
+  const sort = query?.sort as string;
+
   const allSanityBlogPosts = await getAllSanityBlogPosts(
-    "_createdAt",
-    "asc",
-    []
+    sort || "_createdAt",
+    order || "asc",
+    tags !== "undefined" && tags[0]?.length > 0 ? tags.split(",") : []
   );
+
   const sanityBlogPage = await getSanityBlogPage();
   const allSanityBlogTags = await getAllBlogTags();
   return { props: { allSanityBlogPosts, sanityBlogPage, allSanityBlogTags } };
