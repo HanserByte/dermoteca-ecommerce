@@ -31,6 +31,7 @@ import {
 import { COLORS } from "@/utils/constants";
 import Link from "next/link";
 import Loading from "@/components/Loading";
+import ComponentRenderer from "@/components/ComponentRenderer";
 
 const ProductPage = () => {
   const toast = useToast();
@@ -405,6 +406,16 @@ const ProductPage = () => {
           }
         />
       </Box>
+
+      {sanityProductData?.data?.componentes?.map((component: any) => {
+        return (
+          <ComponentRenderer
+            key={component?._id || component?._key}
+            component={component?._type}
+            data={component}
+          />
+        );
+      })}
 
       <Footer />
     </Box>

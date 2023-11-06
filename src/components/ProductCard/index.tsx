@@ -30,7 +30,7 @@ const ProductCard = (props: ProductCardProps) => {
           {props.title}
         </Text>
         <Text fontSize={isMobile ? "lg" : "xl"} fontWeight={700}>
-          ${props.price}
+          ${Number(props.price).toFixed(2)}
         </Text>
       </Flex>
     </Link>

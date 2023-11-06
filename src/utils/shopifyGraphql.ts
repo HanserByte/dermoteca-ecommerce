@@ -191,6 +191,17 @@ export const WishlistProductsQuery = `#graphql
   ${PRODUCT_FRAGMENT}
 `;
 
+export const BestSellingProductsQuery = `#graphql
+  query BestSellingProductsQuery {
+    products (first: 10, sortKey: BEST_SELLING) {
+      nodes {
+        ...productFragment
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
 export const CreateCustomerMutation = `#graphql
   mutation CreateCustomerMutation($input: CustomerCreateInput!) {
     customerCreate(input: $input) {

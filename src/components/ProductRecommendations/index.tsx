@@ -16,6 +16,7 @@ import "@splidejs/react-splide/css";
 import ProductCard from "../ProductCard";
 import { useStore } from "@/store";
 import Link from "next/link";
+import { COLORS } from "@/utils/constants";
 
 interface ProductRecommendationsProps {
   products: IProduct[];
@@ -40,8 +41,8 @@ const ProductRecommendations = ({ products }: ProductRecommendationsProps) => {
           size={isMobile ? "sm" : "lg"}
           _hover={{
             bg: "transparent",
-            borderColor: "#00AA4F",
-            textColor: "#00AA4F",
+            borderColor: COLORS.GREEN,
+            textColor: COLORS.GREEN,
           }}
         >
           VER TODO {!isMobile && <BsArrowRight />}

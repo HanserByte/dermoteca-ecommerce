@@ -1,13 +1,16 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/sanity.client";
+import { groq } from "next-sanity";
 
 export const useSanityProduct = (handle: string) => {
-  const query = `*[_type == "product" && store.slug.current == "${handle}"][0]{
-    ...,
-    store {
+  const query = groq`
+    *[_type == "product" && store.slug.current == "${handle}"][0]{
       ...,
-      variants[]->
-    }
+      store {
+        ...,
+        variants[]->
+      },
+      componentes[]->
   }
   `;
   const sanityProductData = useQuery(
@@ -42,6 +45,14 @@ export const useProductRecommendations = (productId: string) => {
   return productRecommendationsData;
 };
 
+export const useBestSellingProducts = () => {
+  const bestSellingProductsData = useQuery(["bestSellingProducts"], () =>
+    fetch("/api/products/popular").then((res) => res.json())
+  );
+
+  return bestSellingProductsData;
+};
+
 export const useAllTags = () => {
   const allTagsData = useQuery(["tags"], () =>
     fetch("/api/products/tags").then((res) => res.json())
@@ -54,13 +65,14 @@ export const usePrefetch = () => {
   const queryClient = useQueryClient();
 
   const prefetchProductPage = (handle: string) => {
-    const query = `*[_type == "product" && store.slug.current == "${handle}"][0]{
+    const query = groq`*[_type == "product" && store.slug.current == "${handle}"][0]{
       ...,
       store {
         ...,
         variants[]->
-      }
-    }
+      },
+      componentes[]->
+  }
     `;
 
     queryClient.prefetchQuery(["sanityProduct", handle], () =>
