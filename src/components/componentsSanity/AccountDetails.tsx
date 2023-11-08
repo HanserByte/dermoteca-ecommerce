@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   HStack,
+  Stack,
   StackDivider,
   Text,
   VStack,
@@ -12,11 +13,11 @@ import {
 import { useAdminCustomer, useCustomer } from "@/hooks/account";
 import { useRouter } from "next/router";
 import OrdersTable from "../OrdersTable";
-import { useMobileView } from "@/hooks/responsive";
 import Link from "next/link";
 import { COLORS } from "@/utils/constants";
 import AddressTable from "../AddressTable";
 import UserEditModal from "../UserEditModal";
+import { useMobileView } from "@/hooks/responsive";
 
 interface IProps {
   data: {
@@ -25,6 +26,7 @@ interface IProps {
 }
 
 const AccountDetails = ({ data }: IProps) => {
+  const { isMobile } = useMobileView();
   const router = useRouter();
   const [accessToken, setAccessToken] = useState(
     localStorage.getItem("userAccessToken")
@@ -46,61 +48,70 @@ const AccountDetails = ({ data }: IProps) => {
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
       <Box maxW="800px" mx="auto" h="calc(80vh)" py={20} my="auto">
-        <Flex flex={100}>
-          <Text
-            textTransform="uppercase"
-            fontSize="22px"
-            fontWeight="700"
+        <Stack
+          align="start"
+          direction={isMobile ? "column" : "row"}
+          justify="space-between"
+          alignItems="flex-start"
+        >
+          <Box>
+            <Flex flex={100}>
+              <Text
+                textTransform="uppercase"
+                fontSize="22px"
+                fontWeight="700"
+                mb="5px"
+              >
+                {data.title}
+              </Text>
+            </Flex>
+
+            <VStack
+              w="max-content"
+              divider={<StackDivider borderColor="gray.200" />}
+              alignItems="start"
+              fontSize="16px"
+              fontWeight="700"
+              mb="5px"
+              textAlign="start"
+            >
+              <HStack>
+                <Text>Nombre: </Text>
+                <Text fontWeight={400}>
+                  {customerData?.data?.customer?.displayName}
+                </Text>
+                <UserEditModal />
+              </HStack>
+
+              <HStack>
+                <Text>Email: </Text>
+                <Text fontWeight={400}>
+                  {customerData?.data?.customer?.email}
+                </Text>
+              </HStack>
+            </VStack>
+          </Box>
+
+          <Button
+            _hover={{ opacity: 0.7 }}
+            bg="#000"
+            borderRadius="35px"
+            border="1px solid black"
             mb="5px"
+            onClick={handleLogout}
           >
-            {data.title}
-          </Text>
-        </Flex>
-
-        <VStack
-          w="max-content"
-          divider={<StackDivider borderColor="gray.200" />}
-          alignItems="start"
-          fontSize="16px"
-          fontWeight="700"
-          mb="5px"
-          textAlign="start"
-        >
-          <HStack>
-            <Text>Nombre: </Text>
-            <Text fontWeight={400}>
-              {customerData?.data?.customer?.displayName}
+            <Text
+              textTransform="uppercase"
+              color="white"
+              fontWeight={400}
+              fontSize="13px"
+              ml="25px"
+              mr="25px"
+            >
+              Cerrar sesion
             </Text>
-            <UserEditModal />
-          </HStack>
-
-          <HStack>
-            <Text>Email: </Text>
-            <Text fontWeight={400}>{customerData?.data?.customer?.email}</Text>
-          </HStack>
-        </VStack>
-
-        <Button
-          mt={8}
-          alignSelf="end"
-          _hover={{ opacity: 0.7 }}
-          bg="#000"
-          borderRadius="35px"
-          border="1px solid black"
-          mb="5px"
-          onClick={handleLogout}
-        >
-          <Text
-            textTransform="uppercase"
-            color="white"
-            fontWeight={400}
-            fontSize="13px"
-            ml="25px"
-            mr="25px"
-          >
-            Cerrar sesion
-          </Text>
-        </Button>
+          </Button>
+        </Stack>
 
         <Box mt="8">
           {adminCustomerData?.data?.addresses?.length === 0 && (
