@@ -54,9 +54,9 @@ const RelatedBlogs = ({ data }: IRelatedBlogs) => {
         >
           {data?.relatedArticles?.map((blog, idx) => (
             <BlogCard
-              handle={blog.slug.current}
-              image={blog.featuredImage}
-              title={blog.title}
+              handle={blog?.slug?.current}
+              image={blog?.featuredImage}
+              title={blog?.title}
               key={blog?._id}
               createdAt={blog?._createdAt}
             />

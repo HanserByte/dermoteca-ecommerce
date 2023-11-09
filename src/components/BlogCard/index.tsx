@@ -34,8 +34,8 @@ const BlogCard = (props: BlogCardProps) => {
         >
           <Image
             objectPosition="top"
-            src={sanityImage(props.image.asset._ref).url()}
-            alt={props.title}
+            src={sanityImage(props?.image?.asset?._ref).url()}
+            alt={props?.title}
             w="500"
             height="500"
           />
@@ -45,7 +45,7 @@ const BlogCard = (props: BlogCardProps) => {
           <Text color="white" fontSize="md">
             {formatDate(props?.createdAt)}
           </Text>
-          <Text color="white" fontWeight={500} fontSize="xl">
+          <Text color="white" fontWeight={500} fontSize="md">
             {props.title}
           </Text>
         </Box>

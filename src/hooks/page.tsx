@@ -41,6 +41,9 @@ export const usePage = (slug: string[]) => {
                 },
                 'tips': tips[]-> {
                   ...
+                },
+                'relatedArticles': relatedArticles[]-> {
+                  ...
                 }
               },
             }[0]
