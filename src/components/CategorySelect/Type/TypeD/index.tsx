@@ -4,6 +4,7 @@ import { ICategorySelect } from "@/typesSanity/docs/categorySelect";
 import { ICategory } from "../../Interface";
 import { sanityImage } from "@/lib/sanity.image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface ContainerProps {
   data: ICategorySelect;
@@ -11,10 +12,17 @@ interface ContainerProps {
 }
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo, isMargin } = props;
+  const { titulo_imagen, subtitulo_imagen, img_fondo, isMargin, url } = props;
 
   return (
-    <Card w="100%" cursor="pointer" mb={isMargin ? "12px" : ""}>
+    <Card
+      as={Link}
+      href={`/${url}`}
+      alt={titulo_imagen}
+      w="100%"
+      cursor="pointer"
+      mb={isMargin ? "12px" : ""}
+    >
       <Box position="absolute" bottom="0" left="0" width="100%" p="4" mb="20px">
         <Box flex={100}>
           <Text
@@ -83,6 +91,7 @@ const TypeD = (props: ContainerProps) => {
                   img_fondo={item.img_fondo}
                   key={index}
                   isMargin={true}
+                  url={item.link.alternateUrl}
                 />
               );
             })}
@@ -102,6 +111,7 @@ const TypeD = (props: ContainerProps) => {
                   img_fondo={item.img_fondo}
                   key={index}
                   isMargin={true}
+                  url={item.link.alternateUrl}
                 />
               );
             })}

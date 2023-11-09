@@ -8,4 +8,5 @@ export interface ICategory {
   isPaddingBottom?: boolean;
   type?: string;
   link?: string | undefined;
+  url: string;
 }
