@@ -24,6 +24,7 @@ import {
   AdminCustomerQuery,
   CustomerUpdateStorefrontMutation,
   BestSellingProductsQuery,
+  TaggedProductsQuery,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -416,5 +417,10 @@ export async function search(query: string) {
 
 export async function getBestSellingProducts() {
   const { products } = await makeShopifyRequest(BestSellingProductsQuery);
+  return products;
+}
+
+export async function getAllTaggedProducts(tags: string) {
+  const { products } = await makeShopifyRequest(TaggedProductsQuery, { tags });
   return products;
 }

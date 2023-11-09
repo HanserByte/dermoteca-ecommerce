@@ -45,3 +45,16 @@ export const useAllProducts = (
 
   return allProductsData;
 };
+
+export const useAllTaggedProducts = (tags: string[]) => {
+  const allTaggedProductsData = useQuery(
+    ["allTaggedProducts", tags.join(",")],
+    () =>
+      fetch(`/api/products`, {
+        method: "POST",
+        body: JSON.stringify({ tags }),
+      }).then((res) => res.json())
+  );
+
+  return allTaggedProductsData;
+};

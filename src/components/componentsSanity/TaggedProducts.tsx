@@ -6,13 +6,23 @@ import React from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
+import { useAllTaggedProducts } from "@/hooks/collections";
 
-import { useBestSellingProducts } from "@/hooks/products";
 import ProductCard from "../ProductCard";
 
-const BestSelling = () => {
+interface ITaggedProducts {
+  data: {
+    tags: {
+      label: string;
+    }[];
+    titulo: string;
+  };
+}
+
+const TaggedProducts = ({ data }: ITaggedProducts) => {
   const { isMobile } = useMobileView();
-  const bestSellingProductsData = useBestSellingProducts();
+  const tags = data?.tags.map((tag) => tag.label);
+  const allTaggedProductsData = useAllTaggedProducts(tags);
 
   return (
     <Box
@@ -23,7 +33,7 @@ const BestSelling = () => {
       <VStack my={12} w="full">
         <Flex w="full" justifyContent="space-between" alignItems="center">
           <Text fontWeight={700} fontSize={isMobile ? "md" : "xl"}>
-            Productos populares
+            {data?.titulo}
           </Text>
           <Button
             as={Link}
@@ -52,7 +62,7 @@ const BestSelling = () => {
             }}
             aria-label="My Favorite Images"
           >
-            {bestSellingProductsData?.data?.nodes?.map((product) => (
+            {allTaggedProductsData?.data?.nodes?.map((product) => (
               <SplideSlide key={product.id}>
                 <ProductCard
                   imageSrc={product.featuredImage.url}
@@ -70,4 +80,4 @@ const BestSelling = () => {
   );
 };
 
-export default BestSelling;
+export default TaggedProducts;

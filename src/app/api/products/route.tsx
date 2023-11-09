@@ -1,4 +1,4 @@
-import { getAllProducts } from "@/utils/shopifyFunctions";
+import { getAllProducts, getAllTaggedProducts } from "@/utils/shopifyFunctions";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -11,5 +11,11 @@ export async function GET(request: Request) {
       ? await getAllProducts(sortKey, reverse, tags)
       : await getAllProducts("BEST_SELLING", false, tags);
 
+  return new Response(JSON.stringify(response));
+}
+export async function POST(request: Request) {
+  const data = await request.json();
+  const tags = data.tags.map((tag: string) => `(tag:${tag})`).join(" OR ");
+  const response = await getAllTaggedProducts(tags);
   return new Response(JSON.stringify(response));
 }

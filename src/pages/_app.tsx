@@ -45,7 +45,7 @@ function MyApp({ Component, pageProps }: any) {
 function Session({ children }: { children: React.ReactNode }) {
   const { setUserToken, setCartId, cartId } = useSessionVariables();
   const { createCartMutation } = useCartActions();
-  useCart(cartId);
+  const cartData = useCart(cartId);
 
   useEffect(() => {
     const userToken = localStorage.getItem("userAccessToken");
@@ -55,6 +55,7 @@ function Session({ children }: { children: React.ReactNode }) {
 
     // Create a cart if one doesn't exist or if the cartId has expired
     if (
+      !cartData?.data ||
       cartId === "undefined" ||
       !cartId ||
       (cartId && Number(cartIdExpiration) < new Date().getTime())

@@ -202,6 +202,17 @@ export const BestSellingProductsQuery = `#graphql
   ${PRODUCT_FRAGMENT}
 `;
 
+export const TaggedProductsQuery = `#graphql
+  query TaggedProductsQuery($tags: String) {
+    products (first: 10, query: $tags) {
+      nodes {
+        ...productFragment
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
 export const CreateCustomerMutation = `#graphql
   mutation CreateCustomerMutation($input: CustomerCreateInput!) {
     customerCreate(input: $input) {
