@@ -52,7 +52,6 @@ function Session({ children }: { children: React.ReactNode }) {
     const cartId = localStorage.getItem("cartId");
     const cartIdExpiration = localStorage.getItem("cartIdExpiration");
     userToken && setUserToken(userToken);
-
     // Create a cart if one doesn't exist or if the cartId has expired
     if (
       (!cartData.isLoading && !cartData?.data) ||
@@ -65,7 +64,7 @@ function Session({ children }: { children: React.ReactNode }) {
     }
 
     cartId && setCartId(cartId);
-  }, []);
+  }, [cartData.isLoading]);
 
   // Set the cartId in local storage if it doesn't exists
   useEffect(() => {

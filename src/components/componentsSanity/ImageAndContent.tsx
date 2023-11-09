@@ -30,6 +30,7 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
   const desktopWidth = componentOrientation === "vertical" ? "100%" : "50%";
   const maxWidth = componentOrientation === "horizontal" ? "auto" : 1000;
   const imageUrl = sanityImage(image.asset._ref).url();
+  const isVertical = componentOrientation === "vertical";
 
   return (
     <>
@@ -61,10 +62,15 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
           flexDirection={orientation}
         >
           {!isMobile && (
-            <Box top="140" position="sticky" objectFit="cover" w={desktopWidth}>
+            <Box
+              top={isVertical ? "" : 40}
+              position={isVertical ? "relative" : "sticky"}
+              objectFit="cover"
+              w={desktopWidth}
+            >
               <NextImage
                 loading="eager"
-                style={{ position: "sticky", top: "140px" }}
+                style={{ position: "sticky", top: "140px", width: "100%" }}
                 src={imageUrl}
                 alt=""
                 width={720}
@@ -77,7 +83,9 @@ const ImageAndContent = ({ data }: IImageAndContent) => {
             <Text color={COLORS.GREEN} fontWeight={700}>
               {formatDate(createdAt)}
             </Text>
-            <PortableText blocks={content} />
+            <Box textAlign="justify">
+              <PortableText blocks={content} />
+            </Box>
           </Box>
         </Flex>
       </Box>
