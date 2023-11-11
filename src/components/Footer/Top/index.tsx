@@ -23,7 +23,12 @@ const TitleRedirect = (props: ITitleRedirect) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
 
   return (
-    <a href={(dataUrl && `/${dataUrl.url === "Home" ? "" : dataUrl.url }`) || ""} rel="noopener noreferrer">
+    <a
+      href={(dataUrl && `/${dataUrl.url === "Home" ? "" : dataUrl.url}`) || ""}
+      rel="noopener noreferrer"
+      role="menubar"
+      aria-label="Ir a la página de destino"
+    >
       <Text
         fontSize="13px"
         fontWeight={400}
@@ -34,6 +39,7 @@ const TitleRedirect = (props: ITitleRedirect) => {
         pt="20px"
         pr={isMobile ? "" : "20px"}
         whiteSpace="nowrap"
+        role="menuitem"
       >
         {title}
       </Text>

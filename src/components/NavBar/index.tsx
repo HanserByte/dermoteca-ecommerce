@@ -260,7 +260,11 @@ const NavBar = (props: IContainerProps) => {
               data.links_derecha.length > 0 &&
               data.links_derecha.map((item, index) => {
                 const BtnComponent = (
-                  <button key={index} style={{ position: "relative" }}>
+                  <button
+                    key={index}
+                    style={{ position: "relative" }}
+                    aria-label="Mostrar botones Navbar"
+                  >
                     {item.title === "Carrito de compras" && <CartBadge />}
 
                     {iconArray[item.icono]({
@@ -355,7 +359,11 @@ const NavBar = (props: IContainerProps) => {
           >
             {data?.links_derecha_mobile.map((item, index) => {
               const BtnComponent = (
-                <button key={index} style={{ position: "relative" }}>
+                <button
+                  key={index}
+                  style={{ position: "relative" }}
+                  aria-label="Mostrar botones Navbar"
+                >
                   {iconArray[item.icono]({
                     style: {
                       width: item.icono === "TfiSearch" ? "25px" : "30px",
