@@ -158,7 +158,7 @@ export const LogoArrowRightCI = (props: iconTypes) => {
       <svg
         width={width || "34px"}
         height={height || "20px"}
-        viewBox={`0 0 ${width || "34px"} ${height || "20px"}`}
+        viewBox={`0 0 ${width || "34"} ${height || "20"}`}
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
