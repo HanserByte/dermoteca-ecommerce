@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: any) {
           name="description"
           content="Explora soluciones dermatológicas personalizadas para el cuidado de tu piel. Nuestro equipo de dermatólogos expertos ofrece tratamientos especializados para afecciones cutáneas, procedimientos estéticos y consejos de cuidado de la piel. Descubre una piel saludable y radiante con nuestros servicios de dermatología de vanguardia."
         /> */}
-        <html lang="es" />
+        {/* <html lang="es" /> */}
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
