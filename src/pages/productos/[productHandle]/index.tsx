@@ -33,6 +33,8 @@ import Link from "next/link";
 import Loading from "@/components/Loading";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { useAllTaggedProducts } from "@/hooks/collections";
+import Head from "next/head";
+import Script from "next/script";
 
 const ProductPage = () => {
   const toast = useToast();
@@ -188,9 +190,17 @@ const ProductPage = () => {
     setThumbsSwiper(null);
   }, [router.query.productHandle]);
 
+  if (typeof window !== "undefined") {
+    window.Shopify = {};
+    window.Shopify.store = "6a8516-2.myshopify.com";
+  }
+
   return (
     <Box maxW="2560px" m="0 auto">
+      {/* Other meta tags */}
+
       <NavBar dataN={{ isBlackNavBar: true }} />
+
       <Box h={`${height}px`} bg="white" w="100%" />
       {shopifyProductData?.isLoading && sanityProductData.isLoading && (
         <Loading />

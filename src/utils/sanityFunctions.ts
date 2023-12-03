@@ -4,8 +4,9 @@ import {
   allSanityBlogsQuery,
   blogsPageQuery,
   individualBlogPageQuery,
+  sanityProductQuery,
 } from "./sanityGroq";
-import { groq } from "next-sanity";
+import { SanityClient, groq } from "next-sanity";
 
 export async function getSanityBlogPage() {
   const blogsPage = await client.fetch(blogsPageQuery);
@@ -43,4 +44,8 @@ export async function getAllSanityBlogPosts(
 export async function getAllBlogTags() {
   const allBlogTags = await client.fetch(allBlogTagsQuery);
   return allBlogTags;
+}
+
+export async function getSanityProduct(client: SanityClient, slug: string) {
+  return await client.fetch(sanityProductQuery, { slug });
 }

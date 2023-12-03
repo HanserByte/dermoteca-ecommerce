@@ -26,3 +26,14 @@ export const allBlogTagsQuery = groq`
     "alltags": array::unique(*[count(tags[]) > 0].tags[].label) 
   }
 `;
+
+export const sanityProductQuery = groq`
+*[_type == "product" && store.slug.current == $slug][0]{
+    ...,
+    store {
+      ...,
+      variants[]->
+    },
+    componentes[]->
+}
+`;
