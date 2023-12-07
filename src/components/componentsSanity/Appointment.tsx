@@ -16,8 +16,7 @@ const Appointment = ({ data: { cita } }) => {
   const sanityProductData = useSanityProduct(cita.store.slug.current);
   const queryClient = useQueryClient();
 
-  const handleAddToCart = async (e, attributes) => {
-    e.preventDefault();
+  const handleAddToCart = async (attributes) => {
     const productId = sanityProductData?.data.store?.variants[0]?.store?.gid;
 
     // @ts-ignore

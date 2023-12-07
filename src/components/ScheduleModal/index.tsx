@@ -42,6 +42,7 @@ export default function ScheduleModal({
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     const attributes = [
       {
         key: "attendee",
@@ -50,7 +51,7 @@ export default function ScheduleModal({
       ...generateFormattedOutput(dateSelected, timeSelected),
     ];
 
-    handleAddToCart(e, attributes);
+    handleAddToCart(attributes);
   };
 
   return (
