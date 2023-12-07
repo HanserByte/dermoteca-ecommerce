@@ -84,3 +84,43 @@ export const removeQueryParam = (param: string, router: NextRouter) => {
     shallow: true,
   });
 };
+
+export const generateFormattedOutput = (dateString, timeString) => {
+  console.log(timeString);
+  // Parse the input date
+  const inputDate = new Date(dateString);
+
+  // Extract year, month, and day from the input date
+  const year = inputDate.getFullYear();
+  const month = (inputDate.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
+  const day = inputDate.getDate().toString().padStart(2, "0");
+
+  // Extract hours and minutes from the input time
+  const [startHour, startMinute] = timeString
+    .split("-")[0]
+    .trim()
+    .split(":")
+    .map(Number);
+
+  // Calculate the end time (30 minutes later)
+  const endHour = startHour;
+  const endMinute = startMinute + 30;
+
+  // Format the output date and time strings
+  const formattedStartDate = `${year}-${month}-${day}T${startHour
+    .toString()
+    .padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}:00-07:00`;
+  const formattedEndDate = `${year}-${month}-${day}T${endHour
+    .toString()
+    .padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}:00-07:00`;
+
+  // Output the formatted result
+
+  // Output the formatted result
+  const output = [
+    { key: "start", value: formattedStartDate },
+    { key: "end", value: formattedEndDate },
+  ];
+
+  return output;
+};

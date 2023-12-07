@@ -2,36 +2,37 @@ import { useSanityProduct, useShopifyProduct } from "@/hooks/products";
 import { useMobileView } from "@/hooks/responsive";
 import { useCartDrawer, useSessionVariables } from "@/store";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScheduleModal from "../ScheduleModal";
+import { useCartActions } from "@/hooks/cart";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Appointment = ({ data: { cita } }) => {
   const { isMobile } = useMobileView();
   const [datepickerModalOpen, setDatepickerModalOpen] = useState(false);
   const { cartId } = useSessionVariables();
   const { setOpen } = useCartDrawer();
-
-  const shopifyProductData = useShopifyProduct(cita.store.slug.current);
+  const { addToCartMutation } = useCartActions();
   const sanityProductData = useSanityProduct(cita.store.slug.current);
+  const queryClient = useQueryClient();
 
-  const handleAddToCart = async (e: any) => {
+  const handleAddToCart = async (e, attributes) => {
     e.preventDefault();
-    // @ts-ignore
-    const queryVariant = decodeURIComponent(router.query.variant);
-    const variantId = shopifyProductData?.data?.product?.variants?.nodes?.find(
-      (variant: any) => variant.title === queryVariant
-    );
-
-    const productId =
-      variantId?.id || sanityProductData?.data.store?.variants[0]?.store?.gid;
+    const productId = sanityProductData?.data.store?.variants[0]?.store?.gid;
 
     // @ts-ignore
     addToCartMutation.mutate({
       cartId,
-      lines: [{ merchandiseId: productId, quantity: 1 }],
+      lines: [{ merchandiseId: productId, quantity: 1, attributes }],
     });
     setOpen(true);
+    setDatepickerModalOpen(false);
   };
+
+  useEffect(() => {
+    if (addToCartMutation?.isLoading) return;
+    queryClient.refetchQueries(["cart", cartId]);
+  }, [addToCartMutation?.isLoading]);
 
   return (
     <Box

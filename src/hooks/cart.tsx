@@ -2,7 +2,6 @@ import { useSessionVariables } from "@/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useCartActions = () => {
-  
   const createCartMutation = useMutation(
     // @ts-ignore
     () => {
@@ -40,7 +39,6 @@ export const useCartActions = () => {
       ).then((res) => res.json());
     }
   );
-  
 
   return {
     addToCartMutation,

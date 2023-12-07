@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import Datepicker from "../Datepicker";
 import { COLORS } from "@/utils/constants";
 import { useCustomer } from "@/hooks/account";
+import { generateFormattedOutput } from "@/utils";
 
 export default function ScheduleModal({
   isOpen,
@@ -26,14 +27,31 @@ export default function ScheduleModal({
   handleAddToCart,
 }: any) {
   const [dateSelected, setDateSelected] = useState<Date>();
-  const [timeSelected, setTimeSelected] = useState();
+  const [timeSelected, setTimeSelected] = useState("");
   const [showUserInfoScreen, setShowUserInfoScreen] = useState(false);
-  const [email, setEmail] = useState("");
   const accessToken =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const customerData = useCustomer(accessToken as string);
+  const [email, setEmail] = useState();
 
   const handleInputChange = (e) => setEmail(e.target.value);
+
+  const validateDateSelection = () => {
+    if (!dateSelected) return;
+    setShowUserInfoScreen(true);
+  };
+
+  const handleSubmit = (e) => {
+    const attributes = [
+      {
+        key: "attendee",
+        value: customerData?.data?.customer?.email || email,
+      },
+      ...generateFormattedOutput(dateSelected, timeSelected),
+    ];
+
+    handleAddToCart(e, attributes);
+  };
 
   return (
     <>
@@ -42,7 +60,7 @@ export default function ScheduleModal({
         <ModalContent>
           <ModalHeader>Agendar una cita</ModalHeader>
           <ModalCloseButton />
-          <form onSubmit={handleAddToCart}>
+          <form onSubmit={handleSubmit}>
             <ModalBody>
               {showUserInfoScreen && (
                 <>
@@ -78,6 +96,7 @@ export default function ScheduleModal({
                     <List display="flex" flexDirection="column" gap="2">
                       <ListItem>
                         <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
                           bg={COLORS.GREEN}
                           color="white"
                           _hover={{ bg: COLORS.GREEN }}
@@ -87,19 +106,44 @@ export default function ScheduleModal({
                         </Button>
                       </ListItem>
                       <ListItem>
-                        <Button w="full">9:30 - 10:00</Button>
+                        <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
+                          w="full"
+                        >
+                          9:30 - 10:00
+                        </Button>
                       </ListItem>
                       <ListItem>
-                        <Button w="full">10:00 - 10:30</Button>
+                        <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
+                          w="full"
+                        >
+                          10:00 - 10:30
+                        </Button>
                       </ListItem>
                       <ListItem>
-                        <Button w="full">11:00 - 11:30</Button>
+                        <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
+                          w="full"
+                        >
+                          11:00 - 11:30
+                        </Button>
                       </ListItem>
                       <ListItem>
-                        <Button w="full">12:00 - 12:30</Button>
+                        <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
+                          w="full"
+                        >
+                          12:00 - 12:30
+                        </Button>
                       </ListItem>
                       <ListItem>
-                        <Button w="full">13:00 - 13:30</Button>
+                        <Button
+                          onClick={() => setTimeSelected("9:00 - 9:30")}
+                          w="full"
+                        >
+                          13:00 - 13:30
+                        </Button>
                       </ListItem>
                     </List>
                   </Flex>
@@ -112,7 +156,7 @@ export default function ScheduleModal({
                   bg={COLORS.GREEN}
                   color="white"
                   _hover={{ bg: COLORS.GREEN, opacity: 0.7 }}
-                  onClick={() => setShowUserInfoScreen(true)}
+                  onClick={() => validateDateSelection()}
                 >
                   Seleccionar cita
                 </Button>
