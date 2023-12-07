@@ -86,7 +86,6 @@ export const removeQueryParam = (param: string, router: NextRouter) => {
 };
 
 export const generateFormattedOutput = (dateString, timeString) => {
-  console.log(timeString);
   // Parse the input date
   const inputDate = new Date(dateString);
 
