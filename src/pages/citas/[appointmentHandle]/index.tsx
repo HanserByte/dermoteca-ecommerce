@@ -1,17 +1,22 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { client } from "@/lib/sanity.client";
 import { getSanityProduct } from "@/utils/sanityFunctions";
 import { getShopifyProduct } from "@/utils/shopifyFunctions";
 import { useMobileView } from "@/hooks/responsive";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import { useNavbar } from "@/store";
+import { useCartDrawer, useNavbar, useSessionVariables } from "@/store";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import ReviewStars from "@/components/ReviewStars";
 import ProductAccordion from "@/components/ProductAccordion";
+import Datepicker from "@/components/Datepicker";
+import ScheduleModal from "@/components/ScheduleModal";
+import { useRouter } from "next/router";
+import { useCartActions } from "@/hooks/cart";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface PageProps {
   sanityProduct: any;
@@ -22,15 +27,42 @@ export default function AppointmentPage({
   sanityProduct,
   shopifyProduct,
 }: PageProps) {
+  const queryClient = useQueryClient();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
+  const { cartId } = useSessionVariables();
+  const { setOpen } = useCartDrawer();
   const { isMobile } = useMobileView();
   const { height } = useNavbar();
-
+  const [datepickerModalOpen, setDatepickerModalOpen] = useState(false);
+  const router = useRouter();
   const hasMultipleImages = shopifyProduct.product?.images?.nodes.length > 1;
   const hasAccordions = sanityProduct.productAccordions?.length > 0;
+  const { addToCartMutation } = useCartActions();
 
-  console.log(sanityProduct, shopifyProduct);
+  const handleAddToCart = async (e: any) => {
+    e.preventDefault();
+    // @ts-ignore
+    const queryVariant = decodeURIComponent(router.query.variant);
+    const variantId = shopifyProduct?.product?.variants?.nodes?.find(
+      (variant: any) => variant.title === queryVariant
+    );
+
+    const productId =
+      variantId?.id || sanityProduct.store?.variants[0]?.store?.gid;
+
+    // @ts-ignore
+    addToCartMutation.mutate({
+      cartId,
+      lines: [{ merchandiseId: productId, quantity: 1 }],
+    });
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    if (addToCartMutation?.isLoading) return;
+    queryClient.refetchQueries(["cart", cartId]);
+  }, [addToCartMutation?.isLoading]);
+
   return (
     <Box maxW="2560px" m="0 auto">
       <NavBar dataN={{ isBlackNavBar: true }} />
@@ -125,8 +157,6 @@ export default function AppointmentPage({
               ${sanityProduct?.store?.variants[0]?.store?.price}
             </Text>
 
-            <ReviewStars rating={4} />
-
             <Text
               fontSize={isMobile ? "md" : "lg"}
               fontWeight="400"
@@ -142,7 +172,7 @@ export default function AppointmentPage({
               alignItems="center"
             >
               <Button
-                // onClick={handleAddToCart}
+                onClick={() => setDatepickerModalOpen(true)}
                 bg="#00AA4F"
                 color="white"
                 rounded="full"
@@ -150,6 +180,11 @@ export default function AppointmentPage({
               >
                 AGENDAR CITA
               </Button>
+              <ScheduleModal
+                handleAddToCart={handleAddToCart}
+                isOpen={datepickerModalOpen}
+                onClose={() => setDatepickerModalOpen(false)}
+              />
             </Flex>
 
             {hasAccordions && (
@@ -157,11 +192,6 @@ export default function AppointmentPage({
             )}
           </Flex>
         </Flex>
-        {/* <ProductRecommendations
-          products={
-            productRecommendations.data?.productRecommendations
-          }
-        /> */}
       </Box>
       <Footer />
     </Box>

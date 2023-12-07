@@ -32,9 +32,6 @@ import { COLORS } from "@/utils/constants";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import ComponentRenderer from "@/components/ComponentRenderer";
-import { useAllTaggedProducts } from "@/hooks/collections";
-import Head from "next/head";
-import Script from "next/script";
 
 const ProductPage = () => {
   const toast = useToast();

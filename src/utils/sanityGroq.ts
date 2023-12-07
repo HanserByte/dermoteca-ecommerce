@@ -3,7 +3,7 @@ import { groq } from "next-sanity";
 export const blogsPageQuery = groq`
   *[_type == "blogsPage"][0] {
     ...,
-    components[]->
+    components[] {}
   }
 `;
 
@@ -16,7 +16,8 @@ export const individualBlogPageQuery = groq`
     ...,
     componentes[]{
       ...,
-      relatedArticles[]->
+      relatedArticles[]->,
+      cita->
     }
   }
 `;
