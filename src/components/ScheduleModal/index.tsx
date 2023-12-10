@@ -19,7 +19,8 @@ import React, { useState } from "react";
 import Datepicker from "../Datepicker";
 import { COLORS } from "@/utils/constants";
 import { useCustomer } from "@/hooks/account";
-import { generateFormattedOutput } from "@/utils";
+import { generateFormattedOutput, getTimeRange } from "@/utils";
+import { useCalendar } from "@/hooks/calendar";
 
 export default function ScheduleModal({
   isOpen,
@@ -33,6 +34,9 @@ export default function ScheduleModal({
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const customerData = useCustomer(accessToken as string);
   const [email, setEmail] = useState();
+  const calendarData = useCalendar<Date>(dateSelected);
+
+  console.log(calendarData?.data);
 
   const handleInputChange = (e) => setEmail(e.target.value);
 

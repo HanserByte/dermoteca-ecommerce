@@ -123,3 +123,19 @@ export const generateFormattedOutput = (dateString, timeString) => {
 
   return output;
 };
+
+export function getTimeRange(inputA, inputB) {
+  const dateTimeA = new Date(inputA?.dateTime);
+  const dateTimeB = new Date(inputB?.dateTime);
+
+  const timeOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const timeStringA = dateTimeA.toLocaleTimeString("en-US", timeOptions);
+  const timeStringB = dateTimeB.toLocaleTimeString("en-US", timeOptions);
+
+  return `${timeStringA} - ${timeStringB}`;
+}
