@@ -23,9 +23,10 @@ import {
   generateFormattedOutput,
   generateTimeSlots,
   getDayOfWeek,
-  hasInterference,
+  getTimeRange,
 } from "@/utils";
 import { useCalendar, useCalendarSettings } from "@/hooks/calendar";
+import Loading from "../Loading";
 
 export default function ScheduleModal({
   isOpen,
@@ -56,6 +57,26 @@ export default function ScheduleModal({
     calendarStartTime,
     calendarEndTime
   );
+
+  const usedTimeSlots = calendarData?.data?.dateData?.map((event) =>
+    getTimeRange(event.start, event.end)
+  );
+
+  const filteredTimeSlots = timeSlots?.filter((timeSlot) => {
+    const startHour = timeSlot.split("-")[0].split(":")[0];
+
+    if (!usedTimeSlots) return true;
+
+    return !usedTimeSlots?.some((usedTimeSlot) => {
+      const usedStartHour = usedTimeSlot.split("-")[0].split(":")[0];
+      const usedEndHour = usedTimeSlot.split("-")[1].split(":")[0];
+
+      return (
+        parseInt(startHour) >= parseInt(usedStartHour) &&
+        parseInt(startHour) <= parseInt(usedEndHour)
+      );
+    });
+  });
 
   const handleInputChange = (e) => setEmail(e.target.value);
 
@@ -124,22 +145,24 @@ export default function ScheduleModal({
                       maxH="400px"
                       overflowY="auto"
                     >
-                      {timeSlots?.map((slot, idx) => {
-                        const selected = slot === timeSelected;
-                        return (
-                          <ListItem key={idx}>
-                            <Button
-                              onClick={() => setTimeSelected(slot)}
-                              bg={selected ? COLORS.GREEN : "white"}
-                              color={selected ? "white" : COLORS.GREEN}
-                              _hover={{ bg: COLORS.GREEN, color: "white" }}
-                              w="full"
-                            >
-                              {slot}
-                            </Button>
-                          </ListItem>
-                        );
-                      })}
+                      {calendarData?.isLoading && <Loading />}
+                      {!calendarData?.isLoading &&
+                        filteredTimeSlots?.map((slot, idx) => {
+                          const selected = slot === timeSelected;
+                          return (
+                            <ListItem key={idx}>
+                              <Button
+                                onClick={() => setTimeSelected(slot)}
+                                bg={selected ? COLORS.GREEN : "white"}
+                                color={selected ? "white" : COLORS.GREEN}
+                                _hover={{ bg: COLORS.GREEN, color: "white" }}
+                                w="full"
+                              >
+                                {slot}
+                              </Button>
+                            </ListItem>
+                          );
+                        })}
                     </List>
                   </Flex>
                 </Flex>

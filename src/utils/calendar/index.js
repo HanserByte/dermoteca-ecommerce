@@ -73,9 +73,6 @@ async function authorize() {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 async function listEvents(auth, date) {
-  console.log("⭐");
-  console.log(new Date(date).toISOString());
-  console.log(new Date(date).getTime() + 24 * 60 * 60 * 1000);
   const calendar = google.calendar({ version: "v3", auth });
   const res = await calendar.events.list({
     calendarId: "primary",
