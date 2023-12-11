@@ -38,3 +38,7 @@ export const sanityProductQuery = groq`
     componentes[]->
 }
 `;
+
+export const calendarSettings = groq`
+  *[_type == "calendarSettings"][0]
+`;

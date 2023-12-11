@@ -3,6 +3,7 @@ import {
   allBlogTagsQuery,
   allSanityBlogsQuery,
   blogsPageQuery,
+  calendarSettings,
   individualBlogPageQuery,
   sanityProductQuery,
 } from "./sanityGroq";
@@ -48,4 +49,8 @@ export async function getAllBlogTags() {
 
 export async function getSanityProduct(client: SanityClient, slug: string) {
   return await client.fetch(sanityProductQuery, { slug });
+}
+
+export async function getCalendarSettings() {
+  return await client.fetch(calendarSettings);
 }

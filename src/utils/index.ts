@@ -139,3 +139,46 @@ export function getTimeRange(inputA, inputB) {
 
   return `${timeStringA} - ${timeStringB}`;
 }
+
+export function generateTimeSlots(appointmentDuration, startTime, endTime) {
+  if (!startTime || !endTime) return;
+  const timeSlots = [];
+  const [startHour, startMinute] = startTime.split(":");
+  const [endHour, endMinute] = endTime.split(":");
+
+  let currentTime = new Date();
+  currentTime.setHours(startHour);
+  currentTime.setMinutes(startMinute);
+
+  const endTimeObj = new Date();
+  endTimeObj.setHours(endHour);
+  endTimeObj.setMinutes(endMinute);
+
+  while (currentTime < endTimeObj) {
+    const timeStringA = currentTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+
+    currentTime.setMinutes(currentTime.getMinutes() + appointmentDuration);
+
+    const timeStringB = currentTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+
+    const timeSlot = `${timeStringA} - ${timeStringB}`;
+    timeSlots.push(timeSlot);
+  }
+
+  return timeSlots;
+}
+
+export function getDayOfWeek(date) {
+  if (!date) return;
+  const options = { weekday: "long" };
+  const dayOfWeek = date.toLocaleDateString("en-US", options);
+  return dayOfWeek;
+}

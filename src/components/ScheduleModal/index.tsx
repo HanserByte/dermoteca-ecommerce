@@ -19,8 +19,13 @@ import React, { useState } from "react";
 import Datepicker from "../Datepicker";
 import { COLORS } from "@/utils/constants";
 import { useCustomer } from "@/hooks/account";
-import { generateFormattedOutput, getTimeRange } from "@/utils";
-import { useCalendar } from "@/hooks/calendar";
+import {
+  generateFormattedOutput,
+  generateTimeSlots,
+  getDayOfWeek,
+  hasInterference,
+} from "@/utils";
+import { useCalendar, useCalendarSettings } from "@/hooks/calendar";
 
 export default function ScheduleModal({
   isOpen,
@@ -34,9 +39,23 @@ export default function ScheduleModal({
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const customerData = useCustomer(accessToken as string);
   const [email, setEmail] = useState();
-  const calendarData = useCalendar<Date>(dateSelected);
+  const calendarData = useCalendar(dateSelected as Date);
+  const calendarSettingsData = useCalendarSettings();
 
-  console.log(calendarData?.data);
+  const calendarSettingsObjKey = dateSelected
+    ? `${getDayOfWeek(dateSelected).toLowerCase()}Times`
+    : "";
+  const appointmentduration = calendarSettingsData?.data?.appointmentDuration;
+  const calendarStartTime =
+    calendarSettingsData?.data?.[calendarSettingsObjKey]?.startTime;
+  const calendarEndTime =
+    calendarSettingsData?.data?.[calendarSettingsObjKey]?.endTime;
+
+  const timeSlots = generateTimeSlots(
+    appointmentduration,
+    calendarStartTime,
+    calendarEndTime
+  );
 
   const handleInputChange = (e) => setEmail(e.target.value);
 
@@ -98,58 +117,29 @@ export default function ScheduleModal({
                     setSelected={setDateSelected}
                   />
                   <Flex flexDirection="column" w="full">
-                    <List display="flex" flexDirection="column" gap="2">
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          bg={COLORS.GREEN}
-                          color="white"
-                          _hover={{ bg: COLORS.GREEN }}
-                          w="full"
-                        >
-                          9:00 - 9:30
-                        </Button>
-                      </ListItem>
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          w="full"
-                        >
-                          9:30 - 10:00
-                        </Button>
-                      </ListItem>
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          w="full"
-                        >
-                          10:00 - 10:30
-                        </Button>
-                      </ListItem>
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          w="full"
-                        >
-                          11:00 - 11:30
-                        </Button>
-                      </ListItem>
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          w="full"
-                        >
-                          12:00 - 12:30
-                        </Button>
-                      </ListItem>
-                      <ListItem>
-                        <Button
-                          onClick={() => setTimeSelected("9:00 - 9:30")}
-                          w="full"
-                        >
-                          13:00 - 13:30
-                        </Button>
-                      </ListItem>
+                    <List
+                      display="flex"
+                      flexDirection="column"
+                      gap="2"
+                      maxH="400px"
+                      overflowY="auto"
+                    >
+                      {timeSlots?.map((slot, idx) => {
+                        const selected = slot === timeSelected;
+                        return (
+                          <ListItem key={idx}>
+                            <Button
+                              onClick={() => setTimeSelected(slot)}
+                              bg={selected ? COLORS.GREEN : "white"}
+                              color={selected ? "white" : COLORS.GREEN}
+                              _hover={{ bg: COLORS.GREEN, color: "white" }}
+                              w="full"
+                            >
+                              {slot}
+                            </Button>
+                          </ListItem>
+                        );
+                      })}
                     </List>
                   </Flex>
                 </Flex>

@@ -1,6 +1,7 @@
+import { getCalendarSettings } from "@/utils/sanityFunctions";
 import { useQuery } from "@tanstack/react-query";
 
-export const useCalendar = (date: string) => {
+export const useCalendar = (date: Date) => {
   const calendarData = useQuery(
     ["calendar", date],
     () => {
@@ -13,4 +14,14 @@ export const useCalendar = (date: string) => {
   );
 
   return calendarData;
+};
+
+export const useCalendarSettings = () => {
+  const calendarSettingsData = useQuery(
+    ["calendarSettings"],
+    () => getCalendarSettings(),
+    { staleTime: Infinity }
+  );
+
+  return calendarSettingsData;
 };
