@@ -64,6 +64,7 @@ export default function ScheduleModal({
 
   const filteredTimeSlots = timeSlots?.filter((timeSlot) => {
     const startHour = timeSlot.split("-")[0].split(":")[0];
+    const startMinute = timeSlot.split("-")[0].split(":")[1];
 
     if (!usedTimeSlots) return true;
 
@@ -73,7 +74,7 @@ export default function ScheduleModal({
 
       return (
         parseInt(startHour) >= parseInt(usedStartHour) &&
-        parseInt(startHour) <= parseInt(usedEndHour)
+        parseInt(startHour) < parseInt(usedEndHour)
       );
     });
   });
@@ -89,7 +90,7 @@ export default function ScheduleModal({
     e.preventDefault();
     const attributes = [
       {
-        key: "attendee",
+        key: "_attendee",
         value: customerData?.data?.customer?.email || email,
       },
       ...generateFormattedOutput(

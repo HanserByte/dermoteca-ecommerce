@@ -127,8 +127,10 @@ export const generateFormattedOutput = (
 
   // Output the formatted result
   const output = [
-    { key: "start", value: formattedStartDate },
-    { key: "end", value: formattedEndDate },
+    { key: "_start", value: formattedStartDate },
+    { key: "_end", value: formattedEndDate },
+    { key: "Fecha", value: `${day}/${month}/${year}` },
+    { key: "Horario", value: timeString },
   ];
 
   return output;
