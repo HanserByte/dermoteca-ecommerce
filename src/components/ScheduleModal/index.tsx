@@ -92,7 +92,11 @@ export default function ScheduleModal({
         key: "attendee",
         value: customerData?.data?.customer?.email || email,
       },
-      ...generateFormattedOutput(dateSelected, timeSelected),
+      ...generateFormattedOutput(
+        dateSelected,
+        timeSelected,
+        appointmentduration
+      ),
     ];
 
     handleAddToCart(attributes);
@@ -145,7 +149,9 @@ export default function ScheduleModal({
                       maxH="400px"
                       overflowY="auto"
                     >
-                      {calendarData?.isLoading && <Loading />}
+                      {calendarData?.isLoading && calendarData?.isFetching && (
+                        <Loading />
+                      )}
                       {!calendarData?.isLoading &&
                         filteredTimeSlots?.map((slot, idx) => {
                           const selected = slot === timeSelected;

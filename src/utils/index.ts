@@ -85,7 +85,11 @@ export const removeQueryParam = (param: string, router: NextRouter) => {
   });
 };
 
-export const generateFormattedOutput = (dateString, timeString) => {
+export const generateFormattedOutput = (
+  dateString,
+  timeString,
+  appointmentDuration
+) => {
   // Parse the input date
   const inputDate = new Date(dateString);
 
@@ -102,8 +106,14 @@ export const generateFormattedOutput = (dateString, timeString) => {
     .map(Number);
 
   // Calculate the end time (30 minutes later)
-  const endHour = startHour;
-  const endMinute = startMinute + 30;
+  let endHour = startHour;
+  let endMinute = startMinute + appointmentDuration;
+
+  // Adjust the end time if it exceeds 59 minutes
+  if (endMinute >= 60) {
+    endHour += Math.floor(endMinute / 60);
+    endMinute %= 60;
+  }
 
   // Format the output date and time strings
   const formattedStartDate = `${year}-${month}-${day}T${startHour
