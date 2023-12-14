@@ -1,11 +1,14 @@
 import { useSanityProduct, useShopifyProduct } from "@/hooks/products";
 import { useMobileView } from "@/hooks/responsive";
 import { useCartDrawer, useSessionVariables } from "@/store";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ScheduleModal from "../ScheduleModal";
 import { useCartActions } from "@/hooks/cart";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
+import Link from "next/link";
+import { COLORS } from "@/utils/constants";
 
 const Appointment = ({ data: { cita } }) => {
   const { isMobile } = useMobileView();
@@ -13,8 +16,14 @@ const Appointment = ({ data: { cita } }) => {
   const { cartId } = useSessionVariables();
   const { setOpen } = useCartDrawer();
   const { addToCartMutation } = useCartActions();
+  const toast = useToast();
   const sanityProductData = useSanityProduct(cita.store.slug.current);
   const queryClient = useQueryClient();
+  const customerAccessTokenMutation = useCustomerAccessTokenCreate();
+  const [accessToken] = useState(
+    customerAccessTokenMutation?.data?.customerAccessToken?.accessToken
+  );
+  const customerData = useCustomer(accessToken);
 
   const handleAddToCart = async (attributes) => {
     const productId = sanityProductData?.data.store?.variants[0]?.store?.gid;
@@ -32,6 +41,37 @@ const Appointment = ({ data: { cita } }) => {
     if (addToCartMutation?.isLoading) return;
     queryClient.refetchQueries(["cart", cartId]);
   }, [addToCartMutation?.isLoading]);
+
+  const handleScheduleAppointment = () => {
+    if (!customerData?.data) {
+      return toast({
+        duration: 2000,
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            bg={COLORS.GREEN}
+            rounded="2xl"
+            p={3}
+            textAlign="center"
+          >
+            <Text
+              as={Link}
+              fontWeight={500}
+              textDecor="underline"
+              display="inline"
+              href="/cuenta/iniciar-sesion"
+            >
+              Inicia sesion
+            </Text>{" "}
+            <Text display="inline">para agendar una cita.</Text>
+          </Box>
+        ),
+      });
+    }
+
+    setDatepickerModalOpen(true);
+  };
 
   return (
     <Box
@@ -65,7 +105,7 @@ const Appointment = ({ data: { cita } }) => {
           alignItems="center"
         >
           <Button
-            onClick={() => setDatepickerModalOpen(true)}
+            onClick={handleScheduleAppointment}
             bg="#00AA4F"
             color="white"
             rounded="full"

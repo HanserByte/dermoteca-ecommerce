@@ -27,6 +27,7 @@ import {
 } from "@/utils";
 import { useCalendar, useCalendarSettings } from "@/hooks/calendar";
 import Loading from "../Loading";
+import { useMobileView } from "@/hooks/responsive";
 
 export default function ScheduleModal({
   isOpen,
@@ -42,6 +43,7 @@ export default function ScheduleModal({
   const [email, setEmail] = useState();
   const calendarData = useCalendar(dateSelected as Date);
   const calendarSettingsData = useCalendarSettings();
+  const { isMobile } = useMobileView();
 
   const calendarSettingsObjKey = dateSelected
     ? `${getDayOfWeek(dateSelected).toLowerCase()}Times`
@@ -105,7 +107,7 @@ export default function ScheduleModal({
 
   return (
     <>
-      <Modal onClose={onClose} size="xl" isOpen={isOpen}>
+      <Modal onClose={onClose} size="lg" isOpen={isOpen}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Agendar una cita</ModalHeader>
@@ -125,6 +127,7 @@ export default function ScheduleModal({
                   <FormControl mt="2" isRequired>
                     <FormLabel>Email</FormLabel>
                     <Input
+                      disabled
                       value={customerData?.data?.customer?.email || email}
                       type="email"
                       onChange={handleInputChange}
@@ -137,7 +140,11 @@ export default function ScheduleModal({
               )}
 
               {!showUserInfoScreen && (
-                <Flex w="full">
+                <Flex
+                  w="full"
+                  alignItems={isMobile ? "center" : "flex-start"}
+                  flexDirection={isMobile ? "column" : "row"}
+                >
                   <Datepicker
                     selected={dateSelected}
                     setSelected={setDateSelected}
@@ -160,7 +167,7 @@ export default function ScheduleModal({
                             <ListItem key={idx}>
                               <Button
                                 onClick={() => setTimeSelected(slot)}
-                                bg={selected ? COLORS.GREEN : "white"}
+                                bg={selected ? COLORS.GREEN : "gray.100"}
                                 color={selected ? "white" : COLORS.GREEN}
                                 _hover={{ bg: COLORS.GREEN, color: "white" }}
                                 w="full"
