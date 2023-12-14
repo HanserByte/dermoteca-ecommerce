@@ -69,7 +69,7 @@ function Session({ children }: { children: React.ReactNode }) {
     }
 
     cartId && setCartId(cartId);
-  }, [cartData.isLoading]);
+  }, [cartData.isLoading, cartData?.data]);
 
   // Set the cartId in local storage if it doesn't exists
   useEffect(() => {

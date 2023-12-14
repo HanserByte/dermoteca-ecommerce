@@ -87,11 +87,11 @@ async function listEvents(auth, date) {
     console.log("No upcoming events found.");
     return;
   }
-  console.log("Upcoming 10 events:");
-  events.map((event, i) => {
-    const start = event.start.dateTime || event.start.date;
-    console.log(`${start} - ${event.summary}`);
-  });
+  // console.log("Upcoming 10 events:");
+  // events.map((event, i) => {
+  //   const start = event.start.dateTime || event.start.date;
+  //   console.log(`${start} - ${event.summary}`);
+  // });
 
   return events;
 }

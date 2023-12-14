@@ -14,6 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import Datepicker from "../Datepicker";
@@ -40,6 +41,7 @@ export default function ScheduleModal({
   const accessToken =
     typeof window !== "undefined" ? localStorage.getItem("accessToken") : "";
   const customerData = useCustomer(accessToken as string);
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState();
   const calendarData = useCalendar(dateSelected as Date);
   const calendarSettingsData = useCalendarSettings();
@@ -120,7 +122,10 @@ export default function ScheduleModal({
                     <FormLabel>Nombre completo</FormLabel>
                     <Input
                       placeholder="Nombre completo"
-                      value={customerData?.data?.customer?.displayName}
+                      value={
+                        displayName || customerData?.data?.customer?.displayName
+                      }
+                      onChange={(e) => setDisplayName(e.target.value)}
                     />
                   </FormControl>
 
@@ -177,6 +182,19 @@ export default function ScheduleModal({
                             </ListItem>
                           );
                         })}
+
+                      {filteredTimeSlots?.length === 0 && (
+                        <Text
+                          bg={COLORS.GREEN}
+                          color="white"
+                          fontWeight={500}
+                          rounded="md"
+                          textAlign="center"
+                          py="2"
+                        >
+                          No hay citas disponibles para esta fecha 🥲
+                        </Text>
+                      )}
                     </List>
                   </Flex>
                 </Flex>
