@@ -84,3 +84,113 @@ export const removeQueryParam = (param: string, router: NextRouter) => {
     shallow: true,
   });
 };
+
+export const generateFormattedOutput = (
+  dateString,
+  timeString,
+  appointmentDuration
+) => {
+  // Parse the input date
+  const inputDate = new Date(dateString);
+
+  // Extract year, month, and day from the input date
+  const year = inputDate.getFullYear();
+  const month = (inputDate.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based
+  const day = inputDate.getDate().toString().padStart(2, "0");
+
+  // Extract hours and minutes from the input time
+  const [startHour, startMinute] = timeString
+    .split("-")[0]
+    .trim()
+    .split(":")
+    .map(Number);
+
+  // Calculate the end time (30 minutes later)
+  let endHour = startHour;
+  let endMinute = startMinute + appointmentDuration;
+
+  // Adjust the end time if it exceeds 59 minutes
+  if (endMinute >= 60) {
+    endHour += Math.floor(endMinute / 60);
+    endMinute %= 60;
+  }
+
+  // Format the output date and time strings
+  const formattedStartDate = `${year}-${month}-${day}T${startHour
+    .toString()
+    .padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}:00-08:00`;
+  const formattedEndDate = `${year}-${month}-${day}T${endHour
+    .toString()
+    .padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}:00-08:00`;
+
+  // Output the formatted result
+
+  // Output the formatted result
+  const output = [
+    { key: "_start", value: formattedStartDate },
+    { key: "_end", value: formattedEndDate },
+    { key: "Fecha", value: `${day}/${month}/${year}` },
+    { key: "Horario", value: timeString },
+  ];
+
+  return output;
+};
+
+export function getTimeRange(inputA, inputB) {
+  const dateTimeA = new Date(inputA?.dateTime);
+  const dateTimeB = new Date(inputB?.dateTime);
+
+  const timeOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const timeStringA = dateTimeA.toLocaleTimeString("en-US", timeOptions);
+  const timeStringB = dateTimeB.toLocaleTimeString("en-US", timeOptions);
+
+  return `${timeStringA} - ${timeStringB}`;
+}
+
+export function generateTimeSlots(appointmentDuration, startTime, endTime) {
+  if (!startTime || !endTime) return;
+  const timeSlots = [];
+  const [startHour, startMinute] = startTime.split(":");
+  const [endHour, endMinute] = endTime.split(":");
+
+  let currentTime = new Date();
+  currentTime.setHours(startHour);
+  currentTime.setMinutes(startMinute);
+
+  const endTimeObj = new Date();
+  endTimeObj.setHours(endHour);
+  endTimeObj.setMinutes(endMinute);
+
+  while (currentTime < endTimeObj) {
+    const timeStringA = currentTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+
+    currentTime.setMinutes(currentTime.getMinutes() + appointmentDuration);
+
+    const timeStringB = currentTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+
+    const timeSlot = `${timeStringA} - ${timeStringB}`;
+    timeSlots.push(timeSlot);
+  }
+
+  return timeSlots;
+}
+
+export function getDayOfWeek(date) {
+  if (!date) return;
+  const options = { weekday: "long" };
+  const dayOfWeek = date.toLocaleDateString("en-US", options);
+  return dayOfWeek;
+}

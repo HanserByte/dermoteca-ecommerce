@@ -4,7 +4,7 @@ import { groq } from "next-sanity";
 
 export const useSanityProduct = (handle: string) => {
   const query = groq`
-    *[_type == "product" && store.slug.current == "${handle}"][0]{
+  *[_type == "product" && store.slug.current == "${handle}"][0]{
       ...,
       store {
         ...,

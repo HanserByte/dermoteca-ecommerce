@@ -121,7 +121,7 @@ const AccountDetails = ({ data }: IProps) => {
               fontWeight="700"
               mb="5px"
             >
-              Aun no tienes ninguna domicilios agregados
+              Aun no tienes ningun domicilio agregado
             </Text>
           )}
           {adminCustomerData?.data?.addresses?.length > 0 && (

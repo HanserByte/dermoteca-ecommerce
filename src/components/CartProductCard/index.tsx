@@ -19,6 +19,8 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
     useCartActions();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const { cartId } = useSessionVariables();
+  const isAppointment =
+    product?.merchandise?.product?.productType?.toLowerCase() === "cita";
 
   const handleRemoveFromCart = async () => {
     // @ts-ignore
@@ -48,6 +50,9 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
       <Box
         onClick={() => setOpen(false)}
         as={Link}
+        style={{
+          pointerEvents: isAppointment ? "none" : "auto",
+        }}
         href={`/productos/${product?.merchandise?.product?.handle}`}
         w={`${isMobile ? "25%" : "35%"}`}
       >
@@ -86,27 +91,29 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
           </Button>
         </Flex>
 
-        <Flex alignItems="center" gap={3}>
-          <Button
-            onClick={() => handleQuantityChange(product?.quantity - 1)}
-            bg="#00AA4F"
-            size="sm"
-            color="white"
-            rounded="full"
-          >
-            -
-          </Button>
-          <Text>{product?.quantity}</Text>
-          <Button
-            onClick={() => handleQuantityChange(product?.quantity + 1)}
-            bg="#00AA4F"
-            size="sm"
-            color="white"
-            rounded="full"
-          >
-            +
-          </Button>
-        </Flex>
+        {!isAppointment && (
+          <Flex alignItems="center" gap={3}>
+            <Button
+              onClick={() => handleQuantityChange(product?.quantity - 1)}
+              bg="#00AA4F"
+              size="sm"
+              color="white"
+              rounded="full"
+            >
+              -
+            </Button>
+            <Text>{product?.quantity}</Text>
+            <Button
+              onClick={() => handleQuantityChange(product?.quantity + 1)}
+              bg="#00AA4F"
+              size="sm"
+              color="white"
+              rounded="full"
+            >
+              +
+            </Button>
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

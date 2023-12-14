@@ -2,7 +2,6 @@ import {
   CustomerAccessTokenCreateInput,
   CustomerCreateInput,
   CustomerResetInput,
-  CustomerUpdateInput,
 } from "@shopify/hydrogen-react/storefront-api-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
