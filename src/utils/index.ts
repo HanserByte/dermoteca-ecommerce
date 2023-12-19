@@ -118,10 +118,10 @@ export const generateFormattedOutput = (
   // Format the output date and time strings
   const formattedStartDate = `${year}-${month}-${day}T${startHour
     .toString()
-    .padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}:00-08:00`;
+    .padStart(2, "0")}:${startMinute.toString().padStart(2, "0")}:00-06:00`;
   const formattedEndDate = `${year}-${month}-${day}T${endHour
     .toString()
-    .padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}:00-08:00`;
+    .padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}:00-06:00`;
 
   // Output the formatted result
 
