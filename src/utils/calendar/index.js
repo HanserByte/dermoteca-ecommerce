@@ -116,11 +116,11 @@ async function createEvent(auth, properties, title) {
     description: title,
     start: {
       dateTime: startDate,
-      timeZone: "America/Tijuana",
+      timeZone: "America/Mexico_City",
     },
     end: {
       dateTime: endDate,
-      timeZone: "America/Tijuana",
+      timeZone: "America/Mexico_City",
     },
     // recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
     attendees: [{ email: attendee }],
@@ -139,11 +139,11 @@ async function createEvent(auth, properties, title) {
     description: title,
     start: {
       dateTime: startDate,
-      timeZone: "America/Tijuana",
+      timeZone: "America/Mexico_City",
     },
     end: {
       dateTime: endDate,
-      timeZone: "America/Tijuana",
+      timeZone: "America/Mexico_City",
     },
     // recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
     attendees: [{ email: attendee }],
