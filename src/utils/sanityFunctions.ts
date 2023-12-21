@@ -4,11 +4,11 @@ import {
   allSanityBlogsQuery,
   blogsPageQuery,
   calendarSettings,
+  homePageQuery,
   individualBlogPageQuery,
   sanityProductQuery,
 } from "./sanityGroq";
 import { SanityClient, groq } from "next-sanity";
-
 export async function getSanityBlogPage() {
   const blogsPage = await client.fetch(blogsPageQuery);
   return blogsPage;
@@ -53,4 +53,8 @@ export async function getSanityProduct(client: SanityClient, slug: string) {
 
 export async function getCalendarSettings() {
   return await client.fetch(calendarSettings);
+}
+
+export async function getHomePage() {
+  return await client.fetch(homePageQuery);
 }

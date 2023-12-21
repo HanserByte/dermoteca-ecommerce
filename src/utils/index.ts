@@ -124,8 +124,6 @@ export const generateFormattedOutput = (
     .padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}:00-06:00`;
 
   // Output the formatted result
-
-  // Output the formatted result
   const output = [
     { key: "_start", value: formattedStartDate },
     { key: "_end", value: formattedEndDate },
