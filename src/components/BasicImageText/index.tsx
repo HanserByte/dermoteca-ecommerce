@@ -45,7 +45,7 @@ const BasicImageText = (props: ContainerProps) => {
         top="50%"
         transform="translateY(-50%)"
         left={isMobile ? "5px" : "0"}
-        width={isMobile ? "100%" : "50%"}
+        width={isMobile ? "" : "50%"}
         maxHeight={isMobile ? "100%" : "50vh"}
         overflow="auto"
         p="4"

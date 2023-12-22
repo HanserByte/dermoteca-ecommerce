@@ -23,8 +23,8 @@ const Banner = (props: IProps) => {
         <Flex flex={100}>
           <Image src={sanityImage(data.img.asset._ref).url()} alt="image-40" />
         </Flex>
-        <Grid templateColumns="50% 50%" mt="40px" gap="30px">
-          <GridItem>
+        <Grid templateColumns="repeat(2, 1fr)" mt="40px" gap="30px">
+          <GridItem w="full">
             <Text
               textTransform="uppercase"
               color={isBlackBg ? "white" : "black"}
@@ -34,7 +34,7 @@ const Banner = (props: IProps) => {
               {data.text_link_uno}
             </Text>
           </GridItem>
-          <GridItem>
+          <GridItem w="full">
             <Text
               textTransform="uppercase"
               color={isBlackBg ? "white" : "black"}

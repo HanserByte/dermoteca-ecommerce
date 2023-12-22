@@ -9,7 +9,6 @@ const Home = ({ pageData }) => {
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar dataN={{}} />
-
       {pageData &&
         pageData?.componentes.map((componente: any) => (
           <ComponentRenderer

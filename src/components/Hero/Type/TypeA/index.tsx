@@ -5,7 +5,6 @@ import MainText from "../../Common/MainText";
 import { IHeroComponents } from "@/typesSanity/docs/hero";
 
 import { LogoShortCI } from "@/components/Icons";
-import { useState } from "react";
 import { useNavbar } from "@/store";
 
 interface IContainerProps {

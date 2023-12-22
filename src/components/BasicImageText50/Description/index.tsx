@@ -16,10 +16,11 @@ const Description = (props: Props) => {
 
   return (
     <GridItem
+      w="full"
       bg={data.colorFondo}
       borderBottom={`5px solid ${data.colorFondo}`}
     >
-      <ContainerDermo pt={isMobile ? "20px" : "75px" }>
+      <ContainerDermo pt={isMobile ? "20px" : "75px"}>
         <Flex flex={100}>
           <Text
             textTransform="uppercase"
