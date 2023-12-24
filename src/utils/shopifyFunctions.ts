@@ -147,6 +147,7 @@ export const getAllProducts = async (
             featuredImage {
               url
             }
+            productType
             handle
             title
             priceRange {
