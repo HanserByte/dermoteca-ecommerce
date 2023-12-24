@@ -192,3 +192,22 @@ export function getDayOfWeek(date) {
   const dayOfWeek = date.toLocaleDateString("en-US", options);
   return dayOfWeek;
 }
+
+export function formatMetafieldDate(date: string) {
+  if (!date) return;
+  // Parse the input date string
+  const inputDate = new Date(date);
+
+  // Define the options for formatting
+  const options = { day: "numeric", month: "long" };
+
+  // Format the date in the desired output format
+  const outputDateStr = new Intl.DateTimeFormat("es-ES", options)
+    .format(inputDate)
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  // Print the result
+  return outputDateStr;
+}

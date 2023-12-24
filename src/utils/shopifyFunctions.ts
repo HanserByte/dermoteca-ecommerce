@@ -407,7 +407,6 @@ export async function getAdminCustomer(id: string) {
   const { customer } = await makeShopifyAdminRequest(AdminCustomerQuery, {
     id,
   });
-
   return customer;
 }
 

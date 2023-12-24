@@ -401,6 +401,10 @@ export const AdminCustomerQuery = `#graphql
       lastName
       displayName
       email
+      metafield(namespace: "facts", key: "birth_date") {
+        key
+        value
+      }
       addresses (first: 10) {
         formatted
         formattedArea

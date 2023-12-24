@@ -18,6 +18,7 @@ import { COLORS } from "@/utils/constants";
 import AddressTable from "../AddressTable";
 import UserEditModal from "../UserEditModal";
 import { useMobileView } from "@/hooks/responsive";
+import { formatMetafieldDate } from "@/utils/index";
 
 interface IProps {
   data: {
@@ -35,6 +36,8 @@ const AccountDetails = ({ data }: IProps) => {
   const adminCustomerData = useAdminCustomer(
     customerData?.data?.customer?.id as string
   );
+
+  const birthDate = adminCustomerData?.data?.metafield?.value;
 
   const handleLogout = () => {
     localStorage.removeItem("userAccessToken");
@@ -88,6 +91,11 @@ const AccountDetails = ({ data }: IProps) => {
                 <Text fontWeight={400}>
                   {customerData?.data?.customer?.email}
                 </Text>
+              </HStack>
+
+              <HStack>
+                <Text>Cumpleaños</Text>
+                <Text fontWeight={400}>{formatMetafieldDate(birthDate)}</Text>
               </HStack>
             </VStack>
           </Box>
