@@ -13,6 +13,10 @@ import ProductCard from "../ProductCard";
 const BestSelling = () => {
   const { isMobile } = useMobileView();
   const bestSellingProductsData = useBestSellingProducts();
+  const filteredBestSellingProducts =
+    bestSellingProductsData?.data?.nodes.filter(
+      (product) => product.productType.toLowerCase() !== "cita"
+    );
 
   return (
     <Box
@@ -52,7 +56,7 @@ const BestSelling = () => {
             }}
             aria-label="My Favorite Images"
           >
-            {bestSellingProductsData?.data?.nodes?.map((product) => (
+            {filteredBestSellingProducts?.map((product) => (
               <SplideSlide key={product.id}>
                 <ProductCard
                   imageSrc={product.featuredImage.url}

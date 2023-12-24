@@ -65,6 +65,7 @@ fragment productFragment on Product {
   title
   totalInventory
   handle
+  productType
   images (first: 10) {
     nodes {
       url
