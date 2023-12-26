@@ -211,3 +211,12 @@ export function formatMetafieldDate(date: string) {
   // Print the result
   return outputDateStr;
 }
+
+export function cleanObject(obj) {
+  for (const key in obj) {
+    if (obj[key] === null) {
+      delete obj[key];
+    }
+  }
+  return obj;
+}

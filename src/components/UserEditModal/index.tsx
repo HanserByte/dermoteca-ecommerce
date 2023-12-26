@@ -22,6 +22,7 @@ import {
   Stack,
   useDisclosure,
   useToast,
+  Flex,
 } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -43,6 +44,9 @@ const UserEditModal = () => {
     firstName: "",
     lastName: "",
     email: "",
+    day: null,
+    month: null,
+    year: null,
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -58,8 +62,7 @@ const UserEditModal = () => {
     e.preventDefault();
     // @ts-ignore
     updateCustomerMutation.mutate({
-      customer: formData,
-      customerAccessToken: accessToken,
+      customer: { id: customerData?.data?.customer?.id, ...formData },
     });
   };
   useEffect(() => {
@@ -68,6 +71,9 @@ const UserEditModal = () => {
         firstName: adminCustomerData.data.firstName || "",
         lastName: adminCustomerData.data.lastName || "",
         email: adminCustomerData.data.email || "",
+        day: adminCustomerData?.data?.day || null,
+        month: adminCustomerData?.data?.month || null,
+        year: adminCustomerData?.data?.year || null,
       });
     }
   }, [adminCustomerData?.data]);
@@ -145,6 +151,36 @@ const UserEditModal = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                   />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Cumpleaños</FormLabel>
+                  <Flex gap="4">
+                    <Input
+                      type="number"
+                      name="day"
+                      value={formData.day}
+                      onChange={handleInputChange}
+                      placeholder="Dia - 30"
+                      max={31}
+                      min={1}
+                    />
+                    <Input
+                      type="number"
+                      name="month"
+                      value={formData.month}
+                      onChange={handleInputChange}
+                      placeholder="Mes - 12"
+                      max={12}
+                      min={1}
+                    />
+                    <Input
+                      type="number"
+                      name="year"
+                      value={formData.year}
+                      onChange={handleInputChange}
+                      placeholder="Año - 1999"
+                    />
+                  </Flex>
                 </FormControl>
               </Stack>
             </ModalBody>

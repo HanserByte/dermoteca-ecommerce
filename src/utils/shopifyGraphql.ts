@@ -269,7 +269,11 @@ export const CustomerQuery = `#graphql
         province
         zip
       }
-      metafield(namespace: "wishlist", key: "wishlist_ids") {
+      wishlistIds: metafield(namespace: "wishlist", key: "wishlist_ids") {
+        id
+        value
+      }
+      birthDate: metafield(namespace: "facts", key: "birth_date") {
         id
         value
       }
@@ -376,7 +380,6 @@ export const CustomerUpdateStorefrontMutation = `#graphql
 `;
 
 // Admin graphql
-
 export const CustomerUpdateMutation = `#graphql
   mutation CustomerUpdateMutation($input: CustomerInput!) {
     customerUpdate(input: $input) {

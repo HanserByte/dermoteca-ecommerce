@@ -154,8 +154,8 @@ export const useUpdateProductWishlistMutation = () => {
 export const useUpdateCustomerMutation = () => {
   const updateCustomerMutation = useMutation(
     // @ts-ignore
-    ({ customer, customerAccessToken }) => {
-      return fetch(`/api/account/customer?token=${customerAccessToken}`, {
+    ({ customer }) => {
+      return fetch(`/api/account/customer`, {
         method: "PATCH",
         body: JSON.stringify(customer),
       }).then((res) => res.json());

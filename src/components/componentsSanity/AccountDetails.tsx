@@ -70,7 +70,7 @@ const AccountDetails = ({ data }: IProps) => {
             </Flex>
 
             <VStack
-              w="max-content"
+              w="full"
               divider={<StackDivider borderColor="gray.200" />}
               alignItems="start"
               fontSize="16px"
@@ -94,8 +94,12 @@ const AccountDetails = ({ data }: IProps) => {
               </HStack>
 
               <HStack>
-                <Text>Cumpleaños</Text>
-                <Text fontWeight={400}>{formatMetafieldDate(birthDate)}</Text>
+                <Text>Cumpleaños:</Text>
+                <Text color={COLORS.GREEN} textWrap="wrap" fontWeight={400}>
+                  {birthDate
+                    ? formatMetafieldDate(birthDate)
+                    : "Agrega tu fecha de nacimiento editando tu informacion"}
+                </Text>
               </HStack>
             </VStack>
           </Box>

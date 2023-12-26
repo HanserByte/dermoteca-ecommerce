@@ -56,7 +56,7 @@ const ProductPage = () => {
     customerAccessTokenMutation?.data?.customerAccessToken?.accessToken;
   const customerData = useCustomer(accessToken);
   const [wishlistProducts, setWishlistProducts] = useState(
-    customerData?.data?.customer?.metafield?.value
+    customerData?.data?.customer?.wishlistIds?.value
   );
   const productWishlistData = useUserWishlist(wishlistProducts);
   const updateProductWishlistMutation = useUpdateProductWishlistMutation();
@@ -122,15 +122,17 @@ const ProductPage = () => {
 
       return;
     }
-    const { id, metafield } = customerData?.data?.customer;
-    const initialFieldData = metafield?.value ? metafield?.value + "-,-" : "";
+    const { id, wishlistIds } = customerData?.data?.customer;
+    const initialFieldData = wishlistIds?.value
+      ? wishlistIds?.value + "-,-"
+      : "";
 
     updateProductWishlistMutation.mutate(
       // @ts-ignore
       {
         id,
         metafield: {
-          id: metafield?.id,
+          id: wishlistIds?.id,
           value:
             initialFieldData +
             shopifyProductData?.data?.product?.title?.toLowerCase(),
@@ -146,8 +148,8 @@ const ProductPage = () => {
   };
 
   const handleRemoveWishlistItem = () => {
-    const { id, metafield } = customerData?.data?.customer;
-    const wishlistArray = metafield?.value?.split("-,-");
+    const { id, wishlistIds } = customerData?.data?.customer;
+    const wishlistArray = wishlistIds?.value?.split("-,-");
     const filteredArray = wishlistArray?.filter(
       (product: any) =>
         product !== shopifyProductData?.data?.product?.title.toLowerCase()
@@ -159,7 +161,7 @@ const ProductPage = () => {
       {
         id,
         metafield: {
-          id: metafield?.id,
+          id: wishlistIds?.id,
           value: wishlistData,
         },
         shopifyProductData: shopifyProductData?.data?.product,
@@ -174,8 +176,8 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
-    setWishlistProducts(customerData?.data?.customer?.metafield?.value);
-  }, [customerData?.data?.customer?.metafield?.value]);
+    setWishlistProducts(customerData?.data?.customer?.wishlistIds?.value);
+  }, [customerData?.data?.customer?.wishlistIds?.value]);
 
   useEffect(() => {
     if (addToCartMutation?.isLoading) return;
