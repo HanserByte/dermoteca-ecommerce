@@ -272,10 +272,14 @@ export const CustomerQuery = `#graphql
       wishlistIds: metafield(namespace: "wishlist", key: "wishlist_ids") {
         id
         value
+        namespace
+        key
       }
       birthDate: metafield(namespace: "facts", key: "birth_date") {
         id
         value
+        namespace
+        key
       }
     }
   }

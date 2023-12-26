@@ -198,6 +198,12 @@ export function formatMetafieldDate(date: string) {
   // Parse the input date string
   const inputDate = new Date(date);
 
+  // Get the time zone offset in minutes (positive for time zones behind UTC, negative for time zones ahead)
+  const timeZoneOffset = -480; // For Pacific Standard Time (PST), which is UTC-8
+
+  // Apply the time zone offset to the Date object
+  inputDate.setMinutes(inputDate.getMinutes() - timeZoneOffset);
+
   // Define the options for formatting
   const options = { day: "numeric", month: "long" };
 

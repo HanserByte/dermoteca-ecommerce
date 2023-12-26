@@ -35,22 +35,14 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   const data = await request.json();
   const formattedData = {
-    ...cleanObject(data),
-    metafields: [
-      {
-        ...(data?.metafieldId && { id: data?.metafieldId }),
-        key: "birth_date",
-        namespace: "facts",
-        value: data?.updatedWishlist || undefined,
-      },
-    ],
+    id: data?.id,
+    firstName: data?.firstName,
+    lastName: data?.lastName,
+    email: data?.email,
+    metafields: [data?.birthDateMetafield],
   };
 
-  // if(data?.day && data?.month && data?.year) {
-  //   formattedData.metafields
-  // }
-
-  const response = await updateCustomer(cleanObject(data));
+  const response = await updateCustomer(formattedData);
 
   return new Response(JSON.stringify(response));
 }

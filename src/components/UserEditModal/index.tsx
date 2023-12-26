@@ -62,18 +62,27 @@ const UserEditModal = () => {
     e.preventDefault();
     // @ts-ignore
     updateCustomerMutation.mutate({
-      customer: { id: customerData?.data?.customer?.id, ...formData },
+      customer: {
+        id: customerData?.data?.customer?.id,
+        ...formData,
+        birthDateMetafield: {
+          id: customerData?.data?.customer?.birthDate?.id,
+          value: `${formData.year}-${formData.month}-${formData.day}`,
+        },
+      },
     });
   };
   useEffect(() => {
+    const birthDate =
+      customerData?.data?.customer?.birthDate?.value?.split("-");
     if (adminCustomerData?.data) {
       setFormData({
         firstName: adminCustomerData.data.firstName || "",
         lastName: adminCustomerData.data.lastName || "",
         email: adminCustomerData.data.email || "",
-        day: adminCustomerData?.data?.day || null,
-        month: adminCustomerData?.data?.month || null,
-        year: adminCustomerData?.data?.year || null,
+        day: birthDate?.[2] || null,
+        month: birthDate?.[1] || null,
+        year: birthDate?.[0] || null,
       });
     }
   }, [adminCustomerData?.data]);
