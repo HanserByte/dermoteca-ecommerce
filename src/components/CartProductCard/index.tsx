@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { TbTrash } from "react-icons/tb";
+import AppointmentTimer from "../AppointmentTimer/index";
 
 interface ICartProductCardProps {
   product: BaseCartLine;
@@ -21,6 +22,9 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
   const { cartId } = useSessionVariables();
   const isAppointment =
     product?.merchandise?.product?.productType?.toLowerCase() === "cita";
+  const appointmentAvailableTime = product.attributes.find(
+    (attribute) => attribute.key === "_available_time"
+  );
 
   const handleRemoveFromCart = async () => {
     // @ts-ignore
@@ -90,6 +94,13 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
             <TbTrash />
           </Button>
         </Flex>
+
+        {isAppointment && (
+          <AppointmentTimer
+            product={product}
+            appointmentAvailableTime={appointmentAvailableTime}
+          />
+        )}
 
         {!isAppointment && (
           <Flex alignItems="center" gap={3}>

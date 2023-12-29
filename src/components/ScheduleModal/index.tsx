@@ -102,6 +102,10 @@ export default function ScheduleModal({
         timeSelected,
         appointmentduration
       ),
+      {
+        key: "_available_time",
+        value: String(Date.now() + 1000 * 60 * 3),
+      },
     ];
 
     handleAddToCart(attributes);
