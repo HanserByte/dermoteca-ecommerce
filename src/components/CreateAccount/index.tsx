@@ -175,27 +175,9 @@ const CreateAccount = (props: IProps) => {
                 Estoy de acuerdo con los términos y condiciones
               </Checkbox>
             </FormControl>
-            <Stack direction="row" justifyContent="center">
+            <Flex gap="2" direction="row" justifyContent="center">
               <Button
-                _hover={{ opacity: 0.7 }}
-                bg="#000"
-                borderRadius="35px"
-                border="1px solid black"
-                mb="5px"
-                onClick={handleSubmit}
-              >
-                <Text
-                  textTransform="uppercase"
-                  color="white"
-                  fontWeight={400}
-                  fontSize="13px"
-                  ml="25px"
-                  mr="25px"
-                >
-                  Crear Cuenta
-                </Text>
-              </Button>
-              <Button
+                w="100%"
                 as={Link}
                 href="/cuenta/iniciar-sesion"
                 _hover={{ opacity: 0.7 }}
@@ -214,7 +196,28 @@ const CreateAccount = (props: IProps) => {
                   Ya tengo una cuenta
                 </Text>
               </Button>
-            </Stack>
+
+              <Button
+                w="100%"
+                _hover={{ opacity: 0.7 }}
+                bg="#000"
+                borderRadius="35px"
+                border="1px solid black"
+                mb="5px"
+                onClick={handleSubmit}
+              >
+                <Text
+                  textTransform="uppercase"
+                  color="white"
+                  fontWeight={400}
+                  fontSize="13px"
+                  ml="25px"
+                  mr="25px"
+                >
+                  Crear Cuenta
+                </Text>
+              </Button>
+            </Flex>
           </Stack>
         </form>
       </Box>

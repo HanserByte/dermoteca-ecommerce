@@ -119,26 +119,9 @@ const Login = ({ data }: IProps) => {
                 onChange={handleInputChange}
               />
             </FormControl>
-            <Stack direction="row" justifyContent="center">
+            <Flex gap="2" direction="row" justifyContent="center">
               <Button
-                _hover={{ opacity: 0.7 }}
-                bg="#000"
-                borderRadius="35px"
-                border="1px solid black"
-                type="submit"
-              >
-                <Text
-                  textTransform="uppercase"
-                  color="white"
-                  fontWeight={400}
-                  fontSize="13px"
-                  ml="25px"
-                  mr="25px"
-                >
-                  Iniciar sesion
-                </Text>
-              </Button>
-              <Button
+                w="100%"
                 as={Link}
                 href="/cuenta/creacion-de-cuenta"
                 _hover={{ opacity: 0.7 }}
@@ -156,7 +139,27 @@ const Login = ({ data }: IProps) => {
                   Crear una cuenta
                 </Text>
               </Button>
-            </Stack>
+
+              <Button
+                w="100%"
+                _hover={{ opacity: 0.7 }}
+                bg="#000"
+                borderRadius="35px"
+                border="1px solid black"
+                type="submit"
+              >
+                <Text
+                  textTransform="uppercase"
+                  color="white"
+                  fontWeight={400}
+                  fontSize="13px"
+                  ml="25px"
+                  mr="25px"
+                >
+                  Iniciar sesion
+                </Text>
+              </Button>
+            </Flex>
 
             <Button as={Link} href="/cuenta/recuperar" m="auto" variant="link">
               Recuperar contraseña
