@@ -7,7 +7,6 @@ import { BsArrowRight } from "react-icons/bs";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import { useAllTaggedProducts } from "@/hooks/collections";
-
 import ProductCard from "../ProductCard";
 
 interface ITaggedProducts {
@@ -23,8 +22,6 @@ const TaggedProducts = ({ data }: ITaggedProducts) => {
   const { isMobile } = useMobileView();
   const tags = data?.tags?.map((tag) => tag?.label);
   const allTaggedProductsData = useAllTaggedProducts(tags);
-
-  console.log(allTaggedProductsData?.data);
 
   return (
     <Box
