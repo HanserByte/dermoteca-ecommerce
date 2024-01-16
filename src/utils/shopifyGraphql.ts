@@ -65,6 +65,7 @@ fragment productFragment on Product {
   title
   totalInventory
   handle
+  productType
   images (first: 10) {
     nodes {
       url
@@ -268,9 +269,17 @@ export const CustomerQuery = `#graphql
         province
         zip
       }
-      metafield(namespace: "wishlist", key: "wishlist_ids") {
+      wishlistIds: metafield(namespace: "wishlist", key: "wishlist_ids") {
         id
         value
+        namespace
+        key
+      }
+      birthDate: metafield(namespace: "facts", key: "birth_date") {
+        id
+        value
+        namespace
+        key
       }
     }
   }
@@ -375,7 +384,6 @@ export const CustomerUpdateStorefrontMutation = `#graphql
 `;
 
 // Admin graphql
-
 export const CustomerUpdateMutation = `#graphql
   mutation CustomerUpdateMutation($input: CustomerInput!) {
     customerUpdate(input: $input) {
@@ -400,6 +408,10 @@ export const AdminCustomerQuery = `#graphql
       lastName
       displayName
       email
+      metafield(namespace: "facts", key: "birth_date") {
+        key
+        value
+      }
       addresses (first: 10) {
         formatted
         formattedArea

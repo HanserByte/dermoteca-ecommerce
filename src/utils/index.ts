@@ -192,3 +192,37 @@ export function getDayOfWeek(date) {
   const dayOfWeek = date.toLocaleDateString("en-US", options);
   return dayOfWeek;
 }
+
+export function formatMetafieldDate(date: string) {
+  if (!date) return;
+  // Parse the input date string
+  const inputDate = new Date(date);
+
+  // Get the time zone offset in minutes (positive for time zones behind UTC, negative for time zones ahead)
+  const timeZoneOffset = -480; // For Pacific Standard Time (PST), which is UTC-8
+
+  // Apply the time zone offset to the Date object
+  inputDate.setMinutes(inputDate.getMinutes() - timeZoneOffset);
+
+  // Define the options for formatting
+  const options = { day: "numeric", month: "long" };
+
+  // Format the date in the desired output format
+  const outputDateStr = new Intl.DateTimeFormat("es-ES", options)
+    .format(inputDate)
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  // Print the result
+  return outputDateStr;
+}
+
+export function cleanObject(obj) {
+  for (const key in obj) {
+    if (obj[key] === null) {
+      delete obj[key];
+    }
+  }
+  return obj;
+}

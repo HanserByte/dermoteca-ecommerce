@@ -18,6 +18,7 @@ import { COLORS } from "@/utils/constants";
 import AddressTable from "../AddressTable";
 import UserEditModal from "../UserEditModal";
 import { useMobileView } from "@/hooks/responsive";
+import { formatMetafieldDate } from "@/utils/index";
 
 interface IProps {
   data: {
@@ -35,6 +36,8 @@ const AccountDetails = ({ data }: IProps) => {
   const adminCustomerData = useAdminCustomer(
     customerData?.data?.customer?.id as string
   );
+
+  const birthDate = adminCustomerData?.data?.metafield?.value;
 
   const handleLogout = () => {
     localStorage.removeItem("userAccessToken");
@@ -67,7 +70,7 @@ const AccountDetails = ({ data }: IProps) => {
             </Flex>
 
             <VStack
-              w="max-content"
+              w="full"
               divider={<StackDivider borderColor="gray.200" />}
               alignItems="start"
               fontSize="16px"
@@ -87,6 +90,15 @@ const AccountDetails = ({ data }: IProps) => {
                 <Text>Email: </Text>
                 <Text fontWeight={400}>
                   {customerData?.data?.customer?.email}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text>Cumpleaños:</Text>
+                <Text color={COLORS.GREEN} textWrap="wrap" fontWeight={400}>
+                  {birthDate
+                    ? formatMetafieldDate(birthDate)
+                    : "Agrega tu fecha de nacimiento editando tu informacion"}
                 </Text>
               </HStack>
             </VStack>

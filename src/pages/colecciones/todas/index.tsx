@@ -53,6 +53,10 @@ const AllCollectionsPage = () => {
     router?.query?.sort,
     router?.query?.order
   );
+  const filteredProductsData =
+    allProductsData?.data?.data?.products?.nodes?.filter(
+      (product) => product.productType.toLowerCase() !== "cita"
+    );
 
   const hasActiveFilters =
     (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
@@ -164,18 +168,16 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {allProductsData?.data?.data?.products?.nodes?.map(
-            (product: IProduct) => (
-              <ProductCard
-                handle={product.handle}
-                imageSrc={product.featuredImage.url}
-                title={product.title}
-                // @ts-ignore
-                price={product?.priceRange?.maxVariantPrice?.amount}
-                key={product?.id}
-              />
-            )
-          )}
+          {filteredProductsData?.map((product: IProduct) => (
+            <ProductCard
+              handle={product.handle}
+              imageSrc={product.featuredImage.url}
+              title={product.title}
+              // @ts-ignore
+              price={product?.priceRange?.maxVariantPrice?.amount}
+              key={product?.id}
+            />
+          ))}
         </Grid>
       </Box>
 

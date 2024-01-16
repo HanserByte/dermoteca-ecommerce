@@ -147,6 +147,7 @@ export const getAllProducts = async (
             featuredImage {
               url
             }
+            productType
             handle
             title
             priceRange {
@@ -406,7 +407,6 @@ export async function getAdminCustomer(id: string) {
   const { customer } = await makeShopifyAdminRequest(AdminCustomerQuery, {
     id,
   });
-
   return customer;
 }
 
