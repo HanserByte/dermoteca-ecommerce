@@ -50,7 +50,7 @@ const AccountDetails = ({ data }: IProps) => {
 
   return (
     <ContainerDermo pt={"0px"} pb={"0px"}>
-      <Box maxW="800px" mx="auto" h="calc(80vh)" py={20} my="auto">
+      <Box maxW="800px" mx="auto" py={20} my="auto">
         <Stack
           align="start"
           direction={isMobile ? "column" : "row"}
