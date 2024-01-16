@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 import { useSessionVariables } from "@/store";
 import { useCart, useCartActions } from "@/hooks/cart";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Script from "next/script";
 
 const theme = extendTheme({
   fonts: {
@@ -24,6 +25,11 @@ function MyApp({ Component, pageProps }: any) {
   return (
     <>
       <Head>
+        <script
+          type="application/javascript"
+          async
+          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=XEw9NG"
+        ></script>
         <title>Dermoteca</title>
         <link rel="icon" href="/favicon.ico?v=2" />
         <meta
