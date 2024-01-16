@@ -19,6 +19,7 @@ import AddressTable from "../AddressTable";
 import UserEditModal from "../UserEditModal";
 import { useMobileView } from "@/hooks/responsive";
 import { formatMetafieldDate } from "@/utils/index";
+import ProductsByPreviousPurchases from "./ProductsByPreviousPurchases";
 
 interface IProps {
   data: {
@@ -189,6 +190,8 @@ const AccountDetails = ({ data }: IProps) => {
           )}
         </Box>
       </Box>
+
+      <ProductsByPreviousPurchases />
     </ContainerDermo>
   );
 };

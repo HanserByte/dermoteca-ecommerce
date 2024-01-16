@@ -360,6 +360,7 @@ export async function getCustomer(customerAccessToken: string) {
   const data = await makeShopifyRequest(CustomerQuery, {
     customerAccessToken,
   });
+
   return data;
 }
 

@@ -21,8 +21,10 @@ interface ITaggedProducts {
 
 const TaggedProducts = ({ data }: ITaggedProducts) => {
   const { isMobile } = useMobileView();
-  const tags = data?.tags.map((tag) => tag.label);
+  const tags = data?.tags?.map((tag) => tag?.label);
   const allTaggedProductsData = useAllTaggedProducts(tags);
+
+  console.log(allTaggedProductsData?.data);
 
   return (
     <Box

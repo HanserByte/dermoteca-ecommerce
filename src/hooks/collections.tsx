@@ -48,12 +48,13 @@ export const useAllProducts = (
 
 export const useAllTaggedProducts = (tags: string[]) => {
   const allTaggedProductsData = useQuery(
-    ["allTaggedProducts", tags.join(",")],
+    ["allTaggedProducts", tags?.join(",")],
     () =>
       fetch(`/api/products`, {
         method: "POST",
         body: JSON.stringify({ tags }),
-      }).then((res) => res.json())
+      }).then((res) => res.json()),
+    { enabled: tags?.length > 0 }
   );
 
   return allTaggedProductsData;

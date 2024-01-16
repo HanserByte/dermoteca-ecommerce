@@ -281,6 +281,21 @@ export const CustomerQuery = `#graphql
         namespace
         key
       }
+      orders (first:3, reverse: true) {
+        nodes {
+          lineItems (first: 1) {
+            nodes {
+              variant {
+                product {
+                  title
+                  productType
+                  tags 
+                }
+              }
+            }
+          } 
+        }
+      }
     }
   }
 `;
@@ -424,7 +439,7 @@ export const AdminCustomerQuery = `#graphql
         lastName
         id
       }
-      orders(first: 20) {
+      orders(first: 20, reverse: true) {
         nodes {
           id
           name
