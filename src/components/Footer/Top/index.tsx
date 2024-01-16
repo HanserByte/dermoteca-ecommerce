@@ -1,5 +1,6 @@
 import { LogoShortCI } from "@/components/Icons";
 import { ITitleRedirect } from "@/components/Interfaces";
+import { subscribe } from "klaviyo-subscribe";
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import "./index.scss";
 import { useStore } from "@/store";
 import { IDataFooter } from "@/typesSanity/docs/footer";
 import { useEffect, useState } from "react";
+import { COLORS } from "@/utils/constants";
 
 const TitleRedirect = (props: ITitleRedirect) => {
   const { title, dataUrl } = props;
@@ -51,6 +53,14 @@ const Form = (props: any) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const submitEmail = async () => {
+    if (!email) return;
+    await subscribe("RjGrh4", email);
+    setSubmitted(true);
+  };
 
   return (
     <Flex
@@ -73,26 +83,41 @@ const Form = (props: any) => {
             {data.inputTexto}
           </Text>
         </Box>
-        <InputGroup
-          size="md"
-          borderRight="32px 0px 0px 32px"
-          justifyContent="center"
-        >
-          <Input
-            placeholder="Ingresa tu correo"
-            borderWidth="2px"
-            width={isMobile ? "250px" : "300px"}
-            borderRadius="md"
-            pr="4.5rem"
-            color="white"
-            style={{ borderRadius: "32px 0px 0px 32px" }}
-          />
-          <InputRightAddon width="4.5rem" borderRadius="0px 32px 32px 0px">
-            <Button h="100%" size="md" fontWeight={300} fontSize="12px">
-              <Box mr="6px">ENVIAR</Box>
-            </Button>
-          </InputRightAddon>
-        </InputGroup>
+        {submitted && (
+          <Text color={COLORS.GREEN}>
+            Gracias por suscribirte <br /> revisa tu correo para confirmar
+          </Text>
+        )}
+        {!submitted && (
+          <InputGroup
+            size="md"
+            borderRight="32px 0px 0px 32px"
+            justifyContent="center"
+          >
+            <Input
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              placeholder="Ingresa tu correo"
+              borderWidth="2px"
+              width={isMobile ? "250px" : "300px"}
+              borderRadius="md"
+              pr="4.5rem"
+              color="white"
+              style={{ borderRadius: "32px 0px 0px 32px" }}
+            />
+            <InputRightAddon width="4.5rem" borderRadius="0px 32px 32px 0px">
+              <Button
+                h="100%"
+                size="md"
+                fontWeight={300}
+                fontSize="12px"
+                onClick={submitEmail}
+              >
+                <Box mr="6px">ENVIAR</Box>
+              </Button>
+            </InputRightAddon>
+          </InputGroup>
+        )}
       </Box>
     </Flex>
   );
