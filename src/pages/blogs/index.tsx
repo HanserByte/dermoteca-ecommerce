@@ -1,3 +1,4 @@
+"use client";
 import NavBar from "@/components/NavBar";
 import PortableText from "@/components/PortableText";
 import { useMobileView } from "@/hooks/responsive";
@@ -25,7 +26,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BlogSortSelector from "@/components/BlogSortSelector";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import Footer from "@/components/Footer";
@@ -46,6 +47,11 @@ const Blogs = ({
   sanityBlogPage,
   allSanityBlogTags,
 }: IBlogsPage) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const router = useRouter();
   // @ts-ignore
   const queryTags = decodeURIComponent(router?.query?.tags);
@@ -73,6 +79,19 @@ const Blogs = ({
 
   const hasActiveFilters =
     (queryTags.length > 0 && queryTags != "undefined") || activeOrder;
+
+  useEffect(() => {
+    // Load the TikTok embed script asynchronously
+    const script = document.createElement("script");
+    script.src = "https://www.tiktok.com/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup script when component unmounts
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -168,6 +187,29 @@ const Blogs = ({
           py={5}
           templateColumns={isMobile ? "repeat(1, 1fr)" : "repeat(3, 1fr)"}
         >
+          {isClient && (
+            <>
+              {sanityBlogPage?.tiktoks?.map(
+                (tiktokUrl: string, idx: number) => {
+                  return (
+                    <blockquote
+                      key={idx}
+                      className="tiktok-embed"
+                      cite={tiktokUrl}
+                      data-video-id={tiktokUrl.split("/").pop()}
+                      data-embed-from="embed_page"
+                      style={{ maxWidth: "605px", minWidth: "325px" }}
+                    >
+                      <section></section>
+                    </blockquote>
+                  );
+                }
+              )}
+            </>
+          )}
+
+          <script async src="https://www.tiktok.com/embed.js"></script>
+
           {allSanityBlogsData?.data?.map((blog: ISanityBlogPost) => (
             <BlogCard
               handle={blog.slug.current}
