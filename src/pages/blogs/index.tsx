@@ -109,12 +109,12 @@ const Blogs = ({
       </Box>
 
       {/* @ts-ignore */}
-      <Flex my="6" pl={"20px"} pr={"20px"} display={isMobile}>
+      {/* <Flex my="6" pl={"20px"} pr={"20px"} display={isMobile}>
         {isMobile && <BlogsFilterDrawer />}
-      </Flex>
+      </Flex> */}
 
       {/* Filter desktop bar */}
-      {!isMobile && (
+      {/* {!isMobile && (
         <Box w="full">
           <Flex pl={"145px"} justifyContent="space-between" pr={"145px"} py={2}>
             <BlogSortSelector />
@@ -124,9 +124,9 @@ const Blogs = ({
             </Flex>
           </Flex>
         </Box>
-      )}
+      )} */}
 
-      {(hasActiveFilters || !isMobile) && (
+      {/* {(hasActiveFilters || !isMobile) && (
         <Box w="full" bg={COLORS.GREEN}>
           <Box
             overflowX="auto"
@@ -173,7 +173,7 @@ const Blogs = ({
             ))}
           </Box>
         </Box>
-      )}
+      )} */}
 
       {allSanityBlogsData?.isLoading && <Loading />}
 
@@ -209,7 +209,7 @@ const Blogs = ({
           )}
 
           <script async src="https://www.tiktok.com/embed.js"></script>
-
+          {/* 
           {allSanityBlogsData?.data?.map((blog: ISanityBlogPost) => (
             <BlogCard
               handle={blog.slug.current}
@@ -218,7 +218,7 @@ const Blogs = ({
               key={blog?._id}
               createdAt={blog?._createdAt}
             />
-          ))}
+          ))} */}
         </Grid>
       </Box>
 
