@@ -4,6 +4,7 @@ import { useStore } from "@/store";
 import { IDataFooter } from "@/typesSanity/docs/footer";
 import { Box, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
+import Link from "next/link";
 
 interface ContainerProps {
   data: IDataFooter;
@@ -13,6 +14,8 @@ const Bottom = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+
+  console.log(data.enlaces);
 
   const iconArray: any = {
     FaFacebookF: FaFacebookF,
@@ -46,20 +49,28 @@ const Bottom = (props: ContainerProps) => {
         </Flex>
 
         {/* Centro */}
-        <Flex alignItems="center" justifyContent="center" flex={2} mb="20px">
+        <Flex
+          gap={2}
+          alignItems="center"
+          justifyContent="center"
+          flex={2}
+          mb="20px"
+        >
           {data.enlaces &&
             data.enlaces.length > 0 &&
             data.enlaces.map((item, index) => (
               <React.Fragment key={index}>
-                {iconArray[item?.icono]({
-                  style: {
-                    width: "25px",
-                    height: "25px",
-                    cursor: "pointer",
-                    color: "white",
-                  },
-                })}
-                {index !== data.enlaces.length - 1 && <Box mx="10px" />}
+                <Link href={item.url}>
+                  {iconArray[item?.icono]({
+                    style: {
+                      width: "25px",
+                      height: "25px",
+                      cursor: "pointer",
+                      color: "white",
+                    },
+                  })}
+                  {index !== data.enlaces.length - 1 && <Box mx="10px" />}
+                </Link>
               </React.Fragment>
             ))}
         </Flex>

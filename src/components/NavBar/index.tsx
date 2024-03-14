@@ -22,7 +22,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CiHeart, CiUser } from "react-icons/ci";
 import { TfiSearch } from "react-icons/tfi";
 import { LogoCI, LogoHamburguerCI } from "../Icons";
-import { useNavbar, useStore, useUserAccount } from "@/store";
+import { useNavbar, useStore } from "@/store";
 import { IDataNav } from "@/typesSanity/docs/nav";
 import { client } from "@/lib/sanity.client";
 import React from "react";
