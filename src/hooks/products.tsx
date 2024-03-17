@@ -26,7 +26,11 @@ export const useShopifyProduct = (handle: string) => {
   const shopifyProductData = useQuery(
     ["shopifyProduct", handle],
     () => fetch(`/api/products/${handle}`).then((res) => res.json()),
-    { enabled: !!handle }
+    {
+      enabled: !!handle,
+      staleTime: 0, // Los datos se vuelven obsoletos inmediatamente
+      cacheTime: 0, // No mantener los resultados en caché
+    }
   );
 
   return shopifyProductData;
