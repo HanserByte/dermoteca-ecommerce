@@ -238,6 +238,7 @@ export const makeShopifyRequest = async (
     method: "POST",
     headers: HEADERS,
     body: JSON.stringify({ query, variables }),
+    cache: "no-store",
   };
 
   // @ts-ignore
