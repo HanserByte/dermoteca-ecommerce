@@ -273,8 +273,14 @@ const Top = (props: ContainerProps) => {
               </Box>
             </Flex>
 
-            {/* Centro */}
-            <Form data={data} />
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              flex={1}
+              width="100%"
+            >
+              <Form data={data} />
+            </Flex>
 
             {/* Lado derecho */}
             <Flex alignItems="center" flex={1} justifyContent="flex-end">

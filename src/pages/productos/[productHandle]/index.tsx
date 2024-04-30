@@ -295,7 +295,7 @@ const ProductPage = () => {
               ${sanityProductData?.data?.store?.variants[0]?.store?.price}
             </Text>
 
-            <ReviewStars rating={4} />
+            {/* <ReviewStars rating={4} /> */}
 
             <Text
               fontSize={isMobile ? "md" : "lg"}
