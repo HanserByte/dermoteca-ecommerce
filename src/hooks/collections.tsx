@@ -31,14 +31,15 @@ export const useCollection = (
 export const useAllProducts = (
   activeSortKey: string,
   reverse: boolean = false,
-  tags: string = ""
+  tags: string = "",
+  vendors: string = ""
 ) => {
   const sortKey = activeSortKey !== "0" ? activeSortKey : "BEST_SELLING";
   const allProductsData = useQuery(
-    ["products", { sortKey, reverse, tags }],
+    ["products", { sortKey, reverse, tags, vendors }],
     () =>
       fetch(
-        `/api/products?sortKey=${sortKey}&reverse=${reverse}&tags=${tags}`
+        `/api/products?sortKey=${sortKey}&reverse=${reverse}&tags=${tags}&vendors=${vendors}`
       ).then((res) => res.json()),
     { keepPreviousData: true }
   );

@@ -65,6 +65,14 @@ export const useAllTags = () => {
   return allTagsData;
 };
 
+export const useAllVendors = () => {
+  const allTagsVendors = useQuery(["vendors"], () =>
+    fetch("/api/products/vendors").then((res) => res.json())
+  )?.data;
+
+  return allTagsVendors;
+};
+
 export const usePrefetch = () => {
   const queryClient = useQueryClient();
 

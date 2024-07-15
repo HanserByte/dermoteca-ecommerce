@@ -131,16 +131,21 @@ export const getRecommendedProducts = async (productId: string | null) => {
 export const getAllProducts = async (
   sortKey: ProductSortKeys = "BEST_SELLING",
   reverse: boolean = false,
-  tags: string | null
+  tags: string | null,
+  vendors: string | null
 ) => {
+  const fullQuery = `${tags ? `(${tags})` : ""}${
+    tags && vendors ? " AND " : ""
+  }${vendors}`;
+
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean, $tags: String) {
-        products (first: 40, sortKey: $sortKey, reverse: $reverse, query: $tags) {
+      query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean, $query: String) {
+        products(first: 40, sortKey: $sortKey, reverse: $reverse, query: $query) {
           nodes {
             id
             title
@@ -152,9 +157,9 @@ export const getAllProducts = async (
             title
             priceRange {
               maxVariantPrice {
-                    amount
+                amount
               }
-            }  
+            }
           }
         }
       }
@@ -162,7 +167,7 @@ export const getAllProducts = async (
       variables: {
         sortKey,
         reverse,
-        tags,
+        query: fullQuery,
       },
     }),
   });
@@ -190,6 +195,29 @@ export const getAllTags = async () => {
             }
         }
     }
+    `,
+    }),
+  });
+  const data = await response.json();
+  return data;
+};
+
+export const getAllVendors = async () => {
+  const response = await fetch(API_ENDPOINT, {
+    method: "POST",
+    // @ts-ignore
+    headers: HEADERS,
+    body: JSON.stringify({
+      query: `
+      query AllVendors {
+  products(first: 250) {
+    edges {
+      node {
+        vendor
+      }
+    }
+  }
+}
     `,
     }),
   });

@@ -10,6 +10,9 @@ import {
   TagLabel,
   Text,
   useMediaQuery,
+  Button,
+  HStack,
+  IconButton,
 } from "@chakra-ui/react";
 import { useNavbar, useStore } from "@/store";
 import { client } from "@/lib/sanity.client";
@@ -30,6 +33,10 @@ import {
 } from "@/utils";
 import FilterDrawer from "@/components/FilterDrawer";
 import Loading from "@/components/Loading";
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import VendorSelector from "@/components/vendorSelector";
+
+const PRODUCTS_PER_PAGE = 20;
 
 const AllCollectionsPage = () => {
   const router = useRouter();
@@ -38,9 +45,18 @@ const AllCollectionsPage = () => {
   const queryTagsArray = queryTags
     ?.split(",")
     .filter((tag: string) => tag != "undefined" && tag != "");
+  // @ts-ignore
+  const queryVendors = decodeURIComponent(router?.query?.vendors);
+  const queryVendorsArray = queryVendors
+    ?.split(",")
+    .filter((tag: string) => tag != "undefined" && tag != "");
   const gqlQueryTags = queryTagsArray
     ?.map((tag: string) => `(tag:${tag})`)
     .join(" OR ");
+  const gqlQueryVendors = queryVendorsArray
+    ?.map((tag: string) => `(vendor:${tag})`)
+    .join(" OR ");
+  console.log(gqlQueryVendors);
   // @ts-ignore
   const sortKey = router.query?.sort?.toUpperCase();
   const order = router.query?.order === "true";
@@ -48,7 +64,12 @@ const AllCollectionsPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionData, setCollectionData] = useState<ICollectionPageData>();
-  const allProductsData = useAllProducts(sortKey, order, gqlQueryTags);
+  const allProductsData = useAllProducts(
+    sortKey,
+    order,
+    gqlQueryTags,
+    gqlQueryVendors
+  );
   const activeOrder = getCollectionOrderTag(
     router?.query?.sort,
     router?.query?.order
@@ -67,6 +88,17 @@ const AllCollectionsPage = () => {
   }[0]
   `;
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(
+    filteredProductsData?.length / PRODUCTS_PER_PAGE
+  );
+
+  const paginatedProducts = filteredProductsData?.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
   useEffect(() => {
     async function fetchData() {
       const data = await client.fetch(collectionQuery);
@@ -74,6 +106,22 @@ const AllCollectionsPage = () => {
     }
     fetchData();
   }, []);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -101,6 +149,7 @@ const AllCollectionsPage = () => {
 
             <Flex>
               <TagSelector />
+              <VendorSelector />
               <CollectionsSelector />
             </Flex>
           </Flex>
@@ -168,7 +217,7 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {filteredProductsData?.map((product: IProduct) => (
+          {paginatedProducts?.map((product: IProduct) => (
             <ProductCard
               handle={product.handle}
               imageSrc={product.featuredImage.url}
@@ -180,6 +229,34 @@ const AllCollectionsPage = () => {
           ))}
         </Grid>
       </Box>
+
+      {totalPages > 1 && (
+        <Flex justifyContent="center" my={5}>
+          <HStack spacing={4}>
+            <IconButton
+              icon={<ArrowLeftIcon />}
+              onClick={handlePreviousPage}
+              isDisabled={currentPage === 1}
+              aria-label="Previous Page"
+            />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                isActive={currentPage === index + 1}
+              >
+                {index + 1}
+              </Button>
+            ))}
+            <IconButton
+              icon={<ArrowRightIcon />}
+              onClick={handleNextPage}
+              isDisabled={currentPage === totalPages}
+              aria-label="Next Page"
+            />
+          </HStack>
+        </Flex>
+      )}
 
       {collectionData?.components.map((componente: any) => (
         <ComponentRenderer

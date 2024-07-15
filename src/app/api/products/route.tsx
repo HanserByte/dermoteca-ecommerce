@@ -5,11 +5,12 @@ export async function GET(request: Request) {
   const sortKey = url.searchParams.get("sortKey");
   const reverse = url.searchParams.get("reverse") === "true";
   const tags = url.searchParams.get("tags");
+  const vendors = url.searchParams.get("vendors");
 
   const response =
     sortKey !== "undefined"
-      ? await getAllProducts(sortKey, reverse, tags)
-      : await getAllProducts("BEST_SELLING", false, tags);
+      ? await getAllProducts(sortKey, reverse, tags, vendors)
+      : await getAllProducts("BEST_SELLING", false, tags, vendors);
 
   return new Response(JSON.stringify(response));
 }
