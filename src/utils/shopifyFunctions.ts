@@ -145,7 +145,7 @@ export const getAllProducts = async (
     body: JSON.stringify({
       query: `
       query AllProducts($sortKey: ProductSortKeys, $reverse: Boolean, $query: String) {
-        products(first: 40, sortKey: $sortKey, reverse: $reverse, query: $query) {
+        products(first: 250, sortKey: $sortKey, reverse: $reverse, query: $query) {
           nodes {
             id
             title

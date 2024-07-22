@@ -107,6 +107,11 @@ const AllCollectionsPage = () => {
     fetchData();
   }, []);
 
+  // Nuevo useEffect para el scroll al cambiar de página
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -122,6 +127,27 @@ const AllCollectionsPage = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  // Nueva lógica para calcular el rango de páginas visibles
+  const getPaginationRange = (currentPage, totalPages) => {
+    const range = [];
+    const maxVisiblePages = 4;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+
+    return range;
+  };
+
+  const paginationRange = getPaginationRange(currentPage, totalPages);
 
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
@@ -239,13 +265,16 @@ const AllCollectionsPage = () => {
               isDisabled={currentPage === 1}
               aria-label="Previous Page"
             />
-            {Array.from({ length: totalPages }, (_, index) => (
+            {paginationRange.map((page) => (
               <Button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                isActive={currentPage === index + 1}
+                key={page}
+                onClick={() => handlePageChange(page)}
+                isActive={currentPage === page}
+                sx={{
+                  bgColor: currentPage === page ? "#00a94f !important" : "",
+                }}
               >
-                {index + 1}
+                {page}
               </Button>
             ))}
             <IconButton
