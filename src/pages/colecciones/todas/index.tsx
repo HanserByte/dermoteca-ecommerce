@@ -29,6 +29,7 @@ import CollectionSortSelector from "@/components/CollectionSortSelector";
 import {
   getCollectionOrderTag,
   handleRemoveTag,
+  handleRemoveVendor,
   removeQueryParam,
 } from "@/utils";
 import FilterDrawer from "@/components/FilterDrawer";
@@ -224,6 +225,25 @@ const AllCollectionsPage = () => {
                 <TagLabel>{tag}</TagLabel>
                 <TagCloseButton
                   onClick={() => handleRemoveTag(tag, queryTagsArray, router)}
+                />
+              </Tag>
+            ))}
+
+            {queryVendorsArray?.map((tag) => (
+              <Tag
+                ml={2}
+                bg="white"
+                textColor="black"
+                size="md"
+                key={tag}
+                borderRadius="full"
+                variant="solid"
+              >
+                <TagLabel>{tag}</TagLabel>
+                <TagCloseButton
+                  onClick={() =>
+                    handleRemoveVendor(tag, queryVendorsArray, router)
+                  }
                 />
               </Tag>
             ))}

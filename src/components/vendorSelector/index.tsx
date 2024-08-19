@@ -45,14 +45,15 @@ const VendorSelector = () => {
 
   useEffect(() => {
     if (allVendorData && vendors.length === 0) {
-      let arr: any = [];
-      allVendorData.data.products.edges.map((vendor: any) => {
-        arr.push(vendor.node.vendor);
-      });
-      arr = arr.filter(
-        (item: string, index: number) => arr.indexOf(item) === index
-      );
-      setVendors(arr);
+      console.log(allVendorData);
+      // let arr: any = [];
+      // allVendorData.data.products.edges.map((vendor: any) => {
+      //   arr.push(vendor.node.vendor);
+      // });
+      // arr = arr.filter(
+      //   (item: string, index: number) => arr.indexOf(item) === index
+      // );
+      setVendors(allVendorData);
     }
   }, [allVendorData, vendors]);
 

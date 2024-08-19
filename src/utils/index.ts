@@ -76,6 +76,18 @@ export const handleRemoveTag = (
   router.push(router, undefined, { shallow: true });
 };
 
+export const handleRemoveVendor = (
+  tag: string,
+  queryTagsArray: string[],
+  router: NextRouter
+) => {
+  // Remove vendor from query params
+  router.query.vendors = encodeURIComponent(
+    queryTagsArray?.filter((tagItem: string) => tagItem !== tag).join(",")
+  );
+  router.push(router, undefined, { shallow: true });
+};
+
 export const removeQueryParam = (param: string, router: NextRouter) => {
   const { pathname, query } = router;
   const params = new URLSearchParams(query);

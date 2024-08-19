@@ -134,9 +134,9 @@ export const getAllProducts = async (
   tags: string | null,
   vendors: string | null
 ) => {
-  const fullQuery = `${tags ? `(${tags})` : ""}${
+  const fullQuery = `status:active${tags ? ` AND (${tags})` : ""}${
     tags && vendors ? " AND " : ""
-  }${vendors}`;
+  }${vendors ? `(${vendors})` : ""}`;
 
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
@@ -203,26 +203,51 @@ export const getAllTags = async () => {
 };
 
 export const getAllVendors = async () => {
-  const response = await fetch(API_ENDPOINT, {
-    method: "POST",
-    // @ts-ignore
-    headers: HEADERS,
-    body: JSON.stringify({
-      query: `
-      query AllVendors {
-  products(first: 250) {
-    edges {
-      node {
-        vendor
-      }
-    }
+  let hasNextPage = true;
+  let endCursor = null;
+  const allVendors = new Set<string>();
+
+  while (hasNextPage) {
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      // @ts-ignore
+      headers: HEADERS,
+      body: JSON.stringify({
+        query: `
+        query AllVendors($cursor: String) {
+          products(first: 250, after: $cursor, query: "status:active") {
+            edges {
+              node {
+                vendor
+              }
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+        `,
+        variables: {
+          cursor: endCursor,
+        },
+      }),
+    });
+
+    const data = await response.json();
+    const products = data.data.products;
+
+    // Agrega los vendors únicos al Set
+    products.edges.forEach((edge: any) => {
+      allVendors.add(edge.node.vendor);
+    });
+
+    // Actualiza paginación
+    hasNextPage = products.pageInfo.hasNextPage;
+    endCursor = products.pageInfo.endCursor;
   }
-}
-    `,
-    }),
-  });
-  const data = await response.json();
-  return data;
+  console.log(Array.from(allVendors));
+  return Array.from(allVendors);
 };
 
 /**
