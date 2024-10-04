@@ -28,7 +28,8 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const btnRef = React.useRef();
 
   const handleCheckout = () => {
-    cartData?.data?.checkoutUrl && router.push(cartData?.data?.checkoutUrl);
+    console.log(cartData.data);
+    cartData?.data?.checkoutUrl && router.push(cartData.data.checkoutUrl);
   };
 
   return (

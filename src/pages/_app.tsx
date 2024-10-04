@@ -25,11 +25,11 @@ function MyApp({ Component, pageProps }: any) {
   return (
     <>
       <Head>
-        <script
+        {/* <script
           type="application/javascript"
           async
           src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=XEw9NG"
-        ></script>
+        ></script> */}
         <title>Dermoteca</title>
         <link rel="icon" href="/favicon.ico?v=2" />
         <meta
