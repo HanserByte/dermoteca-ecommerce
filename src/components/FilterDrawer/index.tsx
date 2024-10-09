@@ -25,6 +25,7 @@ import React from "react";
 import { BsFilter } from "react-icons/bs";
 import { getCollectionOrderTag } from "@/utils";
 import { useAllTags } from "@/hooks/products";
+import VendorSelector from "../vendorSelector";
 
 const FilterDrawer = ({ useCollectionSort = false }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -125,6 +126,8 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
                 </Button>
               ))}
             </VStack>
+
+            <VendorSelector />
 
             <VStack mt={8} alignItems="start" gap={1}>
               <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>

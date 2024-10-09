@@ -57,7 +57,6 @@ const AllCollectionsPage = () => {
   const gqlQueryVendors = queryVendorsArray
     ?.map((tag: string) => `(vendor:${tag})`)
     .join(" OR ");
-  console.log(gqlQueryVendors);
   // @ts-ignore
   const sortKey = router.query?.sort?.toUpperCase();
   const order = router.query?.order === "true";
@@ -91,6 +90,12 @@ const AllCollectionsPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Leer la página actual desde el query string y actualizar el estado inicial
+  useEffect(() => {
+    const page = Number(router.query.page) || 1;
+    setCurrentPage(page);
+  }, [router.query.page]);
+
   const totalPages = Math.ceil(
     filteredProductsData?.length / PRODUCTS_PER_PAGE
   );
@@ -108,28 +113,33 @@ const AllCollectionsPage = () => {
     fetchData();
   }, []);
 
-  // Nuevo useEffect para el scroll al cambiar de página
+  // useEffect para el scroll al cambiar de página
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
+  // Actualizar el query string cada vez que cambie la página
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page },
+    });
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+      handlePageChange(currentPage + 1);
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      handlePageChange(currentPage - 1);
     }
   };
 
-  // Nueva lógica para calcular el rango de páginas visibles
+  // Lógica para calcular el rango de páginas visibles
   const getPaginationRange = (currentPage, totalPages) => {
     const range = [];
     const maxVisiblePages = 4;
@@ -173,7 +183,6 @@ const AllCollectionsPage = () => {
         <Box w="full">
           <Flex pl={"145px"} justifyContent="space-between" pr={"145px"} py={2}>
             <CollectionSortSelector />
-
             <Flex>
               <TagSelector />
               <VendorSelector />

@@ -1,4 +1,6 @@
 import { useAllTags, useAllVendors } from "@/hooks/products";
+import { useStore } from "@/store";
+import { COLORS } from "@/utils/constants";
 import {
   Button,
   Checkbox,
@@ -8,6 +10,9 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  VStack,
+  Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -17,6 +22,8 @@ const VendorSelector = () => {
   const allVendorData = useAllVendors();
   const [vendors, setVendors] = useState([]);
   const router = useRouter();
+  const { value } = useStore();
+  const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   // @ts-ignore
   const queryVendors = decodeURIComponent(router?.query?.vendors || "");
 
@@ -58,21 +65,13 @@ const VendorSelector = () => {
   }, [allVendorData, vendors]);
 
   return (
-    <Popover placement="bottom-end">
-      <PopoverTrigger>
-        <Button
-          variant="ghost"
-          _hover={{
-            bg: "#E7D4C7",
-          }}
-        >
-          Marcas <GoChevronDown />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow />
-        <PopoverBody>
-          <Grid templateColumns="repeat(2, 1fr)">
+    <>
+      {isMobile ? (
+        <VStack mt={8} alignItems="start" gap={1}>
+          <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
+            Marcas
+          </Text>
+          <Grid templateColumns="repeat(2, 1fr)" columnGap={4}>
             {vendors.length !== 0 &&
               vendors.map((vendor: any) => {
                 return (
@@ -90,9 +89,45 @@ const VendorSelector = () => {
                 );
               })}
           </Grid>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+        </VStack>
+      ) : (
+        <Popover placement="bottom-end">
+          <PopoverTrigger>
+            <Button
+              variant="ghost"
+              _hover={{
+                bg: "#E7D4C7",
+              }}
+            >
+              Marcas <GoChevronDown />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverBody>
+              <Grid templateColumns="repeat(2, 1fr)">
+                {vendors.length !== 0 &&
+                  vendors.map((vendor: any) => {
+                    return (
+                      <Checkbox
+                        colorScheme="green"
+                        size="md"
+                        value={vendor}
+                        onChange={handleCheckboxSelect}
+                        key={vendor}
+                        isChecked={queryVendors?.includes(vendor)}
+                        fontWeight={600}
+                      >
+                        {vendor}
+                      </Checkbox>
+                    );
+                  })}
+              </Grid>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
+      )}
+    </>
   );
 };
 

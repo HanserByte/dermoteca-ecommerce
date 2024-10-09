@@ -86,7 +86,7 @@ const PortableText = ({ blocks }) => {
       },
       normal: ({ children }: { children: React.ReactNode }) => {
         return (
-          <Text fontSize="18px" mb={2}>
+          <Text fontSize={isMobile ? "13px" : "18px"} mb={2}>
             {children}
           </Text>
         );
