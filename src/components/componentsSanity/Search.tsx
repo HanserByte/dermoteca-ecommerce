@@ -15,7 +15,7 @@ const Search = () => {
   const router = useRouter();
   const query = router.query.query;
   const searchData = useSearch(query as string);
-  const allProductsData = useAllProducts(undefined, false, "");
+  const allProductsData = useAllProducts("", false, "");
 
   const handleInputChange = (event: any) => {
     router.query.query = event.target.value;
@@ -65,16 +65,20 @@ const Search = () => {
         {!searchData?.data && (
           <>
             {allProductsData?.data?.data?.products?.nodes?.map(
-              (product: IProduct) => (
-                <ProductCard
-                  handle={product.handle}
-                  imageSrc={product.featuredImage.url}
-                  title={product.title}
-                  // @ts-ignore
-                  price={product?.priceRange?.maxVariantPrice?.amount}
-                  key={product?.id}
-                />
-              )
+              (product: IProduct) => {
+                console.log(product);
+
+                return (
+                  <ProductCard
+                    handle={product.handle}
+                    imageSrc={product.featuredImage.url}
+                    title={product.title}
+                    // @ts-ignore
+                    price={product?.priceRange?.maxVariantPrice?.amount}
+                    key={product?.id}
+                  />
+                );
+              }
             )}
           </>
         )}
