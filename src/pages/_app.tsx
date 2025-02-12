@@ -12,6 +12,7 @@ import { useSessionVariables } from "@/store";
 import { useCart, useCartActions } from "@/hooks/cart";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Script from "next/script";
+import { useRouter } from "next/router";
 
 const theme = extendTheme({
   fonts: {
@@ -21,6 +22,18 @@ const theme = extendTheme({
 });
 
 function MyApp({ Component, pageProps }: any) {
+  const router = useRouter();
+
+  return (
+    <div style={{ margin: 0, padding: 0, width: "100%", height: "100vh" }}>
+      <img
+        src="/mantenimiento.png"
+        alt="Volvemos después"
+        width={"100%"}
+        height={"100%"}
+      />
+    </div>
+  );
   const [queryClient] = React.useState(() => new QueryClient());
   return (
     <>
