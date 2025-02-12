@@ -24,16 +24,7 @@ const theme = extendTheme({
 function MyApp({ Component, pageProps }: any) {
   const router = useRouter();
 
-  return (
-    <div style={{ margin: 0, padding: 0, width: "100%", height: "100vh" }}>
-      <img
-        src="/mantenimiento.png"
-        alt="Volvemos después"
-        width={"100%"}
-        height={"100%"}
-      />
-    </div>
-  );
+  return;
   const [queryClient] = React.useState(() => new QueryClient());
   return (
     <>
