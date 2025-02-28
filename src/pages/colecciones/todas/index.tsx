@@ -184,7 +184,7 @@ const AllCollectionsPage = () => {
           <Flex pl={"145px"} justifyContent="space-between" pr={"145px"} py={2}>
             <CollectionSortSelector />
             <Flex>
-              <TagSelector />
+              {/* <TagSelector /> */}
               <VendorSelector />
               <CollectionsSelector />
             </Flex>
@@ -272,16 +272,20 @@ const AllCollectionsPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {paginatedProducts?.map((product: IProduct) => (
-            <ProductCard
-              handle={product.handle}
-              imageSrc={product.featuredImage.url}
-              title={product.title}
-              // @ts-ignore
-              price={product?.priceRange?.maxVariantPrice?.amount}
-              key={product?.id}
-            />
-          ))}
+          {paginatedProducts?.map((product: IProduct) => {
+            return (
+              <ProductCard
+                handle={product.handle}
+                imageSrc={
+                  product.featuredImage ? product.featuredImage.url : ""
+                }
+                title={product.title}
+                // @ts-ignore
+                price={product?.priceRange?.maxVariantPrice?.amount}
+                key={product?.id}
+              />
+            );
+          })}
         </Grid>
       </Box>
 

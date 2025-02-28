@@ -12,15 +12,16 @@ export const useCollection = (
   collectionHandle: string | string[] | undefined,
   sortKey: string,
   reverse: boolean,
-  tags: any = []
+  tags: any = [],
+  vendors: any = []
 ) => {
   const collectionData = useQuery(
-    ["collections", collectionHandle, { sortKey, reverse, tags }],
+    ["collections", collectionHandle, { sortKey, reverse, tags, vendors }],
     () =>
       fetch(
         `/api/collections?collectionHandle=${collectionHandle}&sortKey=${sortKey}&reverse=${reverse}&tags=${JSON.stringify(
           tags
-        )}`
+        )}&vendors=${JSON.stringify(vendors)}`
       ).then((res) => res.json()),
     { enabled: !!collectionHandle, keepPreviousData: true }
   );

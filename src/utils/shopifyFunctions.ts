@@ -43,17 +43,20 @@ export const getCollection = async (
   collectionHandle: string | null,
   sortKey: ProductSortKeys = "BEST_SELLING",
   reverse: boolean = false,
-  tags: string | null
+  tags: string | null,
+  vendors: string | null
 ) => {
+  console.log(vendors, " <<<<<<<<<<<<<<<<<<");
+
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     // @ts-ignore
     headers: HEADERS,
     body: JSON.stringify({
       query: `
-      query SingleCollection($handle: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $tags: [ProductFilter!]) {
+      query SingleCollection($handle: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $vendors: [ProductFilter!]) {
         collection(handle: $handle) {
-            products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $tags) {
+            products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $vendors) {
                 nodes {
                     tags
                     createdAt
@@ -76,7 +79,7 @@ export const getCollection = async (
         handle: collectionHandle,
         sortKey,
         reverse,
-        tags,
+        vendors,
       },
     }),
   });

@@ -15,6 +15,13 @@ import {
   useMediaQuery,
   useToast,
   VStack,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Button,
+  Divider,
 } from "@chakra-ui/react";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 
@@ -36,6 +43,8 @@ import { Autoplay } from "swiper/modules";
 import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
 import Link from "next/link";
 import { COLORS } from "@/utils/constants";
+import MegaMenu, { megaMenuData } from "../MegaMenu";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 interface IContainerProps {
   dataN: any;
@@ -92,6 +101,10 @@ const NavBar = (props: IContainerProps) => {
   const cartBtnRef = React.useRef();
   const { setHeight } = useNavbar();
   const navbarRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [menuHistory, setMenuHistory] = useState<string[]>(["main"]);
+  const [currentMenu, setCurrentMenu] = useState("main");
+  const [currentMenuTitle, setCurrentMenuTitle] = useState("");
 
   const goHome = () => {
     router.push("/");
@@ -149,6 +162,88 @@ const NavBar = (props: IContainerProps) => {
       setLinksLeft(result);
     }
   }, [data]);
+
+  interface MenuItem {
+    title: string;
+    type: "link" | "submenu";
+    url?: string;
+    menuId?: string;
+  }
+
+  interface MenuSection {
+    title: string;
+    items: MenuItem[];
+  }
+
+  interface MenuStructure {
+    [key: string]: MenuSection;
+  }
+
+  // Ahora usamos la interfaz para tipar menuStructure
+  const menuStructure: MenuStructure = {
+    main: {
+      title: "",
+      items: [
+        {
+          title: "Farmacia",
+          type: "submenu",
+          menuId: "farmacia",
+        },
+        {
+          title: "Tratamientos",
+          type: "link",
+          menuId: "tratamientos",
+          url: "/tratamientos",
+        },
+        {
+          title: "Acerca de",
+          type: "link",
+          menuId: "acerca-de",
+          url: "/acerca-de",
+        },
+      ],
+    },
+    farmacia: {
+      title: "Farmacia",
+      items: Object.entries(megaMenuData).map(([category]) => ({
+        title: category,
+        type: "submenu",
+        menuId: `farmacia_${category.toLowerCase().replace(/ /g, "_")}`,
+      })),
+    },
+    ...Object.entries(megaMenuData).reduce<MenuStructure>(
+      (acc, [category, items]) => {
+        acc[`farmacia_${category.toLowerCase().replace(/ /g, "_")}`] = {
+          title: category,
+          items: items.map((item) => ({
+            title: item.name,
+            type: "link",
+            url: item.link,
+          })),
+        };
+        return acc;
+      },
+      {}
+    ),
+  };
+
+  // En el componente NavBar, añade estas funciones
+  const navigateToMenu = (menuId: string, menuTitle: string) => {
+    setMenuHistory((prev) => [...prev, menuId]);
+    setCurrentMenu(menuId);
+    setCurrentMenuTitle(menuTitle);
+  };
+
+  const navigateBack = () => {
+    if (menuHistory.length > 1) {
+      const newHistory = [...menuHistory];
+      newHistory.pop();
+      const previousMenu = newHistory[newHistory.length - 1];
+      setMenuHistory(newHistory);
+      setCurrentMenu(previousMenu);
+      setCurrentMenuTitle(menuStructure[previousMenu].title);
+    }
+  };
 
   return (
     <Flex
@@ -211,24 +306,75 @@ const NavBar = (props: IContainerProps) => {
                       title: string;
                       url?: string;
                       dataUrl?: { url: string };
-                    }) => (
-                      <Box key={link.title} mr={4}>
-                        <Text
-                          fontSize="14px"
-                          fontWeight={400}
-                          lineHeight="normal"
-                          color={
-                            isScrolled || dataN?.isBlackNavBar
-                              ? "black"
-                              : "white"
-                          }
-                          cursor="pointer"
-                          onClick={() => goToLink(link)}
-                        >
-                          {link.title}
-                        </Text>
-                      </Box>
-                    )
+                    }) => {
+                      console.log(link);
+                      if (link.title === "FARMACIA")
+                        return (
+                          <Box
+                            key={link.title}
+                            position="relative"
+                            onMouseEnter={() => {
+                              setIsOpen(true);
+                              setIsScrolled(true);
+                            }}
+                            onMouseLeave={() => {
+                              setIsOpen(false);
+                              setIsScrolled(false);
+                            }}
+                            mr={4}
+                          >
+                            <Text
+                              fontSize="14px"
+                              fontWeight={400}
+                              lineHeight="normal"
+                              color={
+                                isScrolled || dataN?.isBlackNavBar
+                                  ? "black"
+                                  : "white"
+                              }
+                              cursor="pointer"
+                              onClick={() => goToLink(link)}
+                            >
+                              {link.title}
+                            </Text>
+                            {isOpen && (
+                              <Box
+                                position="fixed"
+                                left="0"
+                                w="100%" // Asegura que el mega menú ocupa todo el ancho de la pantalla
+                                onMouseEnter={() => {
+                                  setIsOpen(true);
+                                  setIsScrolled(true);
+                                }}
+                                onMouseLeave={() => {
+                                  setIsOpen(false);
+                                  setIsScrolled(false);
+                                }}
+                              >
+                                <MegaMenu />
+                              </Box>
+                            )}
+                          </Box>
+                        );
+                      return (
+                        <Box key={link.title} mr={4}>
+                          <Text
+                            fontSize="14px"
+                            fontWeight={400}
+                            lineHeight="normal"
+                            color={
+                              isScrolled || dataN?.isBlackNavBar
+                                ? "black"
+                                : "white"
+                            }
+                            cursor="pointer"
+                            onClick={() => goToLink(link)}
+                          >
+                            {link.title}
+                          </Text>
+                        </Box>
+                      );
+                    }
                   )}
               </HStack>
             </Box>
@@ -243,6 +389,7 @@ const NavBar = (props: IContainerProps) => {
           mr={isPhone ? "15px" : ""}
           onClick={goHome}
           cursor="pointer"
+          zIndex={100}
         >
           <LogoCI
             color={
@@ -426,37 +573,70 @@ const NavBar = (props: IContainerProps) => {
                 />
               </DrawerHeader>
               <DrawerBody>
-                <VStack alignItems="start" justify="space-between" h="full">
-                  <Box>
-                    {linksLeft.length > 0 &&
-                      linksLeft.map(
-                        (link: {
-                          title: string;
-                          url?: string;
-                          dataUrl: { url: string };
-                        }) => (
-                          <Box key={link.title} mb={4}>
-                            <Text
-                              cursor="pointer"
-                              fontSize="14px"
-                              fontWeight={400}
-                              lineHeight="normal"
-                              color="black"
-                              onClick={() => goToLink(link)}
-                            >
-                              {link.title}
-                            </Text>
-                          </Box>
-                        )
-                      )}
-                  </Box>
+                <VStack
+                  alignItems="start"
+                  justify="space-between"
+                  h="full"
+                  w="full"
+                >
+                  <Flex w="full" align="center" mb={4}>
+                    {menuHistory.length > 1 && (
+                      <IconButton
+                        aria-label="Volver"
+                        icon={<ChevronLeftIcon />}
+                        onClick={navigateBack}
+                        variant="ghost"
+                        mr={2}
+                      />
+                    )}
+                    <Text fontSize="lg" fontWeight="bold">
+                      {currentMenuTitle}
+                    </Text>
+                  </Flex>
 
-                  <VStack alignItems="start">
-                    <HStack as={Link} href="/cuenta">
-                      <Text>CUENTA</Text> <AiOutlineUser color={COLORS.GREEN} />
+                  <VStack w="full" align="stretch" spacing={0}>
+                    {menuStructure[currentMenu].items.map((item, index) => (
+                      <Box key={index}>
+                        {item.type === "submenu" ? (
+                          <Button
+                            variant="ghost"
+                            w="full"
+                            justifyContent="space-between"
+                            onClick={() =>
+                              navigateToMenu(item.menuId, item.title)
+                            }
+                            rightIcon={<ChevronRightIcon />}
+                          >
+                            {item.title}
+                          </Button>
+                        ) : (
+                          <Link
+                            href={item.url}
+                            w="full"
+                            _hover={{ textDecoration: "none" }}
+                          >
+                            <Button
+                              variant="ghost"
+                              w="full"
+                              justifyContent="start"
+                            >
+                              {item.title}
+                            </Button>
+                          </Link>
+                        )}
+                      </Box>
+                    ))}
+                  </VStack>
+
+                  {/* Footer con enlaces fijos */}
+                  <VStack alignItems="start" mt="auto" w="full">
+                    <Divider />
+                    <HStack as={Link} href="/cuenta" w="full" p={2}>
+                      <Text>CUENTA</Text>
+                      <AiOutlineUser color={COLORS.GREEN} />
                     </HStack>
-                    <HStack as={Link} href="/cuenta/favoritos">
-                      <Text>FAVORITOS</Text>{" "}
+                    <HStack as={Link} href="/cuenta/favoritos" w="full" p={2}>
+                      <Text>FAVORITOS</Text>
                       <AiOutlineHeart color={COLORS.GREEN} />
                     </HStack>
                   </VStack>
@@ -466,6 +646,7 @@ const NavBar = (props: IContainerProps) => {
           </DrawerOverlay>
         </Drawer>
         <CartDrawer cartBtnRef={cartBtnRef} />
+        {/* {isOpen && <MegaMenu />} */}
       </Flex>
     </Flex>
   );

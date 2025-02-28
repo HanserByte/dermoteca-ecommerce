@@ -6,6 +6,9 @@ export async function GET(request: Request) {
   const sortKey = url.searchParams.get("sortKey");
   const reverse = url.searchParams.get("reverse") === "true";
   const tags = url.searchParams.get("tags");
+  const vendors = url.searchParams.get("vendors");
+
+  console.log(vendors, "vendors>>>>>>>>>>>");
 
   const response =
     sortKey !== "undefined"
@@ -13,13 +16,15 @@ export async function GET(request: Request) {
           collectionHandle,
           sortKey,
           reverse,
-          JSON.parse(String(tags))
+          JSON.parse(String(tags)),
+          JSON.parse(String(vendors))
         )
       : await getCollection(
           collectionHandle,
           "BEST_SELLING",
           false,
-          JSON.parse(String(tags))
+          JSON.parse(String(tags)),
+          JSON.parse(String(vendors))
         );
 
   return new Response(JSON.stringify(response));

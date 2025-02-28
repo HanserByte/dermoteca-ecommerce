@@ -1,11 +1,13 @@
 import { useAllCollections } from "@/hooks/collections";
 import {
+  Box,
   Button,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -30,10 +32,10 @@ const CollectionsSelector = () => {
           Colecciones <GoChevronDown />
         </Button>
       </PopoverTrigger>
-      <PopoverContent w="min-content">
+      <PopoverContent w="full">
         <PopoverArrow />
         <PopoverBody>
-          <VStack w="min-content" align="start">
+          <SimpleGrid columns={4} spacing={3} justifyItems={"start"}>
             <Button
               bg={router?.pathname.includes("all") ? "#E7D4C7" : "transparent"}
               _hover={{
@@ -71,7 +73,8 @@ const CollectionsSelector = () => {
                 );
               }
             )}
-          </VStack>
+          </SimpleGrid>
+          <VStack w="min-content" align="start"></VStack>
         </PopoverBody>
       </PopoverContent>
     </Popover>

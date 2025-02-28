@@ -23,8 +23,6 @@ const theme = extendTheme({
 
 function MyApp({ Component, pageProps }: any) {
   const router = useRouter();
-
-  return;
   const [queryClient] = React.useState(() => new QueryClient());
   return (
     <>

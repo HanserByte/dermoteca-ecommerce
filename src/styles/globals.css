@@ -18,12 +18,3 @@
   --rdp-selected-color: #fff; /* Color of selected day text */
 }
 
-body{
-  margin: 0 !important;
-  background-image: url("/mantenimiento.svg");
-  background-color: #cccccc;
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover;
-  height: 100vh;
-}

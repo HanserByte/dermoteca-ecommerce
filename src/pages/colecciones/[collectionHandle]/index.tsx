@@ -22,10 +22,11 @@ import ComponentRenderer from "@/components/ComponentRenderer";
 import SortSelector from "@/components/CollectionSortSelector";
 import TagSelector from "@/components/TagSelector";
 import CollectionsSelector from "@/components/CollectionsSelector";
-import { getCollectionOrderTag } from "@/utils";
+import { getCollectionOrderTag, handleRemoveVendor } from "@/utils";
 import { ICollectionPageData } from "@/typesSanity/docs/collectionPage";
 import FilterDrawer from "@/components/FilterDrawer";
 import Loading from "@/components/Loading";
+import VendorSelector from "@/components/vendorSelector";
 
 const CollectionPage = () => {
   const router = useRouter();
@@ -37,6 +38,18 @@ const CollectionPage = () => {
   const queryTagsArray = queryTags
     ?.split(",")
     .filter((tag: string) => tag != "undefined" && tag != "");
+  // @ts-ignore
+  const queryVendors = decodeURIComponent(router?.query?.vendors);
+  const queryVendorsArray = queryVendors
+    ?.split(",")
+    .filter((tag: string) => tag != "undefined" && tag != "");
+  const gqlQueryVendors = queryVendorsArray?.map((tag: string) => {
+    return { productVendor: tag };
+  });
+  // @ts-ignore
+
+  console.log(gqlQueryVendors);
+
   const gqlQueryTags = queryTagsArray?.map((tag: string) => {
     return { tag };
   });
@@ -54,7 +67,8 @@ const CollectionPage = () => {
     router?.query?.collectionHandle,
     sortKey,
     order,
-    gqlQueryTags
+    gqlQueryTags,
+    gqlQueryVendors
   );
 
   const query = `*[_type == "collectionPage"]  {
@@ -118,7 +132,8 @@ const CollectionPage = () => {
             <SortSelector useCollectionSort />
 
             <Flex>
-              <TagSelector />
+              {/* <TagSelector /> */}
+              <VendorSelector />
               <CollectionsSelector />
             </Flex>
           </Flex>
@@ -165,6 +180,25 @@ const CollectionPage = () => {
               <TagCloseButton onClick={() => handleRemoveTag(tag)} />
             </Tag>
           ))}
+
+          {queryVendorsArray?.map((tag) => (
+            <Tag
+              ml={2}
+              bg="white"
+              textColor="black"
+              size="md"
+              key={tag}
+              borderRadius="full"
+              variant="solid"
+            >
+              <TagLabel>{tag}</TagLabel>
+              <TagCloseButton
+                onClick={() =>
+                  handleRemoveVendor(tag, queryVendorsArray, router)
+                }
+              />
+            </Tag>
+          ))}
         </Box>
       </Box>
 
@@ -184,7 +218,9 @@ const CollectionPage = () => {
             (product: IProduct) => (
               <ProductCard
                 handle={product.handle}
-                imageSrc={product.featuredImage.url}
+                imageSrc={
+                  product.featuredImage ? product.featuredImage.url : ""
+                }
                 title={product.title}
                 // @ts-ignore
                 price={Number(product?.priceRange?.maxVariantPrice?.amount)}
