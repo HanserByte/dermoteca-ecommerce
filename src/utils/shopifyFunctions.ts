@@ -218,7 +218,12 @@ export const getAllVendors = async () => {
       body: JSON.stringify({
         query: `
         query AllVendors($cursor: String) {
-          products(first: 250, after: $cursor, query: "status:active") {
+          products(
+            first: 250, 
+            after: $cursor, 
+            sortKey: VENDOR,
+            query: "status:active"
+          ) {
             edges {
               node {
                 vendor
@@ -238,19 +243,38 @@ export const getAllVendors = async () => {
     });
 
     const data = await response.json();
+
+    if (!data.data?.products) {
+      console.error("Error fetching vendors:", data);
+      break;
+    }
+
     const products = data.data.products;
 
-    // Agrega los vendors únicos al Set
+    // Agregar vendors al Set y asegurar que no haya espacios extras
     products.edges.forEach((edge: any) => {
-      allVendors.add(edge.node.vendor);
+      if (edge.node.vendor) {
+        allVendors.add(edge.node.vendor.trim());
+      }
     });
 
-    // Actualiza paginación
+    // Actualizar paginación
     hasNextPage = products.pageInfo.hasNextPage;
     endCursor = products.pageInfo.endCursor;
+
+    // Agregar un log para debugging
+    console.log(
+      "Vendors encontrados en esta página:",
+      products.edges.map((edge: any) => edge.node.vendor)
+    );
+    console.log("Total vendors únicos hasta ahora:", allVendors.size);
   }
-  console.log(Array.from(allVendors));
-  return Array.from(allVendors);
+
+  const sortedVendors = Array.from(allVendors).sort();
+  console.log("Total vendors finales:", sortedVendors.length);
+  console.log("Lista completa de vendors:", sortedVendors);
+
+  return sortedVendors;
 };
 
 /**

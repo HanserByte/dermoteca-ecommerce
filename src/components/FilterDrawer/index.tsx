@@ -129,7 +129,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
 
             <VendorSelector />
 
-            <VStack mt={8} alignItems="start" gap={1}>
+            {/* <VStack mt={8} alignItems="start" gap={1}>
               <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
                 Etiquetas
               </Text>
@@ -150,7 +150,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
                   );
                 })}
               </Grid>
-            </VStack>
+            </VStack> */}
 
             <VStack mt={8} w="min-content" align="start" gap={1}>
               <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
