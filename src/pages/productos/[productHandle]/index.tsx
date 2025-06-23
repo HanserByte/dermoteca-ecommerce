@@ -180,32 +180,23 @@ const ProductPage = () => {
     try {
       const currentUrl = window.location.href;
 
-      if (navigator.share && isMobile) {
-        // Usar Web Share API en móviles si está disponible
-        await navigator.share({
-          title: sanityProductData?.data?.store?.title,
-          text: `Mira este producto: ${sanityProductData?.data?.store?.title}`,
-          url: currentUrl,
-        });
-      } else {
-        // Copiar al portapapeles
-        await navigator.clipboard.writeText(currentUrl);
-        toast({
-          duration: 2000,
-          isClosable: true,
-          render: () => (
-            <Box
-              color="white"
-              bg={COLORS.GREEN}
-              rounded="2xl"
-              p={3}
-              textAlign="center"
-            >
-              <Text>¡Link copiado al portapapeles!</Text>
-            </Box>
-          ),
-        });
-      }
+      // Copiar al portapapeles tanto en móvil como en desktop
+      await navigator.clipboard.writeText(currentUrl);
+      toast({
+        duration: 2000,
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            bg={COLORS.GREEN}
+            rounded="2xl"
+            p={3}
+            textAlign="center"
+          >
+            <Text>¡Link copiado al portapapeles!</Text>
+          </Box>
+        ),
+      });
     } catch (error) {
       // Fallback si falla la copia al portapapeles
       toast({
