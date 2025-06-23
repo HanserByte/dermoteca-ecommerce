@@ -6,6 +6,7 @@ import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import { useCartDrawer, useNavbar, useSessionVariables } from "@/store";
 import ReviewStars from "@/components/ReviewStars";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { IoShareOutline } from "react-icons/io5";
 import { useCartActions } from "@/hooks/cart";
 import {
   useProductRecommendations,
@@ -173,6 +174,56 @@ const ProductPage = () => {
         },
       }
     );
+  };
+
+  const handleShareProduct = async () => {
+    try {
+      const currentUrl = window.location.href;
+
+      if (navigator.share && isMobile) {
+        // Usar Web Share API en móviles si está disponible
+        await navigator.share({
+          title: sanityProductData?.data?.store?.title,
+          text: `Mira este producto: ${sanityProductData?.data?.store?.title}`,
+          url: currentUrl,
+        });
+      } else {
+        // Copiar al portapapeles
+        await navigator.clipboard.writeText(currentUrl);
+        toast({
+          duration: 2000,
+          isClosable: true,
+          render: () => (
+            <Box
+              color="white"
+              bg={COLORS.GREEN}
+              rounded="2xl"
+              p={3}
+              textAlign="center"
+            >
+              <Text>¡Link copiado al portapapeles!</Text>
+            </Box>
+          ),
+        });
+      }
+    } catch (error) {
+      // Fallback si falla la copia al portapapeles
+      toast({
+        duration: 3000,
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            bg="red.500"
+            rounded="2xl"
+            p={3}
+            textAlign="center"
+          >
+            <Text>No se pudo copiar el link. Intenta de nuevo.</Text>
+          </Box>
+        ),
+      });
+    }
   };
 
   useEffect(() => {
@@ -378,6 +429,17 @@ const ProductPage = () => {
                   Out of stock
                 </Box>
               )}
+
+              <Button
+                onClick={handleShareProduct}
+                p={0}
+                bg="transparent"
+                color="grey"
+                _hover={{ color: COLORS.GREEN }}
+                title="Compartir producto"
+              >
+                <IoShareOutline size={40} />
+              </Button>
 
               {!isWishlisted && (
                 <Button
