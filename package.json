@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "22.17.1"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.0",
     "@chakra-ui/react": "^2.8.0",
