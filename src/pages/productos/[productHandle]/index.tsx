@@ -34,6 +34,15 @@ import Link from "next/link";
 import Loading from "@/components/Loading";
 import ComponentRenderer from "@/components/ComponentRenderer";
 
+// Extend Window interface to include Shopify property
+declare global {
+  interface Window {
+    Shopify: {
+      store: string;
+    };
+  }
+}
+
 const ProductPage = () => {
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -42,7 +51,9 @@ const ProductPage = () => {
 
   // @ts-ignore
   const shopifyProductData = useShopifyProduct(router.query.productHandle);
-  const sanityProductData = useSanityProduct(router.query.productHandle);
+  const sanityProductData = useSanityProduct(
+    router?.query?.productHandle as string
+  );
   const { addToCartMutation } = useCartActions();
   const productRecommendationsData = useProductRecommendations(
     sanityProductData?.data?.store?.gid
@@ -62,8 +73,13 @@ const ProductPage = () => {
   const productWishlistData = useUserWishlist(wishlistProducts);
   const updateProductWishlistMutation = useUpdateProductWishlistMutation();
 
+  // Fix: Only consider wishlist as loading if we actually have wishlist products to load
+  const isWishlistLoading = wishlistProducts
+    ? productWishlistData?.isLoading
+    : false;
+
   const isWishlisted = productWishlistData?.data?.nodes?.some(
-    (product) => product.handle === router.query.productHandle
+    (product: any) => product.handle === router.query.productHandle
   );
 
   const hasMultipleImages =
@@ -73,10 +89,34 @@ const ProductPage = () => {
     shopifyProductData?.data?.product?.variants?.nodes?.length > 1;
 
   const handleAddToCart = async () => {
+    // Validate inventory before adding to cart
+    if (quantity > availableInventory) {
+      toast({
+        duration: 3000,
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            bg="red.500"
+            rounded="2xl"
+            p={3}
+            textAlign="center"
+          >
+            <Text>
+              Solo hay {availableInventory} unidades disponibles de este
+              producto.
+            </Text>
+          </Box>
+        ),
+      });
+      setQuantity(availableInventory);
+      return;
+    }
+
     // @ts-ignore
     const queryVariant = decodeURIComponent(router.query.variant);
     const variantId = shopifyProductData?.data?.product?.variants?.nodes?.find(
-      (variant) => variant.title === queryVariant
+      (variant: any) => variant.title === queryVariant
     );
 
     const productId =
@@ -91,6 +131,32 @@ const ProductPage = () => {
   };
 
   const isOutOfStock = shopifyProductData?.data?.product?.totalInventory === 0;
+
+  // Get available inventory for the current variant
+  const getCurrentVariantInventory = () => {
+    const queryVariant = router.query.variant
+      ? decodeURIComponent(router.query.variant as string)
+      : null;
+
+    if (queryVariant && shopifyProductData?.data?.product?.variants?.nodes) {
+      const selectedVariant =
+        shopifyProductData.data.product.variants.nodes.find(
+          (variant: any) => variant.title === queryVariant
+        );
+      return selectedVariant?.quantityAvailable || 0;
+    }
+
+    // If no variant selected, use the first variant or total inventory
+    const firstVariant =
+      shopifyProductData?.data?.product?.variants?.nodes?.[0];
+    return (
+      firstVariant?.quantityAvailable ||
+      shopifyProductData?.data?.product?.totalInventory ||
+      0
+    );
+  };
+
+  const availableInventory = getCurrentVariantInventory();
 
   const handleWishlistItem = () => {
     if (!customerData?.data) {
@@ -231,9 +297,17 @@ const ProductPage = () => {
     setThumbsSwiper(null);
   }, [router.query.productHandle]);
 
+  // Reset quantity when variant changes to ensure it doesn't exceed new variant's inventory
+  useEffect(() => {
+    if (quantity > availableInventory && availableInventory > 0) {
+      setQuantity(availableInventory);
+    }
+  }, [router.query.variant, availableInventory]);
+
   if (typeof window !== "undefined") {
-    window.Shopify = {};
-    window.Shopify.store = "6a8516-2.myshopify.com";
+    window.Shopify = {
+      store: "6a8516-2.myshopify.com",
+    };
   }
 
   return (
@@ -288,7 +362,7 @@ const ProductPage = () => {
                   thumbs={{ swiper: thumbsSwiper }}
                 >
                   {shopifyProductData?.data?.product?.images?.nodes.map(
-                    (image, idx) => (
+                    (image: any, idx: any) => (
                       <SwiperSlide key={idx}>
                         <img
                           src={image.url}
@@ -307,10 +381,10 @@ const ProductPage = () => {
                     watchSlidesProgress
                     freeMode={true}
                     className="mySwiper"
-                    onSwiper={setThumbsSwiper}
+                    onSwiper={setThumbsSwiper as any}
                   >
                     {shopifyProductData?.data?.product?.images?.nodes.map(
-                      (image, idx) => (
+                      (image: any, idx: any) => (
                         <SwiperSlide key={idx}>
                           <img
                             src={image.url}
@@ -357,6 +431,13 @@ const ProductPage = () => {
               )}
             </Box>
 
+            {/* Stock availability indicator */}
+            {!isOutOfStock && availableInventory <= 5 && (
+              <Text fontSize="sm" color="orange.500" fontWeight="500">
+                ¡Solo quedan {availableInventory} unidades disponibles!
+              </Text>
+            )}
+
             <Flex
               gap={isMobile ? 1 : 8}
               justifyContent={isMobile ? "space-between" : "flex-start"}
@@ -365,7 +446,7 @@ const ProductPage = () => {
               {!isOutOfStock && (
                 <Flex alignItems="center" gap={3}>
                   <Button
-                    disabled={productWishlistData?.isLoading}
+                    disabled={isWishlistLoading || quantity <= 1}
                     onClick={() =>
                       setQuantity(quantity - 1 > 0 ? quantity - 1 : 1)
                     }
@@ -374,6 +455,7 @@ const ProductPage = () => {
                     color="white"
                     rounded="full"
                     _hover={{ opacity: 0.8 }}
+                    opacity={quantity <= 1 ? 0.5 : 1}
                   >
                     -
                   </Button>
@@ -381,13 +463,16 @@ const ProductPage = () => {
                     {quantity}
                   </Text>
                   <Button
-                    disabled={productWishlistData?.isLoading}
+                    disabled={
+                      isWishlistLoading || quantity >= availableInventory
+                    }
                     onClick={() => setQuantity(quantity + 1)}
                     bg="#00AA4F"
                     size="sm"
                     color="white"
                     rounded="full"
                     _hover={{ opacity: 0.8 }}
+                    opacity={quantity >= availableInventory ? 0.5 : 1}
                   >
                     +
                   </Button>
