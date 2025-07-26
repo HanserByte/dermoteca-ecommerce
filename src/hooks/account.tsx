@@ -84,8 +84,9 @@ export const useCustomerAccessTokenCreate = () => {
 
 export const useUserWishlist = (wishlistProducts: string) => {
   const productWishlistData = useQuery(
-    ["wishlist"],
+    ["wishlist", wishlistProducts],
     () => {
+      console.log("Executing wishlist query with:", wishlistProducts);
       return fetch(
         `/api/account/wishlist?products=${encodeURIComponent(
           wishlistProducts
@@ -93,10 +94,15 @@ export const useUserWishlist = (wishlistProducts: string) => {
         {
           method: "GET",
         }
-      ).then((res) => res.json());
+      ).then((res) => {
+        console.log("Wishlist API response status:", res.status);
+        return res.json();
+      });
     },
     {
-      enabled: !!wishlistProducts,
+      enabled: !!wishlistProducts && wishlistProducts.trim() !== "",
+      retry: 1,
+      staleTime: 5 * 60 * 1000, // 5 minutes
     }
   );
 

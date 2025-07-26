@@ -32,6 +32,11 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
     cartData?.data?.checkoutUrl && router.push(cartData.data.checkoutUrl);
   };
 
+  // Check if cart is empty
+  const isCartEmpty =
+    !cartData?.data?.lines?.nodes || cartData.data.lines.nodes.length === 0;
+  const totalAmount = Number(cartData?.data?.cost?.subtotalAmount?.amount) || 0;
+
   return (
     <>
       {button &&
@@ -54,12 +59,29 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
 
           <DrawerBody>
             <Flex direction="column" gap={4}>
-              {cartData?.data?.lines?.nodes?.map((product: BaseCartLine) => (
-                <CartProductCard
-                  key={product?.merchandise?.id}
-                  product={product}
-                />
-              ))}
+              {isCartEmpty ? (
+                <Flex
+                  direction="column"
+                  align="center"
+                  justify="center"
+                  h="200px"
+                  textAlign="center"
+                >
+                  <Text fontSize="lg" color="gray.500" mb={2}>
+                    Tu carrito está vacío
+                  </Text>
+                  <Text fontSize="sm" color="gray.400">
+                    Agrega algunos productos para continuar
+                  </Text>
+                </Flex>
+              ) : (
+                cartData?.data?.lines?.nodes?.map((product: BaseCartLine) => (
+                  <CartProductCard
+                    key={product?.merchandise?.id}
+                    product={product}
+                  />
+                ))
+              )}
             </Flex>
           </DrawerBody>
 
@@ -69,20 +91,23 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
                 Total:
               </Text>
               <Text fontSize="lg" fontWeight="600" w="100%" align="end">
-                $
-                {Number(cartData?.data?.cost?.subtotalAmount?.amount)?.toFixed(
-                  2
-                )}
+                ${totalAmount.toFixed(2)}
               </Text>
             </Flex>
             <Button
               w="100%"
               onClick={handleCheckout}
-              bg="#00AA4F"
+              bg={isCartEmpty ? "gray.400" : "#00AA4F"}
               color="white"
               w="full"
+              disabled={isCartEmpty}
+              cursor={isCartEmpty ? "not-allowed" : "pointer"}
+              _hover={{
+                opacity: isCartEmpty ? 1 : 0.8,
+                bg: isCartEmpty ? "gray.400" : "#00AA4F",
+              }}
             >
-              Checkout
+              {isCartEmpty ? "Carrito vacío" : "Checkout"}
             </Button>
           </DrawerFooter>
         </DrawerContent>
