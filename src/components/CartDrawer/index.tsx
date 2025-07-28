@@ -25,7 +25,7 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
   const router = useRouter();
   const { open, setOpen } = useCartDrawer();
   const cartData = useCart();
-  const btnRef = React.useRef();
+  const btnRef = React.useRef<any>(null);
 
   const handleCheckout = () => {
     console.log(cartData.data);
@@ -99,8 +99,9 @@ export default function CartDrawer({ button }: ICartDrawerProps) {
               onClick={handleCheckout}
               bg={isCartEmpty ? "gray.400" : "#00AA4F"}
               color="white"
-              w="full"
+              width="full"
               disabled={isCartEmpty}
+              isDisabled={isCartEmpty}
               cursor={isCartEmpty ? "not-allowed" : "pointer"}
               _hover={{
                 opacity: isCartEmpty ? 1 : 0.8,
