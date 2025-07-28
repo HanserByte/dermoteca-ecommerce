@@ -466,6 +466,9 @@ const ProductPage = () => {
                     disabled={
                       isWishlistLoading || quantity >= availableInventory
                     }
+                    isDisabled={
+                      isWishlistLoading || quantity >= availableInventory
+                    }
                     onClick={() => setQuantity(quantity + 1)}
                     bg="#00AA4F"
                     size="sm"
