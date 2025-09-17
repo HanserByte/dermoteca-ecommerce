@@ -3,6 +3,7 @@ import { AspectRatio, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import Link from "next/link";
 import { useStore } from "@/store";
 import { usePrefetch } from "@/hooks/products";
+import { formatCurrencyMXN, normalizeShopifyAmount } from "@/utils";
 
 interface ProductCardProps {
   imageSrc: string | undefined;
@@ -30,7 +31,7 @@ const ProductCard = (props: ProductCardProps) => {
           {props.title}
         </Text>
         <Text fontSize={isMobile ? "lg" : "xl"} fontWeight={700}>
-          ${Number(props.price).toFixed(2)}
+          {formatCurrencyMXN(normalizeShopifyAmount(props.price), "MXN")}
         </Text>
       </Flex>
     </Link>

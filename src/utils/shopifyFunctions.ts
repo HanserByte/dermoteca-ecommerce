@@ -25,6 +25,7 @@ import {
   CustomerUpdateStorefrontMutation,
   BestSellingProductsQuery,
   TaggedProductsQuery,
+  BundleProductAdminQuery,
 } from "./shopifyGraphql";
 
 const API_ENDPOINT = "https://6a8516-2.myshopify.com/api/2023-07/graphql.json";
@@ -219,8 +220,8 @@ export const getAllVendors = async () => {
         query: `
         query AllVendors($cursor: String) {
           products(
-            first: 250, 
-            after: $cursor, 
+            first: 250,
+            after: $cursor,
             sortKey: VENDOR,
             query: "status:active"
           ) {
@@ -342,7 +343,7 @@ export const makeShopifyAdminRequest = async (
   variables: Record<string, unknown> = {}
 ) => {
   const ADMIN_ENDPOINT =
-    "https://6a8516-2.myshopify.com/admin/api/2023-07/graphql.json";
+    "https://6a8516-2.myshopify.com/admin/api/2025-01/graphql.json";
   const HEADERS = {
     "Content-Type": "application/json",
     "X-Shopify-Access-Token": process.env.ADMIN_ACCESS_TOKEN,
@@ -505,4 +506,9 @@ export async function getBestSellingProducts() {
 export async function getAllTaggedProducts(tags: string) {
   const { products } = await makeShopifyRequest(TaggedProductsQuery, { tags });
   return products;
+}
+
+export async function getBundleProduct(id: string) {
+  const data = await makeShopifyAdminRequest(BundleProductAdminQuery, { id });
+  return data;
 }
