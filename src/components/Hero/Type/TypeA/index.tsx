@@ -15,16 +15,21 @@ interface IContainerProps {
 const TypeA = (props: IContainerProps) => {
   const { data, isMobile } = props;
   const { height } = useNavbar();
+  const image = isMobile
+    ? data.backgroundImageMobile.asset._ref
+    : data.backgroundImage.asset._ref;
+
+  console.log(data);
 
   return (
     <>
       <Flex position="relative" id="hero">
         <Image
-          src={sanityImage(data.backgroundImage.asset._ref).url()}
+          src={sanityImage(image).url()}
           alt="Hero"
           pt={isMobile ? "81px" : ""}
           height={isMobile ? "900px" : ""}
-          objectFit={"cover"}
+          objectFit={"fill"}
           width="100%"
           objectPosition={isMobile ? "90% 50%" : ""}
         />

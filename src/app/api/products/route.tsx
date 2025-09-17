@@ -16,7 +16,31 @@ export async function GET(request: Request) {
 }
 export async function POST(request: Request) {
   const data = await request.json();
-  const tags = data.tags.map((tag: string) => `(tag:${tag})`).join(" OR ");
-  const response = await getAllTaggedProducts(tags);
+  const tags = data.tags || [];
+  const vendors = data.vendors || [];
+
+  // Construir query para tags
+  const tagsQuery =
+    tags.length > 0
+      ? tags.map((tag: string) => `(tag:${tag})`).join(" OR ")
+      : "";
+
+  // Construir query para vendors
+  const vendorsQuery =
+    vendors.length > 0
+      ? vendors.map((vendor: string) => `(vendor:${vendor})`).join(" OR ")
+      : "";
+
+  // Combinar queries
+  let combinedQuery = "";
+  if (tagsQuery && vendorsQuery) {
+    combinedQuery = `(${tagsQuery}) OR (${vendorsQuery})`;
+  } else if (tagsQuery) {
+    combinedQuery = tagsQuery;
+  } else if (vendorsQuery) {
+    combinedQuery = vendorsQuery;
+  }
+
+  const response = await getAllTaggedProducts(combinedQuery);
   return new Response(JSON.stringify(response));
 }

@@ -61,3 +61,20 @@ export const useAllTaggedProducts = (tags: string[]) => {
 
   return allTaggedProductsData;
 };
+
+export const useAllTaggedAndVendorProducts = (
+  tags: string[],
+  vendors: string[]
+) => {
+  const allTaggedAndVendorProductsData = useQuery(
+    ["allTaggedAndVendorProducts", tags?.join(","), vendors?.join(",")],
+    () =>
+      fetch(`/api/products`, {
+        method: "POST",
+        body: JSON.stringify({ tags, vendors }),
+      }).then((res) => res.json()),
+    { enabled: tags?.length > 0 || vendors?.length > 0 }
+  );
+
+  return allTaggedAndVendorProductsData;
+};

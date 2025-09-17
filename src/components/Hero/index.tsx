@@ -14,6 +14,7 @@ const Hero = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
+  console.log(data);
 
   return (
     <>
