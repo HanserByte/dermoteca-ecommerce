@@ -8,6 +8,8 @@ import React, { useEffect } from "react";
 import { TbTrash } from "react-icons/tb";
 import AppointmentTimer from "../AppointmentTimer/index";
 
+import { formatCurrencyMXN, normalizeShopifyAmount } from "@/utils";
+
 interface ICartProductCardProps {
   product: BaseCartLine;
 }
@@ -84,7 +86,12 @@ const CartProductCard = ({ product }: ICartProductCardProps) => {
           fontWeight={500}
           color="#00AA4F"
         >
-          <span>${Number(product?.merchandise?.price?.amount).toFixed(2)}</span>
+          <span>
+            {formatCurrencyMXN(
+              normalizeShopifyAmount(product?.merchandise?.price?.amount),
+              product?.merchandise?.price?.currencyCode || "MXN"
+            )}
+          </span>
           <Button
             onClick={handleRemoveFromCart}
             bg="#00AA4F"

@@ -35,6 +35,7 @@ const TypeA = (props: ContainerProps) => {
             type={data.formato_categorias}
             key={index}
             link={item.link}
+            titulo_imagen_color={item?.titulo_imagen_color || "#FFFFFF"}
           />
         );
       })}

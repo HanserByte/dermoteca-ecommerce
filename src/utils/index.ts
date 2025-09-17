@@ -238,3 +238,27 @@ export function cleanObject(obj) {
   }
   return obj;
 }
+
+// Currency helpers
+export function normalizeShopifyAmount(amount: any, currencyCode?: string) {
+  const n = Number(amount);
+  if (!isFinite(n)) return undefined;
+  // Some Shopify MoneyV2 amounts may come in cents for MXN; heuristically normalize
+  return n >= 10000 ? n / 100 : n;
+}
+
+export function formatCurrencyMXN(amount?: number, currencyCode?: string) {
+  if (amount == null || isNaN(amount as any)) return "";
+  // Desired: 1.929,00 $ (comma decimals, trailing $)
+  if (!currencyCode || currencyCode === "MXN") {
+    const formatted = new Intl.NumberFormat("es-ES", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount as number);
+    return `${formatted} $`;
+  }
+  return new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: currencyCode,
+  }).format(amount as number);
+}

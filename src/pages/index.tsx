@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import ComponentRenderer from "@/components/ComponentRenderer";
 import { getHomePage } from "@/utils/sanityFunctions";
 
-const Home = ({ pageData }) => {
+const Home = ({ pageData }: any) => {
+  console.log(pageData, "pageData");
   return (
     <Box maxW="2560px" m="0 auto" id="main-container">
       <NavBar dataN={{}} />

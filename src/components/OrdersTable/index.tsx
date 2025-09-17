@@ -1,4 +1,9 @@
-import { formatDate, getFulfillmentStatus } from "@/utils";
+import {
+  formatCurrencyMXN,
+  formatDate,
+  getFulfillmentStatus,
+  normalizeShopifyAmount,
+} from "@/utils";
 import {
   Table,
   TableCaption,
@@ -54,7 +59,10 @@ const OrdersTable = ({ orders }: IOrdersTableProps) => {
                   order.paymentGatewayNames[0].slice(1)}
               </Td>
               <Td>
-                ${Number(order.totalPriceSet.shopMoney.amount).toFixed(2)}
+                {formatCurrencyMXN(
+                  normalizeShopifyAmount(order.totalPriceSet.shopMoney.amount),
+                  "MXN"
+                )}
               </Td>
             </Tr>
           ))}

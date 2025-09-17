@@ -4,8 +4,15 @@ import { sanityImage } from "@/lib/sanity.image";
 import Link from "next/link";
 
 const Category = (props: ICategory) => {
-  const { titulo_imagen, subtitulo_imagen, img_fondo, isMobile, type, link } =
-    props;
+  const {
+    titulo_imagen,
+    subtitulo_imagen,
+    img_fondo,
+    isMobile,
+    type,
+    link,
+    titulo_imagen_color,
+  } = props;
 
   return (
     <Card as={Link} href={link?.alternateUrl || ""} w="100%" cursor="pointer">
@@ -22,7 +29,7 @@ const Category = (props: ICategory) => {
             fontSize={isMobile ? "16px" : "22px"}
             fontWeight={700}
             lineHeight="normal"
-            color="white"
+            color={titulo_imagen_color}
             cursor="pointer"
             pl={isMobile ? "0px" : "10px"}
             pt="20px"
