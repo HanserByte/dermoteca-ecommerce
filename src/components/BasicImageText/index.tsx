@@ -76,7 +76,7 @@ const BasicImageText = (props: ContainerProps) => {
             border="1px solid #00AA4F"
             borderRadius="35px"
             width="200px"
-            href={data?.linkDetail?.dataUrl?.url || data.link.alternateUrl}
+            href={data?.linkDetail?.dataUrl?.url || ""}
           >
             <Text
               textTransform="uppercase"
