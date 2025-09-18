@@ -78,7 +78,11 @@ const BasicImageText = (props: ContainerProps) => {
             width="200px"
             href={data?.linkDetail?.dataUrl?.url || data.link.alternateUrl}
           >
-            <Text textTransform="uppercase" color="white" fontSize="14px">
+            <Text
+              textTransform="uppercase"
+              color={data?.color_texto_botton?.value || "white"}
+              fontSize="14px"
+            >
               {data?.text_button}
             </Text>
           </Button>

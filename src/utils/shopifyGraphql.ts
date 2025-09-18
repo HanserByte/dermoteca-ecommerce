@@ -21,7 +21,7 @@ const CART_FRAGMENT = `#graphql
           ...on ProductVariant {
             id
             title
-            selectedOptions { 
+            selectedOptions {
               value
             }
             price {
@@ -117,7 +117,7 @@ export const CartCreateMutation = `#graphql
           subtotalAmount {
             amount
           }
-        } 
+        }
       }
     }
   }
@@ -137,6 +137,10 @@ export const CartLinesAddMutation = `#graphql
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
         ...cartFragment
+      }
+      userErrors {
+        field
+        message
       }
     }
   }
@@ -289,11 +293,11 @@ export const CustomerQuery = `#graphql
                 product {
                   title
                   productType
-                  tags 
+                  tags
                 }
               }
             }
-          } 
+          }
         }
       }
     }
@@ -449,6 +453,76 @@ export const AdminCustomerQuery = `#graphql
           totalPriceSet {
             shopMoney {
               amount
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+// Bundle query (Admin API)
+export const BundleProductAdminQuery = `#graphql
+  query BundleProduct($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      priceRange {
+      maxVariantPrice {
+          amount
+          currencyCode
+        }
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      media(first: 1) {
+        nodes {
+          alt
+          id
+          preview {
+            image {
+              src
+              url(transform: {})
+            }
+          }
+        }
+      }
+      bundleComponents(first: 10) {
+        nodes {
+          quantity
+          componentProduct {
+            id
+            title
+            bodyHtml
+            descriptionHtml
+            createdAt
+            variants(first: 1) {
+              nodes {
+                id
+                title
+              }
+            }
+            priceRange {
+            maxVariantPrice {
+                amount
+              }
+              minVariantPrice {
+                amount
+              }
+            }
+            media(first: 1) {
+              nodes {
+                alt
+                id
+                preview {
+                  image {
+                    src
+                    url(transform: {})
+                  }
+                }
+              }
             }
           }
         }
