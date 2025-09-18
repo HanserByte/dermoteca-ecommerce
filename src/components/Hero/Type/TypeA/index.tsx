@@ -29,7 +29,7 @@ const TypeA = (props: IContainerProps) => {
           alt="Hero"
           pt={isMobile ? "81px" : ""}
           height={isMobile ? "900px" : ""}
-          objectFit={"fill"}
+          objectFit={"cover"}
           width="100%"
           objectPosition={isMobile ? "90% 50%" : ""}
         />

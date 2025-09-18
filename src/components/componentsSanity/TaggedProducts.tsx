@@ -6,7 +6,7 @@ import React from "react";
 import { BsArrowRight } from "react-icons/bs";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import { useAllTaggedAndVendorProducts } from "@/hooks/collections";
+import { useAllTaggedVendorAndCollectionProducts } from "@/hooks/collections";
 import ProductCard from "../ProductCard";
 
 interface ITaggedProducts {
@@ -16,6 +16,7 @@ interface ITaggedProducts {
     }[];
     vendors: string[];
     titulo: string;
+    collections: string[];
   };
 }
 
@@ -23,8 +24,13 @@ const TaggedProducts = ({ data }: ITaggedProducts) => {
   const { isMobile } = useMobileView();
   const tags = data?.tags?.map((tag) => tag?.label);
   const vendors = data?.vendors;
-  console.log(vendors);
-  const allTaggedProductsData = useAllTaggedAndVendorProducts(tags, vendors);
+  const collections = data?.collections;
+  console.log(collections);
+  const allTaggedProductsData = useAllTaggedVendorAndCollectionProducts(
+    tags,
+    vendors,
+    collections
+  );
 
   return (
     <Box

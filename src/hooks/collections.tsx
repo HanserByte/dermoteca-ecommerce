@@ -78,3 +78,29 @@ export const useAllTaggedAndVendorProducts = (
 
   return allTaggedAndVendorProductsData;
 };
+
+export const useAllTaggedVendorAndCollectionProducts = (
+  tags: string[],
+  vendors: string[],
+  collections: string[]
+) => {
+  const allTaggedVendorAndCollectionProductsData = useQuery(
+    [
+      "allTaggedVendorAndCollectionProducts",
+      tags?.join(","),
+      vendors?.join(","),
+      collections?.join(","),
+    ],
+    () =>
+      fetch(`/api/products`, {
+        method: "POST",
+        body: JSON.stringify({ tags, vendors, collections }),
+      }).then((res) => res.json()),
+    {
+      enabled:
+        tags?.length > 0 || vendors?.length > 0 || collections?.length > 0,
+    }
+  );
+
+  return allTaggedVendorAndCollectionProductsData;
+};

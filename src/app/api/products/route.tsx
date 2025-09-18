@@ -18,6 +18,7 @@ export async function POST(request: Request) {
   const data = await request.json();
   const tags = data.tags || [];
   const vendors = data.vendors || [];
+  const collections = data.collections || [];
 
   // Construir query para tags
   const tagsQuery =
@@ -31,15 +32,19 @@ export async function POST(request: Request) {
       ? vendors.map((vendor: string) => `(vendor:${vendor})`).join(" OR ")
       : "";
 
+  // Construir query para collections
+  const collectionsQuery =
+    collections.length > 0
+      ? collections
+          .map((collection: string) => `(collection:${collection})`)
+          .join(" OR ")
+      : "";
+
   // Combinar queries
-  let combinedQuery = "";
-  if (tagsQuery && vendorsQuery) {
-    combinedQuery = `(${tagsQuery}) OR (${vendorsQuery})`;
-  } else if (tagsQuery) {
-    combinedQuery = tagsQuery;
-  } else if (vendorsQuery) {
-    combinedQuery = vendorsQuery;
-  }
+  const queries = [tagsQuery, vendorsQuery, collectionsQuery].filter(
+    (q) => q !== ""
+  );
+  const combinedQuery = queries.length > 0 ? queries.join(" OR ") : "";
 
   const response = await getAllTaggedProducts(combinedQuery);
   return new Response(JSON.stringify(response));
