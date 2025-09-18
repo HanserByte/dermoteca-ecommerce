@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface ContainerProps {
   data: IBasicImageText;
@@ -21,6 +22,16 @@ const BasicImageText = (props: ContainerProps) => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const router = useRouter();
+
+  console.log(data);
+
+  const [textButton, setTextButton] = useState("");
+
+  useEffect(() => {
+    if (data?.text_button) {
+      setTextButton(data?.text_button);
+    }
+  }, [data?.text_button]);
 
   return (
     <Box
@@ -68,35 +79,27 @@ const BasicImageText = (props: ContainerProps) => {
         >
           {data?.texto}
         </Text>
-        {data?.text_button !== "" ||
-          data?.text_button !== null ||
-          data?.text_button !== undefined ||
-          data?.text_button !== " " ||
-          data?.text_button !== "  " ||
-          data?.text_button !== "   " ||
-          data?.text_button !== "    " ||
-          data?.text_button !== "     " ||
-          (data?.text_button !== "      " && (
-            <Box flex={100} pt="30px">
-              <Button
-                _hover={{ opacity: 0.7 }}
-                as={Link}
-                bg={data?.color_botton.value}
-                border="1px solid #00AA4F"
-                borderRadius="35px"
-                width="200px"
-                href={data?.linkDetail?.dataUrl?.url || ""}
+        {data?.needa_boton && (
+          <Box flex={100} pt="30px">
+            <Button
+              _hover={{ opacity: 0.7 }}
+              as={Link}
+              bg={data?.color_botton.value}
+              border="1px solid #00AA4F"
+              borderRadius="35px"
+              width="200px"
+              href={data?.linkDetail?.dataUrl?.url || ""}
+            >
+              <Text
+                textTransform="uppercase"
+                color={data?.color_texto_botton?.value || "white"}
+                fontSize="14px"
               >
-                <Text
-                  textTransform="uppercase"
-                  color={data?.color_texto_botton?.value || "white"}
-                  fontSize="14px"
-                >
-                  {data?.text_button}
-                </Text>
-              </Button>
-            </Box>
-          ))}
+                {textButton}
+              </Text>
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   );
