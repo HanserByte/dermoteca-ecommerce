@@ -23,8 +23,6 @@ const BasicImageText = (props: ContainerProps) => {
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const router = useRouter();
 
-  console.log(data);
-
   const [textButton, setTextButton] = useState("");
 
   useEffect(() => {
@@ -88,7 +86,7 @@ const BasicImageText = (props: ContainerProps) => {
               border="1px solid #00AA4F"
               borderRadius="35px"
               width="200px"
-              href={data?.linkDetail?.dataUrl?.url || ""}
+              href={data?.linkDetail.alternateUrl || ""}
             >
               <Text
                 textTransform="uppercase"
