@@ -22,6 +22,9 @@ import {
   AccordionPanel,
   Button,
   Divider,
+  Input,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 
@@ -44,6 +47,7 @@ import { useCustomer, useCustomerAccessTokenCreate } from "@/hooks/account";
 import Link from "next/link";
 import { COLORS } from "@/utils/constants";
 import MegaMenu, { megaMenuData } from "../MegaMenu";
+import BrandsMenu from "../BrandsMenu";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 interface IContainerProps {
@@ -101,10 +105,41 @@ const NavBar = (props: IContainerProps) => {
   const cartBtnRef = React.useRef();
   const { setHeight } = useNavbar();
   const navbarRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [menuHistory, setMenuHistory] = useState<string[]>(["main"]);
   const [currentMenu, setCurrentMenu] = useState("main");
   const [currentMenuTitle, setCurrentMenuTitle] = useState("");
+
+  const [brandsMenuItems, setBrandsMenuItems] = useState<
+    { name: string; link: string }[]
+  >([]);
+
+  const [brandSearch, setBrandSearch] = useState("");
+  const normalizeBrand = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  const filteredBrandItems = brandsMenuItems
+    .filter((b) => normalizeBrand(b.name).includes(normalizeBrand(brandSearch)))
+    .map((b) => ({ title: b.name, type: "link" as const, url: b.link }));
+
+  useEffect(() => {
+    const loadBrands = async () => {
+      try {
+        const res = await fetch("/api/brands", { cache: "no-store" });
+        const data: { title: string; handle: string }[] = await res.json();
+        const items = data.map((c) => ({
+          name: c.title,
+          link: `/colecciones/${c.handle}`,
+        }));
+        setBrandsMenuItems(items);
+      } catch (e) {
+        console.error("Navbar brands load error", e);
+      }
+    };
+    loadBrands();
+  }, []);
 
   const goHome = () => {
     router.push("/");
@@ -159,6 +194,18 @@ const NavBar = (props: IContainerProps) => {
         return { title: item.title, dataUrl: item.dataUrl };
       });
 
+      // Inserta "MARCAS" si no viene desde CMS para mostrar el BrandsMenu
+      const hasMarcas = result.some(
+        (l: any) => l?.title?.toUpperCase?.() === "MARCAS"
+      );
+      if (!hasMarcas) {
+        const idxFarmacia = result.findIndex(
+          (l: any) => l?.title?.toUpperCase?.() === "FARMACIA"
+        );
+        const insertIndex = idxFarmacia >= 0 ? idxFarmacia + 1 : result.length;
+        result.splice(insertIndex, 0, { title: "MARCAS" } as any);
+      }
+
       setLinksLeft(result);
     }
   }, [data]);
@@ -190,6 +237,11 @@ const NavBar = (props: IContainerProps) => {
           menuId: "farmacia",
         },
         {
+          title: "Marcas",
+          type: "submenu",
+          menuId: "marcas",
+        },
+        {
           title: "Tratamientos",
           type: "link",
           menuId: "tratamientos",
@@ -209,6 +261,14 @@ const NavBar = (props: IContainerProps) => {
         title: category,
         type: "submenu",
         menuId: `farmacia_${category.toLowerCase().replace(/ /g, "_")}`,
+      })),
+    },
+    marcas: {
+      title: "Marcas",
+      items: brandsMenuItems.map((brand) => ({
+        title: brand.name,
+        type: "link",
+        url: brand.link,
       })),
     },
     ...Object.entries(megaMenuData).reduce<MenuStructure>(
@@ -307,24 +367,23 @@ const NavBar = (props: IContainerProps) => {
                       url?: string;
                       dataUrl?: { url: string };
                     }) => {
-                      console.log(link);
-                      if (link.title === "FARMACIA")
+                      if (link.title === "FARMACIA" || link.title === "MARCAS")
                         return (
                           <Box
                             key={link.title}
                             position="relative"
                             onMouseEnter={() => {
-                              setIsOpen(true);
+                              setOpenMenu(link.title);
                               setIsScrolled(true);
                             }}
                             onMouseLeave={() => {
-                              setIsOpen(false);
+                              setOpenMenu(null);
                               setIsScrolled(false);
                             }}
                             mr={4}
                           >
                             <Text
-                              fontSize="14px"
+                              fontSize="lg"
                               fontWeight={400}
                               lineHeight="normal"
                               color={
@@ -332,26 +391,31 @@ const NavBar = (props: IContainerProps) => {
                                   ? "black"
                                   : "white"
                               }
+                              whiteSpace="nowrap"
                               cursor="pointer"
                               onClick={() => goToLink(link)}
                             >
                               {link.title}
                             </Text>
-                            {isOpen && (
+                            {openMenu === link.title && (
                               <Box
                                 position="fixed"
                                 left="0"
                                 w="100%" // Asegura que el mega menú ocupa todo el ancho de la pantalla
                                 onMouseEnter={() => {
-                                  setIsOpen(true);
+                                  setOpenMenu(link.title);
                                   setIsScrolled(true);
                                 }}
                                 onMouseLeave={() => {
-                                  setIsOpen(false);
+                                  setOpenMenu(null);
                                   setIsScrolled(false);
                                 }}
                               >
-                                <MegaMenu />
+                                {link.title === "MARCAS" ? (
+                                  <BrandsMenu />
+                                ) : (
+                                  <MegaMenu />
+                                )}
                               </Box>
                             )}
                           </Box>
@@ -359,7 +423,7 @@ const NavBar = (props: IContainerProps) => {
                       return (
                         <Box key={link.title} mr={4}>
                           <Text
-                            fontSize="14px"
+                            fontSize="lg"
                             fontWeight={400}
                             lineHeight="normal"
                             color={
@@ -367,6 +431,7 @@ const NavBar = (props: IContainerProps) => {
                                 ? "black"
                                 : "white"
                             }
+                            whiteSpace="nowrap"
                             cursor="pointer"
                             onClick={() => goToLink(link)}
                           >
@@ -594,8 +659,26 @@ const NavBar = (props: IContainerProps) => {
                     </Text>
                   </Flex>
 
+                  {currentMenu === "marcas" && (
+                    <InputGroup mb={3}>
+                      <InputLeftElement pointerEvents="none">
+                        <TfiSearch />
+                      </InputLeftElement>
+                      <Input
+                        placeholder="Buscar marca..."
+                        value={brandSearch}
+                        onChange={(e) => setBrandSearch(e.target.value)}
+                        bg="gray.50"
+                        _placeholder={{ color: "gray.500" }}
+                      />
+                    </InputGroup>
+                  )}
+
                   <VStack w="full" align="stretch" spacing={0}>
-                    {menuStructure[currentMenu].items.map((item, index) => (
+                    {(currentMenu === "marcas"
+                      ? filteredBrandItems
+                      : menuStructure[currentMenu].items
+                    ).map((item, index) => (
                       <Box key={index}>
                         {item.type === "submenu" ? (
                           <Button
@@ -603,18 +686,17 @@ const NavBar = (props: IContainerProps) => {
                             w="full"
                             justifyContent="space-between"
                             onClick={() =>
-                              navigateToMenu(item.menuId, item.title)
+                              navigateToMenu(
+                                item.menuId as string,
+                                item.title as string
+                              )
                             }
                             rightIcon={<ChevronRightIcon />}
                           >
                             {item.title}
                           </Button>
                         ) : (
-                          <Link
-                            href={item.url}
-                            w="full"
-                            _hover={{ textDecoration: "none" }}
-                          >
+                          <Link href={item.url as any}>
                             <Button
                               variant="ghost"
                               w="full"
