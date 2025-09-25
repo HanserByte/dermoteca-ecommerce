@@ -57,24 +57,20 @@ export const getCollection = async (
       query: `
       query SingleCollection($handle: String, $sortKey: ProductCollectionSortKeys, $reverse: Boolean, $vendors: [ProductFilter!]) {
         collection(handle: $handle) {
-            products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $vendors) {
-                nodes {
-                    tags
-                    createdAt
-                    featuredImage {
-                        url
-                    }
-                    handle
-                    title
-                    priceRange {
-                        maxVariantPrice{
-                            amount
-                        }
-                    }
-                }
+          products(first: 40, sortKey: $sortKey, reverse: $reverse, filters: $vendors) {
+            nodes {
+              id
+              availableForSale
+              tags
+              createdAt
+              featuredImage { url }
+              handle
+              title
+              priceRange { maxVariantPrice { amount } }
             }
+          }
         }
-    }
+      }
       `,
       variables: {
         handle: collectionHandle,
@@ -304,6 +300,66 @@ export const getAllCollections = async () => {
   });
   const data = await response.json();
   return data;
+};
+
+// Obtiene colecciones de marcas (por regla VENDOR == "<marca>")
+// Devuelve título y handle para enlazar a /colecciones/[handle]
+export const getBrandCollections = async (): Promise<
+  { title: string; handle: string; vendor?: string }[]
+> => {
+  const query = `#graphql
+    query BrandCollections($cursor: String) {
+      collections(first: 100, after: $cursor) {
+        edges {
+          node {
+            title
+            handle
+            ruleSet { rules { column relation condition } }
+          }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  `;
+
+  const results: { title: string; handle: string }[] = [];
+  const seenHandles = new Set<string>();
+  let hasNextPage = true;
+  let cursor: string | null = null;
+
+  while (hasNextPage) {
+    const data = await makeShopifyAdminRequest(query, { cursor });
+    const edges = data?.collections?.edges || [];
+
+    edges.forEach((edge: any) => {
+      const rules = edge?.node?.ruleSet?.rules || [];
+      const vendorRule = rules.find((r: any) => {
+        const col = String(r?.column || "").toUpperCase();
+        const rel = String(r?.relation || "").toUpperCase();
+        const cond = (r?.condition || "").trim();
+        return (
+          cond &&
+          col.includes("VENDOR") &&
+          (rel.includes("EQUAL") || rel.includes("IS"))
+        );
+      });
+      const isVendorCollection = Boolean(vendorRule);
+      if (isVendorCollection && !seenHandles.has(edge.node.handle)) {
+        seenHandles.add(edge.node.handle);
+        results.push({
+          title: edge.node.title,
+          handle: edge.node.handle,
+          vendor: vendorRule?.condition?.trim?.(),
+        });
+      }
+    });
+
+    hasNextPage = Boolean(data?.collections?.pageInfo?.hasNextPage);
+    cursor = data?.collections?.pageInfo?.endCursor || null;
+  }
+
+  results.sort((a, b) => a.title.localeCompare(b.title));
+  return results;
 };
 
 export const makeShopifyRequest = async (

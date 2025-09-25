@@ -58,6 +58,25 @@ const CollectionPage = () => {
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
   const [collectionPage, setCollectionPage] = useState<ICollectionPageData>();
+  const [isBrandCollection, setIsBrandCollection] = useState(false);
+  const collectionHandle = router?.query?.collectionHandle as
+    | string
+    | undefined;
+  useEffect(() => {
+    const checkBrand = async () => {
+      try {
+        if (!collectionHandle) return;
+        const res = await fetch("/api/brands", { cache: "no-store" });
+        const brands: { title: string; handle: string }[] = await res.json();
+        setIsBrandCollection(brands.some((b) => b.handle === collectionHandle));
+      } catch (e) {
+        // Silently ignore; default false
+        setIsBrandCollection(false);
+      }
+    };
+    checkBrand();
+  }, [collectionHandle]);
+
   const activeOrder = getCollectionOrderTag(
     router?.query?.sort,
     router?.query?.order,
@@ -73,7 +92,7 @@ const CollectionPage = () => {
 
   const query = `*[_type == "collectionPage"]  {
     collectionContent,
-    components[]-> 
+    components[]->
   }[0]
   `;
 
@@ -118,7 +137,12 @@ const CollectionPage = () => {
       </Box>
 
       <Flex my="6" pl={"20px"} pr={"20px"}>
-        {isMobile && <FilterDrawer useCollectionSort />}
+        {isMobile && (
+          <FilterDrawer
+            useCollectionSort
+            hideVendorsAndCollections={isBrandCollection}
+          />
+        )}
       </Flex>
 
       {!isMobile && (
@@ -133,8 +157,12 @@ const CollectionPage = () => {
 
             <Flex>
               {/* <TagSelector /> */}
-              <VendorSelector />
-              <CollectionsSelector />
+              {!isBrandCollection && (
+                <>
+                  <VendorSelector />
+                  <CollectionsSelector />
+                </>
+              )}
             </Flex>
           </Flex>
         </Box>
@@ -214,8 +242,9 @@ const CollectionPage = () => {
           py={5}
           templateColumns={isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         >
-          {collectionData?.data?.data?.collection?.products?.nodes?.map(
-            (product: IProduct) => (
+          {collectionData?.data?.data?.collection?.products?.nodes
+            ?.filter((p: any) => p?.availableForSale !== false)
+            ?.map((product: IProduct) => (
               <ProductCard
                 handle={product.handle}
                 imageSrc={
@@ -226,8 +255,7 @@ const CollectionPage = () => {
                 price={Number(product?.priceRange?.maxVariantPrice?.amount)}
                 key={product?.handle}
               />
-            )
-          )}
+            ))}
         </Grid>
       </Box>
       {collectionPage &&

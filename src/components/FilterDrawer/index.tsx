@@ -27,7 +27,14 @@ import { getCollectionOrderTag } from "@/utils";
 import { useAllTags } from "@/hooks/products";
 import VendorSelector from "../vendorSelector";
 
-const FilterDrawer = ({ useCollectionSort = false }) => {
+interface FilterDrawerProps {
+  useCollectionSort?: boolean;
+  hideVendorsAndCollections?: boolean;
+}
+const FilterDrawer = ({
+  useCollectionSort = false,
+  hideVendorsAndCollections = false,
+}: FilterDrawerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const router = useRouter();
@@ -127,7 +134,7 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
               ))}
             </VStack>
 
-            <VendorSelector />
+            {!hideVendorsAndCollections && <VendorSelector />}
 
             {/* <VStack mt={8} alignItems="start" gap={1}>
               <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
@@ -152,48 +159,50 @@ const FilterDrawer = ({ useCollectionSort = false }) => {
               </Grid>
             </VStack> */}
 
-            <VStack mt={8} w="min-content" align="start" gap={1}>
-              <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
-                Colecciones
-              </Text>
-              <Button
-                gap={2}
-                _hover={{ bg: "transparent" }}
-                p={0}
-                fontSize="16px"
-                variant="ghost"
-                size="sm"
-                as={Link}
-                href={`/collections/all`}
-              >
-                Todas las colecciones
-                {router?.pathname.includes("all") && (
-                  <CheckCircleIcon color={COLORS.GREEN} />
+            {!hideVendorsAndCollections && (
+              <VStack mt={8} w="min-content" align="start" gap={1}>
+                <Text fontSize="lg" color={COLORS.GREEN} fontWeight={600}>
+                  Colecciones
+                </Text>
+                <Button
+                  gap={2}
+                  _hover={{ bg: "transparent" }}
+                  p={0}
+                  fontSize="16px"
+                  variant="ghost"
+                  size="sm"
+                  as={Link}
+                  href={`/collections/all`}
+                >
+                  Todas las colecciones
+                  {router?.pathname.includes("all") && (
+                    <CheckCircleIcon color={COLORS.GREEN} />
+                  )}
+                </Button>
+                {allCollectionsData?.data?.collections?.nodes?.map(
+                  (collection: any) => {
+                    return (
+                      <Button
+                        gap={2}
+                        _hover={{ bg: "transparent" }}
+                        p={0}
+                        key={collection.handle}
+                        fontSize="16px"
+                        variant="ghost"
+                        size="sm"
+                        as={Link}
+                        href={`/collections/${collection.handle}`}
+                      >
+                        {collection.title}
+                        {activeCollection === collection.handle && (
+                          <CheckCircleIcon color={COLORS.GREEN} />
+                        )}
+                      </Button>
+                    );
+                  }
                 )}
-              </Button>
-              {allCollectionsData?.data?.collections?.nodes?.map(
-                (collection: any) => {
-                  return (
-                    <Button
-                      gap={2}
-                      _hover={{ bg: "transparent" }}
-                      p={0}
-                      key={collection.handle}
-                      fontSize="16px"
-                      variant="ghost"
-                      size="sm"
-                      as={Link}
-                      href={`/collections/${collection.handle}`}
-                    >
-                      {collection.title}
-                      {activeCollection === collection.handle && (
-                        <CheckCircleIcon color={COLORS.GREEN} />
-                      )}
-                    </Button>
-                  );
-                }
-              )}
-            </VStack>
+              </VStack>
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

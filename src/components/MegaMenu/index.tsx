@@ -70,11 +70,15 @@ export default function MegaMenu() {
         <Grid templateColumns="repeat(4, 1fr)">
           {Object.entries(megaMenuData).map(([category, items]) => (
             <VStack align={"left"} key={category}>
-              <Text fontSize="lg" fontWeight="bold">
+              <Text fontSize="xl" fontWeight="bold">
                 {category}
               </Text>
               {items.map((item) => (
-                <Link key={item.link} href={item.link}>
+                <Link
+                  key={item.link}
+                  style={{ fontSize: "18px" }}
+                  href={item.link}
+                >
                   {item.name}
                 </Link>
               ))}

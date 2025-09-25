@@ -8,23 +8,33 @@ export async function GET(request: Request) {
   const tags = url.searchParams.get("tags");
   const vendors = url.searchParams.get("vendors");
 
-  console.log(vendors, "vendors>>>>>>>>>>>");
+  const safeParse = (val: string | null) => {
+    try {
+      if (!val || val === "undefined" || val === "null") return [];
+      return JSON.parse(val);
+    } catch {
+      return [];
+    }
+  };
+
+  const parsedTags = safeParse(tags);
+  const parsedVendors = safeParse(vendors);
 
   const response =
     sortKey !== "undefined"
       ? await getCollection(
           collectionHandle,
-          sortKey,
+          sortKey as any,
           reverse,
-          JSON.parse(String(tags)),
-          JSON.parse(String(vendors))
+          parsedTags,
+          parsedVendors
         )
       : await getCollection(
           collectionHandle,
           "BEST_SELLING",
           false,
-          JSON.parse(String(tags)),
-          JSON.parse(String(vendors))
+          parsedTags,
+          parsedVendors
         );
 
   return new Response(JSON.stringify(response));
