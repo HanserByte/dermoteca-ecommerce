@@ -249,15 +249,16 @@ export function normalizeShopifyAmount(amount: any, currencyCode?: string) {
 
 export function formatCurrencyMXN(amount?: number, currencyCode?: string) {
   if (amount == null || isNaN(amount as any)) return "";
-  // Desired: 1.929,00 $ (comma decimals, trailing $)
+  // Desired: $ 1,929.00 (US-style decimals with symbol first and a space)
   if (!currencyCode || currencyCode === "MXN") {
-    const formatted = new Intl.NumberFormat("es-ES", {
+    const formatted = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
+      useGrouping: true,
     }).format(amount as number);
-    return `${formatted} $`;
+    return `$ ${formatted}`;
   }
-  return new Intl.NumberFormat("es-MX", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currencyCode,
   }).format(amount as number);
