@@ -1,4 +1,4 @@
-import { Box, Grid, Text, VStack, useDimensions } from "@chakra-ui/react";
+import { Box, Grid, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 
 export const megaMenuData = {

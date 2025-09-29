@@ -42,21 +42,21 @@ const BasicImageText = (props: ContainerProps) => {
       />
       <Box
         position="absolute"
-        top="50%"
-        transform="translateY(-50%)"
-        left={isMobile ? "5px" : "0"}
-        width={isMobile ? "" : "50%"}
+        top={isMobile ? "24px" : "50%"}
+        transform={isMobile ? "none" : "translateY(-50%)"}
+        left={isMobile ? "0" : "0"}
+        width={isMobile ? "100%" : "50%"}
         maxHeight={isMobile ? "100%" : "50vh"}
         overflow="auto"
         p="4"
-        pl={isMobile ? "" : "145px"}
+        pl={isMobile ? "16px" : "145px"}
         pr={isMobile ? "20px" : "95px"}
       >
         <Heading
           fontFamily="KobeBold"
           color="white"
           fontSize="55px"
-          pt={isMobile ? "20px" : "60px"}
+          pt={isMobile ? "0" : "60px"}
           noOfLines={2}
         >
           {data?.titulo}
