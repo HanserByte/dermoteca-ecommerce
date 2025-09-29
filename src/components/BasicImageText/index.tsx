@@ -20,7 +20,6 @@ const BasicImageText = (props: ContainerProps) => {
   const { data } = props;
   const { value } = useStore();
   const [isMobile] = useMediaQuery(`(max-width: ${value})`);
-  const router = useRouter();
 
   return (
     <Box
