@@ -12,6 +12,7 @@ import { IHeroComponents } from "@/typesSanity/docs/hero";
 import { useState } from "react";
 import MainText from "../../Common/MainText";
 
+import { useNavbar } from "@/store";
 interface IContainerProps {
   data: IHeroComponents;
   isMobile: boolean;
@@ -19,6 +20,7 @@ interface IContainerProps {
 
 const TypeC = (props: IContainerProps) => {
   const { data, isMobile } = props;
+  const { height } = useNavbar();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -34,7 +36,7 @@ const TypeC = (props: IContainerProps) => {
   };
 
   return (
-    <Flex position="relative" id="hero" mt={data.isPadding ? "37px" : ""}>
+    <Flex position="relative" id="hero" mt={`${height}px`}>
       <Skeleton isLoaded={!isLoading} width="100%" height="auto">
         <Image
           src={sanityImage(

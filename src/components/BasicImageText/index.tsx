@@ -54,7 +54,7 @@ const BasicImageText = (props: ContainerProps) => {
         <Heading
           fontFamily="KobeBold"
           color="white"
-          fontSize="55px"
+          fontSize={isMobile ? "40px" : "55px"}
           pt={isMobile ? "0" : "60px"}
           noOfLines={2}
         >
@@ -63,7 +63,8 @@ const BasicImageText = (props: ContainerProps) => {
         <Text
           color={data?.color_texto.value}
           lineHeight="normal"
-          textAlign="justify"
+          textAlign="left"
+          fontSize={"xl"}
         >
           {data?.texto}
         </Text>

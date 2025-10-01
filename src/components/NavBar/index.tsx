@@ -342,11 +342,12 @@ const NavBar = (props: IContainerProps) => {
       <Flex
         px={4}
         h="86px"
-        bg={isMobile || dataN.isBlackNavBar || isScrolled ? "#fff" : ""}
+        bg="#fff"
         alignItems="center"
         justifyContent="space-between"
         pt="20px"
         pb="20px"
+        position="relative"
       >
         {/* Lado izquierdo */}
         <Flex flex={1} pl={isMobile ? "" : "10px"}>
@@ -386,11 +387,7 @@ const NavBar = (props: IContainerProps) => {
                               fontSize="lg"
                               fontWeight={400}
                               lineHeight="normal"
-                              color={
-                                isScrolled || dataN?.isBlackNavBar
-                                  ? "black"
-                                  : "white"
-                              }
+                              color="black"
                               whiteSpace="nowrap"
                               cursor="pointer"
                               onClick={() => goToLink(link)}
@@ -426,11 +423,7 @@ const NavBar = (props: IContainerProps) => {
                             fontSize="lg"
                             fontWeight={400}
                             lineHeight="normal"
-                            color={
-                              isScrolled || dataN?.isBlackNavBar
-                                ? "black"
-                                : "white"
-                            }
+                            color="black"
                             whiteSpace="nowrap"
                             cursor="pointer"
                             onClick={() => goToLink(link)}
@@ -450,16 +443,16 @@ const NavBar = (props: IContainerProps) => {
         <Flex
           alignItems="center"
           justifyContent="center"
-          flex={2}
+          position="absolute"
+          left="50%"
+          transform="translateX(-50%)"
           mr={isPhone ? "15px" : ""}
           onClick={goHome}
           cursor="pointer"
           zIndex={100}
         >
           <LogoCI
-            color={
-              isMobile || isScrolled || dataN?.isBlackNavBar ? "black" : "white"
-            }
+            color="black"
             width={isMobile ? "190px" : "250px"}
             height={isMobile ? "27px" : "33px"}
           />
@@ -484,10 +477,7 @@ const NavBar = (props: IContainerProps) => {
                         width: item.icono === "TfiSearch" ? "25px" : "30px",
                         height: item.icono === "TfiSearch" ? "25px" : "30px",
                         cursor: "pointer",
-                        color:
-                          isScrolled || dataN?.isBlackNavBar
-                            ? "black"
-                            : "white",
+                        color: "black",
                       },
                     })}
                     {index !== data.links_derecha.length - 1 && (
@@ -632,7 +622,7 @@ const NavBar = (props: IContainerProps) => {
               <DrawerCloseButton />
               <DrawerHeader>
                 <LogoCI
-                  color={isMobile ? "black" : "white"}
+                  color="black"
                   width={isMobile ? "150px" : "250px"}
                   height={isMobile ? "20px" : "33px"}
                 />

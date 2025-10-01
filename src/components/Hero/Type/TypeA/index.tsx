@@ -18,11 +18,11 @@ const TypeA = (props: IContainerProps) => {
 
   return (
     <>
-      <Flex position="relative" id="hero">
+      <Flex position="relative" id="hero" mt={`${height}px`}>
         <Image
           src={sanityImage(data.backgroundImage.asset._ref).url()}
           alt="Hero"
-          pt={isMobile ? "81px" : ""}
+          pt={isMobile ? "0" : ""}
           height={isMobile ? "900px" : ""}
           objectFit={"cover"}
           width="100%"
@@ -38,7 +38,7 @@ const TypeA = (props: IContainerProps) => {
           overflow="auto"
           p="4"
           pl={isMobile ? "" : "145px"}
-          mt={isMobile ? `${height}px` : "180px"}
+          mt={isMobile ? "0" : "180px"}
           zIndex={100}
         >
           <Flex

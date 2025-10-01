@@ -76,7 +76,7 @@ export default function BrandsMenu() {
               <Text
                 as={Link}
                 href={brand.link}
-                fontSize="lg"
+                fontSize="2xl"
                 _hover={{ textDecoration: "underline" }}
               >
                 {brand.name}
