@@ -1,4 +1,5 @@
 import { Box, Flex, Image, Skeleton } from "@chakra-ui/react";
+import { useNavbar } from "@/store";
 
 import { sanityImage } from "@/lib/sanity.image";
 import { IHeroComponents } from "@/typesSanity/docs/hero";
@@ -11,6 +12,7 @@ interface IContainerProps {
 
 const TypeC = (props: IContainerProps) => {
   const { data, isMobile } = props;
+  const { height } = useNavbar();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -19,12 +21,12 @@ const TypeC = (props: IContainerProps) => {
   };
 
   return (
-    <Flex position="relative" id="hero" mt={data.isPadding ? "75px" : ""}>
+    <Flex position="relative" id="hero" mt={`${height}px`}>
       <Skeleton isLoaded={!isLoading} width="100%">
         <Image
           src={sanityImage(data.backgroundImage.asset._ref).url()}
           alt="Hero"
-          pt={isMobile ? "81px" : ""}
+          pt={isMobile ? "0" : ""}
           height={isMobile ? "900px" : ""}
           objectFit={"cover"}
           width="100%"
