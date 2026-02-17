@@ -29,8 +29,30 @@ const TaggedProducts = ({ data }: ITaggedProducts) => {
   const allTaggedProductsData = useAllTaggedVendorAndCollectionProducts(
     tags,
     vendors,
-    collections
+    collections,
   );
+
+  // Construir URL con parámetros de filtro
+  const buildFilterUrl = () => {
+    const params = new URLSearchParams();
+
+    if (vendors && vendors.length > 0) {
+      params.append("vendors", vendors.join(","));
+    }
+
+    if (tags && tags.length > 0) {
+      params.append("tags", tags.join(","));
+    }
+
+    if (collections && collections.length > 0) {
+      params.append("collections", collections.join(","));
+    }
+
+    const queryString = params.toString();
+    return queryString
+      ? `/colecciones/todas?${queryString}`
+      : "/colecciones/todas";
+  };
 
   return (
     <Box
@@ -45,7 +67,7 @@ const TaggedProducts = ({ data }: ITaggedProducts) => {
           </Text>
           <Button
             as={Link}
-            href="/colecciones/todas"
+            href={buildFilterUrl()}
             border="1px"
             borderColor="black"
             rounded="full"
