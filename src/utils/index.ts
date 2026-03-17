@@ -243,8 +243,8 @@ export function cleanObject(obj) {
 export function normalizeShopifyAmount(amount: any, currencyCode?: string) {
   const n = Number(amount);
   if (!isFinite(n)) return undefined;
-  // Some Shopify MoneyV2 amounts may come in cents for MXN; heuristically normalize
-  return n >= 10000 ? n / 100 : n;
+  // Shopify Storefront API returns amounts in the major currency unit (e.g., pesos, not centavos)
+  return n;
 }
 
 export function formatCurrencyMXN(amount?: number, currencyCode?: string) {
